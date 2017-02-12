@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Messages" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Messages" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" />
+  <xs:complexType name="SignInRequestSubmitted">
+    <xs:sequence>
+      <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" minOccurs="0" name="Person" nillable="true" type="q1:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SignInRequestSubmitted" nillable="true" type="tns:SignInRequestSubmitted" />
+  <xs:complexType name="TokenRead">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="Id" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="TokenRead" nillable="true" type="tns:TokenRead" />
+  <xs:complexType name="PersonSignedIn">
+    <xs:sequence>
+      <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" minOccurs="0" name="Person" nillable="true" type="q2:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonSignedIn" nillable="true" type="tns:PersonSignedIn" />
+  <xs:complexType name="PersonSignedOut">
+    <xs:sequence>
+      <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" minOccurs="0" name="Person" nillable="true" type="q3:Person" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="PersonSignedOut" nillable="true" type="tns:PersonSignedOut" />
+</xs:schema>

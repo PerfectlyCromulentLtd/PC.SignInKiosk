@@ -1,0 +1,57 @@
+﻿<Page
+    x:Class="OxHack.SignInKiosk.Views.StartView"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+	RequestedTheme="Light">
+
+	<Grid Background="MintCream">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+		<Grid.ColumnDefinitions>
+			<ColumnDefinition Width="*"/>
+			<ColumnDefinition Width="Auto"/>
+		</Grid.ColumnDefinitions>
+
+		<StackPanel
+			Grid.Row="0"
+			Grid.ColumnSpan="2"
+			HorizontalAlignment="Center"
+			Orientation="Horizontal">
+			<TextBlock 
+				VerticalAlignment="Center"
+				FontSize="120"
+				Margin="0 0 32 0"
+				Text="Use key fob" />
+			<Image Source="ms-appx:///Assets/HandWithFob.png" />
+		</StackPanel>
+        
+        <TextBlock 
+            Grid.Row="1" Grid.ColumnSpan="2"
+            HorizontalAlignment="Center"
+            FontSize="72"
+            Text="- or do it manually -" />
+
+		<Button
+			x:Name="SignIn"
+			Grid.Row="2" Grid.Column="0"
+			Margin="42 42 0 42"
+			HorizontalAlignment="Stretch"
+			VerticalAlignment="Stretch"
+			FontSize="144"
+			Content="Sign-in"/>
+		<Button
+			x:Name="SignOut"
+			Grid.Row="2" Grid.Column="1"
+			VerticalAlignment="Stretch"
+			Margin="42"
+			FontSize="60"
+			Content="Sign-out"/>
+		
+	</Grid>
+</Page>

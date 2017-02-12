@@ -1,0 +1,16 @@
+﻿<caliburn:CaliburnApplication
+	x:Class="OxHack.SignInKiosk.App"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:OxHack.SignInKiosk"
+	xmlns:caliburn="using:Caliburn.Micro"
+	RequestedTheme="Light"
+	>
+	<Application.Resources>
+		<ResourceDictionary>
+			<FontFamily x:Key="ContentControlThemeFontFamily">Catamaran</FontFamily>
+			<x:String x:Key="ProgressBarIndeterminateForegroundThemeBrush">Black</x:String>
+		</ResourceDictionary>
+	</Application.Resources>
+
+</caliburn:CaliburnApplication>

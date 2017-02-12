@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="b7ddc9c7-8b6b-4466-8b1e-28b01915af74" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings>
+      <CollectionMapping TypeName="System.Collections.ObjectModel.ObservableCollection`1" Category="List" />
+    </CollectionMappings>
+    <GenerateSerializableTypes>false</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="6ae0a004-5f0e-428a-933c-48607e3b375c" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="691c67ab-c148-41fb-a427-bd0ae94cdaa6" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="4e1cb32d-81ce-469f-a982-d93e651afb66" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Messaging.Messages.xsd" MetadataType="Schema" ID="1b4add30-0e52-408c-b618-e4ff1b5ea6f0" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Messaging.Models.xsd" MetadataType="Schema" ID="0b638207-5ed4-4345-8222-d2ac9d75d446" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

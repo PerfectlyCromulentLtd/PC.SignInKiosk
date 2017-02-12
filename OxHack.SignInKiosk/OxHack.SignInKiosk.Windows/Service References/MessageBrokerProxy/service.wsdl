@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<wsdl:definitions xmlns:wsap="http://schemas.xmlsoap.org/ws/2004/08/addressing/policy" xmlns:wsa10="http://www.w3.org/2005/08/addressing" xmlns:tns="http://tempuri.org/" xmlns:msc="http://schemas.microsoft.com/ws/2005/12/wsdl/contract" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy" xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata" xmlns:wsa="http://schemas.xmlsoap.org/ws/2004/08/addressing" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:wsaw="http://www.w3.org/2006/05/addressing/wsdl" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd" xmlns:xsd="http://www.w3.org/2001/XMLSchema" name="MessageBrokerProxyService" targetNamespace="http://tempuri.org/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+  <wsp:Policy wsu:Id="ServiceEndpoint_policy">
+    <wsp:ExactlyOne>
+      <wsp:All>
+        <msb:BinaryEncoding xmlns:msb="http://schemas.microsoft.com/ws/06/2004/mspolicy/netbinary1">
+        </msb:BinaryEncoding>
+        <sp:TransportBinding xmlns:sp="http://schemas.xmlsoap.org/ws/2005/07/securitypolicy">
+          <wsp:Policy>
+            <sp:TransportToken>
+              <wsp:Policy>
+                <msf:WindowsTransportSecurity xmlns:msf="http://schemas.microsoft.com/ws/2006/05/framing/policy">
+                  <msf:ProtectionLevel>EncryptAndSign</msf:ProtectionLevel>
+                </msf:WindowsTransportSecurity>
+              </wsp:Policy>
+            </sp:TransportToken>
+            <sp:AlgorithmSuite>
+              <wsp:Policy>
+                <sp:Basic256>
+                </sp:Basic256>
+              </wsp:Policy>
+            </sp:AlgorithmSuite>
+            <sp:Layout>
+              <wsp:Policy>
+                <sp:Strict>
+                </sp:Strict>
+              </wsp:Policy>
+            </sp:Layout>
+          </wsp:Policy>
+        </sp:TransportBinding>
+        <wsaw:UsingAddressing>
+        </wsaw:UsingAddressing>
+      </wsp:All>
+    </wsp:ExactlyOne>
+  </wsp:Policy>
+  <wsdl:types>
+    <xsd:schema targetNamespace="http://tempuri.org/Imports">
+      <xsd:import namespace="http://tempuri.org/" />
+      <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Messages" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" />
+    </xsd:schema>
+  </wsdl:types>
+  <wsdl:message name="IMessageBrokerProxyService_PublishSignInRequestSubmitted_InputMessage">
+    <wsdl:part name="parameters" element="tns:PublishSignInRequestSubmitted" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_PublishSignInRequestSubmitted_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PublishSignInRequestSubmittedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_Subscribe_InputMessage">
+    <wsdl:part name="parameters" element="tns:Subscribe" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_Subscribe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:SubscribeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_Unsubscribe_InputMessage">
+    <wsdl:part name="parameters" element="tns:Unsubscribe" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_Unsubscribe_OutputMessage">
+    <wsdl:part name="parameters" element="tns:UnsubscribeResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnTokenReadPublished_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnTokenReadPublished" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnTokenReadPublished_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnTokenReadPublishedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnPersonSignedInPublished_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPersonSignedInPublished" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnPersonSignedInPublished_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPersonSignedInPublishedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnPersonSignedOutPublished_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPersonSignedOutPublished" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnPersonSignedOutPublished_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnPersonSignedOutPublishedResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnSignInRequestSubmittedPublished" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnSignInRequestSubmittedPublishedResponse" />
+  </wsdl:message>
+  <wsdl:portType name="IMessageBrokerProxyService">
+    <wsdl:operation name="PublishSignInRequestSubmitted">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestSubmitted" message="tns:IMessageBrokerProxyService_PublishSignInRequestSubmitted_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestSubmittedResponse" message="tns:IMessageBrokerProxyService_PublishSignInRequestSubmitted_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Subscribe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/Subscribe" message="tns:IMessageBrokerProxyService_Subscribe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/SubscribeResponse" message="tns:IMessageBrokerProxyService_Subscribe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="Unsubscribe">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/Unsubscribe" message="tns:IMessageBrokerProxyService_Unsubscribe_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/UnsubscribeResponse" message="tns:IMessageBrokerProxyService_Unsubscribe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnTokenReadPublished">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnTokenReadPublished" message="tns:IMessageBrokerProxyService_OnTokenReadPublished_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnTokenReadPublishedResponse" message="tns:IMessageBrokerProxyService_OnTokenReadPublished_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnPersonSignedInPublished">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedInPublished" message="tns:IMessageBrokerProxyService_OnPersonSignedInPublished_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedInPublishedResponse" message="tns:IMessageBrokerProxyService_OnPersonSignedInPublished_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnPersonSignedOutPublished">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedOutPublished" message="tns:IMessageBrokerProxyService_OnPersonSignedOutPublished_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedOutPublishedResponse" message="tns:IMessageBrokerProxyService_OnPersonSignedOutPublished_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="OnSignInRequestSubmittedPublished">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublished" message="tns:IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublishedResponse" message="tns:IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_InputCallbackMessage" />
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="ServiceEndpoint" type="tns:IMessageBrokerProxyService">
+    <wsp:PolicyReference URI="#ServiceEndpoint_policy">
+    </wsp:PolicyReference>
+    <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
+    <wsdl:operation name="PublishSignInRequestSubmitted">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestSubmitted" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Subscribe">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/Subscribe" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Unsubscribe">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/Unsubscribe" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnTokenReadPublished">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnTokenReadPublished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnPersonSignedInPublished">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedInPublished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnPersonSignedOutPublished">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedOutPublished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnSignInRequestSubmittedPublished">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="MessageBrokerProxyService">
+    <wsdl:port name="ServiceEndpoint" binding="tns:ServiceEndpoint">
+      <soap12:address location="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService" />
+      <wsa10:EndpointReference>
+        <wsa10:Address>net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService</wsa10:Address>
+        <Identity xmlns="http://schemas.xmlsoap.org/ws/2006/02/addressingidentity">
+          <Upn>ZODASREVENGE\yargh</Upn>
+        </Identity>
+      </wsa10:EndpointReference>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>
