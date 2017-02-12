@@ -17,11 +17,18 @@ namespace OxHack.SignInKiosk.ViewModels
 		{
 			this.navigationService = navigationService;
 			this.messageBroker = messageBroker;
+			this.CanSubmitName = true;
 		}
 
 		public void GoBack()
 		{
 			this.navigationService.GoBack();
+		}
+
+		public bool CanSubmitName
+		{
+			get;
+			set;
 		}
 
 		public async void SubmitName()
@@ -35,6 +42,9 @@ namespace OxHack.SignInKiosk.ViewModels
 			}
 			else
 			{
+				this.CanSubmitName = false;
+				this.NotifyOfPropertyChange(nameof(this.CanSubmitName));
+
 				await this.messageBroker.PublishSignInRequestSubmitted(
 					new SignInRequestSubmitted()
 					{

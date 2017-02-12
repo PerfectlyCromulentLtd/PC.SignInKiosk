@@ -2,6 +2,8 @@
 using MassTransit.NLogIntegration;
 using OxHack.SignInKiosk.Messaging.Messages;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 
@@ -9,10 +11,20 @@ namespace OxHack.SignInKiosk.Messaging
 {
 	public sealed class MessagingClient
 	{
-		private BusHandle bus;
-		private readonly IBusControl busControl;
+		public event EventHandler<PersonSignedIn> PersonSignedIn;
+		public event EventHandler<PersonSignedOut> PersonSignedOut;
+		public event EventHandler<SignInRequestSubmitted> SignInRequestSubmitted;
+		public event EventHandler<TokenRead> TokenRead;
 
-		public MessagingClient(string username, string password, string connectionString = "rabbitmq://rampage:5672/", string queueName = null)
+		private BusHandle bus;
+		private IBusControl busControl;
+
+		public MessagingClient(
+			string username = "signInKiosk",
+			string password = "signInKiosk",
+			string connectionString = "rabbitmq://rampage:5672/",
+			string queueName = null
+			)
 		{
 			var hostAddress = new Uri(connectionString);
 			queueName = queueName ?? Assembly.GetEntryAssembly().GetName().Name;
@@ -40,13 +52,12 @@ namespace OxHack.SignInKiosk.Messaging
 						receiveConfig.AutoDelete = true;
 						receiveConfig.Durable = false;
 						receiveConfig.Exclusive = true;
+						receiveConfig.Consumer(() => new DelegateConsumer<PersonSignedIn>(message => this.PersonSignedIn?.Invoke(this, message)));
+						receiveConfig.Consumer(() => new DelegateConsumer<PersonSignedOut>(message => this.PersonSignedOut?.Invoke(this, message)));
+						receiveConfig.Consumer(() => new DelegateConsumer<SignInRequestSubmitted>(message => this.SignInRequestSubmitted?.Invoke(this, message)));
+						receiveConfig.Consumer(() => new DelegateConsumer<TokenRead>(message => this.TokenRead?.Invoke(this, message)));
 					});
 			});
-		}
-
-		public void AddConsumer<T>(Func<T> consumerFactory) where T : class, IConsumer
-		{
-			this.busControl.ConnectConsumer<T>(consumerFactory);
 		}
 
 		public async Task Publish<T>(T message) where T : class

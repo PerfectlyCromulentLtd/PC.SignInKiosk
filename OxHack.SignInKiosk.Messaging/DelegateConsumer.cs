@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Messaging
 {
-	internal class DelegateConsumer<T> : IConsumer<T> where T : class
+	public class DelegateConsumer<T> : IConsumer<T> where T : class
 	{
 		private readonly Action<T> action;
 

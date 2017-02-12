@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26127.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tablet Interface", "Tablet Interface", "{657C0E27-735A-4034-9C52-D511E4B17F1B}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pi Services", "Pi Services", "{84A389A1-7ECE-42B2-9EE9-00A5610DFC2B}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{84A389A1-7ECE-42B2-9EE9-00A5610DFC2B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{A9B0A2CB-F9B9-4201-BA91-C758CECD78B3}"
 EndProject

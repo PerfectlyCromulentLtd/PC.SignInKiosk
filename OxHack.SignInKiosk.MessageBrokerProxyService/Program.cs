@@ -24,8 +24,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService
 				hostConf.RunAsLocalSystem();
 
 				hostConf.SetDescription("A WCF service the Tablet can use in order to receiver and publish messages to the RabbitMQ message broker.");
-				hostConf.SetDisplayName("SignInKioskTabletProxyService");
-				hostConf.SetServiceName("SignInKioskTabletProxyService");
+				hostConf.SetDisplayName("SignInKiosk.MessageBrokerProxy");
+				hostConf.SetServiceName("SignInKiosk.MessageBrokerProxy");
 			});
 		}
 
@@ -36,7 +36,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService
 			var consoleTarget = new ConsoleTarget()
 			{
 				Name = "Console",
-				Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}"
+				Layout = "\n${date:format=HH\\:mm\\:ss} ${logger}\n\t${message}"
 			};
 			config.AddTarget(consoleTarget);
 

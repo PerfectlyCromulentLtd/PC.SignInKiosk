@@ -13,19 +13,19 @@ namespace OxHack.SignInKiosk.PrinterService.SubServices
 	class SignInEventPrinter
 	{
 		private readonly ILogger logger = LogManager.GetCurrentClassLogger();
-		private readonly MessageReceiver receiver;
+		private readonly MessagingClient messagingClient;
 		private Task spacerWorker;
 		private DateTime nextTimeToWriteASpacer;
 		private DateTime timeOfLastSpacerPrint;
 		private readonly string printTextScript;
 		private readonly string printSpacerScript;
 
-		public SignInEventPrinter(MessageReceiver receiver)
+		public SignInEventPrinter(MessagingClient messagingClient)
 		{
-			this.receiver = receiver;
+			this.messagingClient = messagingClient;
 
-			this.receiver.PersonSignedIn += this.OnPersonSignedIn;
-			this.receiver.PersonSignedOut += this.OnPersonSignedOut;
+			this.messagingClient.PersonSignedIn += this.OnPersonSignedIn;
+			this.messagingClient.PersonSignedOut += this.OnPersonSignedOut;
 
 			var isLinux = IsLinuxy();
 			this.printTextScript = isLinux ? "linux-printText.sh" : "windows-printText.bat";
@@ -44,14 +44,14 @@ namespace OxHack.SignInKiosk.PrinterService.SubServices
 			this.spacerWorker = null;
 		}
 
-		private void OnPersonSignedIn(object sender, PersonSignedIn e)
+		private void OnPersonSignedIn(object sender, PersonSignedIn message)
 		{
-			this.Print($"IN : {e.Person.DisplayName}");
+			this.Print($"IN : {message.Person.DisplayName}");
 		}
 
-		private void OnPersonSignedOut(object sender, PersonSignedOut e)
+		private void OnPersonSignedOut(object sender, PersonSignedOut message)
 		{
-			this.Print($"OUT: {e.Person.DisplayName}");
+			this.Print($"OUT: {message.Person.DisplayName}");
 		}
 
 		private void Print(string text)
@@ -81,19 +81,23 @@ namespace OxHack.SignInKiosk.PrinterService.SubServices
 			}
 			catch (Exception exception)
 			{
-				//TODO: Log stuff
+				this.logger.Error(exception);
 			}
 		}
 
 		private async Task SpacerWorkerLoop()
 		{
+			this.logger.Info($"Spacer worker started.  Waiting a few seconds before entering loop.");
+
+			await Task.Delay(TimeSpan.FromSeconds(3));
+
 			while (this.spacerWorker != null)
 			{
 				if (this.nextTimeToWriteASpacer > this.timeOfLastSpacerPrint)
 				{
 					var targetTime = this.nextTimeToWriteASpacer;
 					var delayDuration = TimeSpan.FromSeconds(Math.Max(0, (targetTime - DateTime.Now).TotalSeconds));
-					this.logger.Info($"Spacer timer started...  Printing spacer in {delayDuration.TotalSeconds} seconds...");
+					this.logger.Info($"Spacer timer reset.  Printing spacer in {delayDuration.TotalSeconds} seconds...");
 					await Task.Delay(delayDuration);
 
 					if (this.nextTimeToWriteASpacer == targetTime)
@@ -125,13 +129,13 @@ namespace OxHack.SignInKiosk.PrinterService.SubServices
 		public async Task Start()
 		{
 			this.InitialiseWorker();
-			await this.receiver.Connect();
+			await this.messagingClient.Connect();
 		}
 
 		public async Task Stop()
 		{
 			this.KillWorker();
-			await this.receiver.Disconnect();
+			await this.messagingClient.Disconnect();
 		}
 	}
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Messaging
 {
-	public sealed class MessageReceiver
+	internal sealed class MessageReceiver
 	{
 		public event EventHandler<PersonSignedIn> PersonSignedIn;
 		public event EventHandler<PersonSignedOut> PersonSignedOut;

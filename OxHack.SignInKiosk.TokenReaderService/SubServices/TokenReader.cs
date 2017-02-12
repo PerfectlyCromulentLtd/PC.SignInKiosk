@@ -8,17 +8,17 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 	class TokenReader
 	{
 		private bool isRunning;
-		private readonly MessagePublisher messageSender;
+		private readonly MessagingClient messagingClient;
 		private Task worker;
 
-		public TokenReader(MessagePublisher messageSender)
+		public TokenReader(MessagingClient messagingClient)
 		{
-			this.messageSender = messageSender;
+			this.messagingClient = messagingClient;
 		}
 
 		public async Task Start()
 		{
-			await this.messageSender.Connect();
+			await this.messagingClient.Connect();
 
 			this.worker = Task.Run(() => WorkerLoop());
 		}
@@ -27,7 +27,7 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 		{
 			this.isRunning = await Task.FromResult(false);
 			await this.worker;
-			await this.messageSender.Disconnect();
+			await this.messagingClient.Disconnect();
 		}
 
 		private async Task WorkerLoop()
@@ -36,7 +36,7 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 
 			while (this.isRunning)
 			{
-				await this.messageSender.Publish(new TokenRead(DateTime.Now.Ticks.ToString()));
+				await this.messagingClient.Publish(new TokenRead(DateTime.Now.Ticks.ToString()));
 				await Task.Delay(TimeSpan.FromSeconds(5));
 			}
 		}

@@ -12,7 +12,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService
 
 		public Bootstrapper()
 		{
-			this.wcfServiceRunner = new WcfServiceRunner(new MessageReceiver(), new MessagePublisher());
+			this.wcfServiceRunner = new WcfServiceRunner(new MessagingClient());
 		}
 
 		public async Task Start()

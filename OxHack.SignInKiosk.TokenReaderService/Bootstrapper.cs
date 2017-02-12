@@ -10,7 +10,7 @@ namespace OxHack.SignInKiosk.TokenReaderService
 
 		public Bootstrapper()
 		{
-			this.tokenReader = new TokenReader(new MessagePublisher());
+			this.tokenReader = new TokenReader(new MessagingClient());
 		}
 
 		public async Task Start()

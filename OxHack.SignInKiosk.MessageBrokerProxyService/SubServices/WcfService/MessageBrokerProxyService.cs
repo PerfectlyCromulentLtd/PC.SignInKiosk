@@ -11,21 +11,19 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 	{
 		private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 		private IMessageBrokerProxyServiceCallback callBack;
-		private readonly MessageReceiver messageReceiver;
-		private readonly MessagePublisher messagePublisher;
+		private readonly MessagingClient messagingClient;
 
-		public MessageBrokerProxyService(MessageReceiver messageReceiver, MessagePublisher messageSender)
+		public MessageBrokerProxyService(MessagingClient messagingClient)
 		{
-			this.messageReceiver = messageReceiver;
-			this.messagePublisher = messageSender;
+			this.messagingClient = messagingClient;
 
-			this.messageReceiver.PersonSignedIn += (s, e) => this.RelayPersonSignedInMessage(e);
-			this.messageReceiver.PersonSignedOut += (s, e) => this.RelayPersonSignedOutMessage(e);
-			this.messageReceiver.SignInRequestSubmitted += (s, e) => this.RelaySignInRequestSubmitted(e);
-			this.messageReceiver.TokenRead += (s, e) => this.RelayTokenReadMessage(e);
+			this.messagingClient.PersonSignedIn += this.RelayPersonSignedInMessage;
+			this.messagingClient.PersonSignedOut += this.RelayPersonSignedOutMessage;
+			this.messagingClient.SignInRequestSubmitted += this.RelaySignInRequestSubmitted;
+			this.messagingClient.TokenRead += this.RelayTokenReadMessage;
 		}
 
-		private void RelayPersonSignedInMessage(PersonSignedIn message)
+		private void RelayPersonSignedInMessage(Object sender, PersonSignedIn message)
 		{
 			try
 			{
@@ -37,7 +35,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			}
 		}
 
-		private void RelayPersonSignedOutMessage(PersonSignedOut message)
+		private void RelayPersonSignedOutMessage(Object sender, PersonSignedOut message)
 		{
 			try
 			{
@@ -51,7 +49,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			}
 		}
 
-		private void RelaySignInRequestSubmitted(SignInRequestSubmitted message)
+		private void RelaySignInRequestSubmitted(Object sender, SignInRequestSubmitted message)
 		{
 			try
 			{
@@ -65,7 +63,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			}
 		}
 
-		private void RelayTokenReadMessage(TokenRead message)
+		private void RelayTokenReadMessage(Object sender, TokenRead message)
 		{
 			try
 			{
@@ -85,7 +83,10 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			{
 				this.logger.Debug($"Publishing {nameof(SignInRequestSubmitted)} message: {message.Person.DisplayName}");
 
-				await this.messagePublisher.Publish(new PersonSignedIn(message.Person));
+				await this.messagingClient.Publish(message);
+
+				// HACK: temporary
+				await this.messagingClient.Publish(new PersonSignedIn(message.Person));
 			}
 			catch (Exception exception)
 			{

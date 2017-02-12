@@ -14,7 +14,7 @@ namespace OxHack.SignInKiosk.PrinterService
 
 		public Bootstrapper()
 		{
-			this.messageListener = new SignInEventPrinter(new MessageReceiver());
+			this.messageListener = new SignInEventPrinter(new MessagingClient());
 		}
 
 		public async Task Start()

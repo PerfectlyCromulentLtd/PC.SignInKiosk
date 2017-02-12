@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Messaging
 {
-	public class MessagePublisher
+	internal class MessagePublisher
 	{
 		private BusHandle bus;
 		private readonly IBusControl busControl;

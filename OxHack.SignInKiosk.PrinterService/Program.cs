@@ -42,7 +42,7 @@ namespace OxHack.SignInKiosk.PrinterService
 			var consoleTarget = new ConsoleTarget()
 			{
 				Name = "Console",
-				Layout = @"${date:format=HH\:mm\:ss} ${logger} ${message}"
+				Layout = "\n${date:format=HH\\:mm\\:ss} ${logger}\n\t${message}"
 			};
 			config.AddTarget(consoleTarget);
 
