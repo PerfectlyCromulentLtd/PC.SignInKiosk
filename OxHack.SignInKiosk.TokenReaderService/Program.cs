@@ -24,8 +24,8 @@ namespace OxHack.SignInKiosk.TokenReaderService
 				//hostConf.RunAsLocalSystem();
 
 				hostConf.SetDescription("Translates RFID token reads into RabbitMQ \"TokenRead\" messages.");
-				hostConf.SetDisplayName("SignInKioskTokenReaderService");
-				hostConf.SetServiceName("SignInKioskTokenReaderService");
+				hostConf.SetDisplayName("SignInKiosk.TokenReaderService");
+				hostConf.SetServiceName("SignInKiosk.TokenReaderService");
 			});
 		}
 

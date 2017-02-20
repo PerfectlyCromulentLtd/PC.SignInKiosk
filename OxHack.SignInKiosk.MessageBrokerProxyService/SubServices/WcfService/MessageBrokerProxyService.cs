@@ -84,9 +84,6 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 				this.logger.Debug($"Publishing {nameof(SignInRequestSubmitted)} message: {message.Person.DisplayName}");
 
 				await this.messagingClient.Publish(message);
-
-				// HACK: temporary
-				await this.messagingClient.Publish(new PersonSignedIn(message.Person));
 			}
 			catch (Exception exception)
 			{

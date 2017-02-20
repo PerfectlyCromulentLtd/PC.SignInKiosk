@@ -30,8 +30,8 @@ namespace OxHack.SignInKiosk.PrinterService
 				//hostConf.RunAsLocalSystem();
 
 				hostConf.SetDescription($"Listens for {nameof(PersonSignedIn)} and Sign-out messages and logs them to paper using the receipt printer.");
-				hostConf.SetDisplayName("SignInKioskPrinterService");
-				hostConf.SetServiceName("SignInKioskPrinterService");
+				hostConf.SetDisplayName("SignInKiosk.PrinterService");
+				hostConf.SetServiceName("SignInKiosk.PrinterService");
 			});
 		}
 

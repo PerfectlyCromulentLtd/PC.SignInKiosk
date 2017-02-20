@@ -29,8 +29,8 @@ namespace OxHack.SignInKiosk.CoreService
 				//hostConf.RunAsLocalSystem();
 
 				hostConf.SetDescription("Responsible");
-				hostConf.SetDisplayName("SignInKioskCoreService");
-				hostConf.SetServiceName("SignInKioskCoreService");
+				hostConf.SetDisplayName("SignInKiosk.CoreService");
+				hostConf.SetServiceName("SignInKiosk.CoreService");
 			});
 		}
 
