@@ -29,7 +29,7 @@ namespace OxHack.SignInKiosk.PrinterService
 				});
 				//hostConf.RunAsLocalSystem();
 
-				hostConf.SetDescription($"Listens for {nameof(PersonSignedIn)} and Sign-out messages and logs them to paper using the receipt printer.");
+				hostConf.SetDescription($"Listens for {nameof(PersonSignedIn)} and {nameof(PersonSignedOut)} messages and logs them to paper using the receipt printer.");
 				hostConf.SetDisplayName("SignInKiosk.PrinterService");
 				hostConf.SetServiceName("SignInKiosk.PrinterService");
 			});

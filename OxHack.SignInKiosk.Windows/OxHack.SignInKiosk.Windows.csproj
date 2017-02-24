@@ -118,6 +118,8 @@
     <Compile Include="Events\Connected.cs" />
     <Compile Include="Events\Disconnected.cs" />
     <Compile Include="Services\MessageOrchestratorService.cs" />
+    <Compile Include="Services\SignInService.cs" />
+    <Compile Include="Services\ToastService.cs" />
     <Compile Include="Views\NameEntryView.xaml.cs">
       <DependentUpon>NameEntryView.xaml</DependentUpon>
     </Compile>
@@ -234,6 +236,10 @@
     </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\..\packages\System.Runtime.InteropServices.RuntimeInformation.4.0.0\lib\win8\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="ToastHelper, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\ToastHelper.1.0.0.0\lib\ToastHelper.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

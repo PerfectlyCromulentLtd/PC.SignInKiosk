@@ -7,53 +7,54 @@
     mc:Ignorable="d"
 	RequestedTheme="Light">
 
-	<Grid Background="MintCream">
-		<Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-		</Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="*"/>
-			<ColumnDefinition Width="Auto"/>
-		</Grid.ColumnDefinitions>
+    <Grid Background="MintCream">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="Auto"/>
+        </Grid.ColumnDefinitions>
 
-		<Viewbox
+        <Viewbox
 			Height="120"
 			HorizontalAlignment="Left"
 			Grid.Row="0">
-			<AppBarButton
+            <AppBarButton
 				x:Name="GoBack"
 				Margin="-20 0 0 -25"
 				Content="Back"
 				Icon="Back"	/>
-		</Viewbox>
-		<TextBlock 
+        </Viewbox>
+        <TextBlock 
 			Grid.Row="1" Grid.ColumnSpan="2"
 			FontSize="40"
 			TextWrapping="Wrap"
 			Margin="30 0"
 			Text="Please Note: Fire regulations require us to record an identifier for you." />
 
-		<TextBlock 
+        <TextBlock 
             Grid.Row="2" Grid.ColumnSpan="2"
 			Margin="30 30 0 0"
             FontSize="96"
 			TextWrapping="Wrap"
             Text="Your Name (or nickname):" />
 
-		<TextBox
+        <TextBox
 			x:Name="nameInput"
 			Grid.Row="3" Grid.Column="0"
 			HorizontalAlignment="Stretch"
 			VerticalAlignment="Stretch"
 			Margin="42 42 0 42"
 			FontSize="144"
-			InputScope="NameOrPhoneNumber"
-			Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-			/>
-		<Button
+			InputScope="Chat"
+            AcceptsReturn="True"
+			Text="{Binding Name, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+
+        <Button
 			x:Name="SubmitName"
 			Grid.Row="3" Grid.Column="1"
 			VerticalAlignment="Stretch"
@@ -61,5 +62,5 @@
 			Padding="21 0"
 			FontSize="144"
 			Content="OK" />
-	</Grid>
+    </Grid>
 </Page>

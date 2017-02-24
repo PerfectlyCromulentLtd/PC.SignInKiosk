@@ -8,6 +8,7 @@ using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
+using Windows.UI.Notifications;
 
 namespace OxHack.SignInKiosk
 {
@@ -36,6 +37,10 @@ namespace OxHack.SignInKiosk
 			this.container.Singleton<MessageBrokerService>();
 			this.container.Singleton<MessageOrchestratorService>();
 			this.container.Singleton<UserInfoService>();
+			this.container.Singleton<SignInService>();
+			this.container.PerRequest<ToastService>();
+
+			this.container.RegisterHandler(typeof(ToastNotifier), null, c => ToastNotificationManager.CreateToastNotifier());
 		}
 
 		protected override object GetInstance(Type service, string key)

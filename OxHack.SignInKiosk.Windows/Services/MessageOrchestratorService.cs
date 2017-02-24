@@ -4,10 +4,6 @@ using OxHack.SignInKiosk.MessageBrokerProxy;
 using OxHack.SignInKiosk.ViewModels;
 using OxHack.SignInKiosk.Views;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Services
 {
@@ -18,33 +14,52 @@ namespace OxHack.SignInKiosk.Services
 		IHandle<TokenRead>
 	{
 		private readonly INavigationService navigationService;
-		private readonly MessageBrokerService messageBrokerService;
+		private readonly SignInService signInService;
 		private readonly UserInfoService userInfoService;
+		private readonly ToastService toastService;
 
 		public MessageOrchestratorService(
 			INavigationService navigationService,
-			MessageBrokerService messageBrokerService,
-			UserInfoService userInfoService, 
+			SignInService signInService,
+			UserInfoService userInfoService,
+			ToastService toastService,
 			IEventAggregator eventAggregator)
 		{
 			this.navigationService = navigationService;
-			this.messageBrokerService = messageBrokerService;
+			this.signInService = signInService;
 			this.userInfoService = userInfoService;
+			this.toastService = toastService;
 
 			eventAggregator.Subscribe(this);
 		}
 
 		public async void Handle(TokenRead message)
 		{
-			var person = this.userInfoService.GetUserByTokenId(message.Id);
+			// TODO: Play success beep
 
-			if (person == null)
+			if (this.navigationService.CurrentSourcePageType != typeof(StartView))
 			{
-				this.navigationService.NavigateToViewModel<NameEntryViewModel>(message.Id);
+				this.toastService.Show("A fob was read and ignored.", "To sign-in with it go BACK to the sign-in screen and try again.");
 			}
 			else
 			{
-				await this.messageBrokerService.PublishSignInRequestSubmitted(new SignInRequestSubmitted() { Person = person });
+				var person = this.userInfoService.GetUserByTokenId(message.Id);
+
+				if (person == null)
+				{
+					this.navigationService.NavigateToViewModel<NameEntryViewModel>(message.Id);
+				}
+				else
+				{
+					if (this.signInService.IsSignedIn(person))
+					{
+						this.navigationService.NavigateToViewModel<ManualSignOutViewModel>(person.TokenId);
+					}
+					else
+					{
+						await this.signInService.RequestSignIn(person);
+					}
+				}
 			}
 		}
 

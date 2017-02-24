@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="c3944d1d-e5a7-4a30-9017-fc576bae4fc9" Publisher="CN=yargh" Version="1.0.0.22" />
+  <Identity Name="c3944d1d-e5a7-4a30-9017-fc576bae4fc9" Publisher="CN=yargh" Version="1.0.0.31" />
   <Properties>
     <DisplayName>OxHack.SignInKiosk.Windows</DisplayName>
     <PublisherDisplayName>yargh</PublisherDisplayName>
@@ -15,8 +15,11 @@
   </Resources>
   <Applications>
     <Application Id="App" Executable="$targetnametoken$.exe" EntryPoint="OxHack.SignInKiosk.Windows.App">
-      <m2:VisualElements DisplayName="OxHack.SignInKiosk.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="OxHack.SignInKiosk.Windows" ForegroundText="light" BackgroundColor="#464646">
+      <m2:VisualElements DisplayName="OxHack.SignInKiosk.Windows" Square150x150Logo="Assets\Logo.png" Square30x30Logo="Assets\SmallLogo.png" Description="OxHack.SignInKiosk.Windows" ForegroundText="light" BackgroundColor="#464646" ToastCapable="true">
         <m2:SplashScreen Image="Assets\SplashScreen.png" />
+        <m2:InitialRotationPreference>
+          <m2:Rotation Preference="landscape" />
+        </m2:InitialRotationPreference>
       </m2:VisualElements>
     </Application>
   </Applications>

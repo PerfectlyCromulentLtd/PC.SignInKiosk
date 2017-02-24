@@ -1,22 +1,29 @@
 ﻿using Caliburn.Micro;
 using OxHack.SignInKiosk.MessageBrokerProxy;
 using OxHack.SignInKiosk.Services;
+using OxHack.SignInKiosk.Views;
 using System;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
+using Windows.UI.Xaml.Navigation;
 
 namespace OxHack.SignInKiosk.ViewModels
 {
 	public class NameEntryViewModel : Screen
 	{
 		private readonly INavigationService navigationService;
-		private string uniqueId;
 		private readonly MessageBrokerService messageBroker;
+		private readonly UserInfoService userInfoService;
 
-		public NameEntryViewModel(INavigationService navigationService, MessageBrokerService messageBroker)
+		private string uniqueId;
+		private string name;
+
+		public NameEntryViewModel(INavigationService navigationService, MessageBrokerService messageBroker, UserInfoService userInfoService)
 		{
 			this.navigationService = navigationService;
 			this.messageBroker = messageBroker;
+			this.userInfoService = userInfoService;
+
 			this.CanSubmitName = true;
 		}
 
@@ -45,15 +52,19 @@ namespace OxHack.SignInKiosk.ViewModels
 				this.CanSubmitName = false;
 				this.NotifyOfPropertyChange(nameof(this.CanSubmitName));
 
+				var person = new Person()
+				{
+					TokenId = this.uniqueId,
+					DisplayName = name
+				};
+
 				await this.messageBroker.PublishSignInRequestSubmitted(
 					new SignInRequestSubmitted()
 					{
-						Person = new Person()
-						{
-							TokenId = this.uniqueId,
-							DisplayName = name
-						}
+						Person = person
 					});
+
+				this.userInfoService.AddUser(person);
 			}
 		}
 
@@ -70,13 +81,27 @@ namespace OxHack.SignInKiosk.ViewModels
 			}
 
 			this.Name = String.Empty;
-			this.NotifyOfPropertyChange(nameof(this.Name));
 		}
 
 		public string Name
 		{
-			get;
-			set;
+			get
+			{
+				return this.name;
+			}
+			set
+			{
+				if (this.name != value)
+				{
+					this.name = (value ?? String.Empty).Trim();
+					this.NotifyOfPropertyChange();
+
+					if (value.Contains("\n"))
+					{
+						this.SubmitName();
+					}
+				}
+			}
 		}
 	}
 }

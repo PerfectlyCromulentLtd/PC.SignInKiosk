@@ -1,9 +1,10 @@
 ﻿using OxHack.SignInKiosk.MessageBrokerProxy;
+using System;
 using System.Collections.Generic;
 
 namespace OxHack.SignInKiosk.Services
 {
-	class UserInfoService
+	public class UserInfoService
 	{
 		Dictionary<string, Person> usersByTokenId;
 
@@ -19,6 +20,17 @@ namespace OxHack.SignInKiosk.Services
 			this.usersByTokenId.TryGetValue(tokenId, out result);
 
 			return result;
+		}
+
+		public void AddUser(Person newUser)
+		{
+			//TODO: properly implement this
+			if (newUser == null || string.IsNullOrWhiteSpace(newUser.TokenId) || this.usersByTokenId.ContainsKey(newUser.TokenId))
+			{
+				throw new ArgumentException();
+			}
+
+			this.usersByTokenId.Add(newUser.TokenId, newUser);
 		}
 	}
 }

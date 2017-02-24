@@ -1,4 +1,5 @@
 ﻿using OxHack.SignInKiosk.Messaging;
+using OxHack.SignInKiosk.Messaging.Messages;
 using OxHack.SignInKiosk.PrinterService.SubServices;
 using System;
 using System.Collections.Generic;
@@ -10,21 +11,23 @@ namespace OxHack.SignInKiosk.PrinterService
 {
 	class Bootstrapper
 	{
-		private readonly SignInEventPrinter messageListener;
+		private readonly SignInEventPrinter signInEventPrinter;
 
 		public Bootstrapper()
 		{
-			this.messageListener = new SignInEventPrinter(new MessagingClient());
+			this.signInEventPrinter = 
+				new SignInEventPrinter(
+					new MessagingClient(subscriptions: new[] { typeof(PersonSignedIn), typeof(PersonSignedOut) }));
 		}
 
 		public async Task Start()
 		{
-			await this.messageListener.Start();
+			await this.signInEventPrinter.Start();
 		}
 
 		public async Task Stop()
 		{
-			await this.messageListener.Stop();
+			await this.signInEventPrinter.Stop();
 		}
 	}
 }

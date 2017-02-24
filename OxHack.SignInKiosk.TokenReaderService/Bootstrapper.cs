@@ -20,14 +20,14 @@ namespace OxHack.SignInKiosk.TokenReaderService
 
 		public async Task Start()
 		{
-			//await this.messageRelayer.Start();
+			await this.messageRelayer.Start();
 			await this.tokenReader.Start();
 		}
 
 		public async Task Stop()
 		{
 			await this.tokenReader.Stop();
-			//await this.messageRelayer.Stop();
+			await this.messageRelayer.Stop();
 		}
 	}
 }

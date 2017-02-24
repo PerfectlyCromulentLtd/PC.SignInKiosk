@@ -9,6 +9,8 @@ using Raspberry.IO.GeneralPurpose;
 using NLog;
 using System.Threading;
 using System.IO.Ports;
+using OxHack.SignInKiosk.TokenReaderService.Events;
+using OxHack.SignInKiosk.Messaging.Messages;
 
 namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 {
@@ -21,32 +23,35 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 
 		private Task transmitWorker;
 		private Task receiveWorker;
-		private Task dummyWorker;
+		private Task pollingWorker;
 
-		private readonly OutputPinConfiguration transmitPin;
-		private readonly InputPinConfiguration receivePin;
 		private readonly InputPinConfiguration busyPin;
 		private GpioConnection piConnection;
 		private readonly SerialPort serialPort;
 
+		private readonly byte[] factoryResetCommand = { 0x46, 0x55, 0xAA };
 		private readonly byte[] getProductAndFirmwareCommand = { 0x7A };
 		private readonly byte[] setHiTag2ModeCommand = { 0x76, 0x01 };
+		private readonly byte[] setEM400xModeCommand = { 0x76, 0x03 };
 		private readonly byte[] readHiTag2UidCommand = { 0x52, 0x00 };
-		//private readonly byte[] readHiTag2UidCommand = { 0x55 };
+		private readonly byte[] readHiTag2ConfigurationCommand = { 0x52, 0x03 };
+		private readonly byte[] readCardUidCommand = { 0x55 };
+		private const byte WriteEepromCommand = 0x50;
+
+		private const int HiTag2PasswordEepromAddress = 0x08;
+		private const int EnableUidEepromAddress = 0x0C;
+
+		private const byte TokenReadMask = 0xC6;
 
 		public TokenReader(IEventAggregator eventAggregator)
 		{
 			this.eventAggregator = eventAggregator;
+
 			this.canTransmit = new AutoResetEvent(false);
 
-			//this.transmitPin = ConnectorPin.P1Pin08.Output();
-			//this.receivePin = ConnectorPin.P1Pin10.Input();
 			this.busyPin = ConnectorPin.P1Pin12.Input();
-			this.busyPin.OnStatusChanged(this.OnBusyChanged);
 
 			this.serialPort = new SerialPort("/dev/ttyAMA0", 9600, Parity.None, 8, StopBits.One);
-			this.serialPort.DataReceived += (s, e) => this.logger.Debug(":) Data received over serial port :)");
-			this.serialPort.ErrorReceived += (s, e) => this.logger.Error("-! Serial port error: " + Enum.GetName(typeof(SerialError), e.EventType));
 		}
 
 		public async Task Start()
@@ -54,20 +59,20 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 			this.logger.Debug("Starting...");
 
 			this.transmitQueue = new BlockingCollection<Action>();
-			//this.transmitQueue.Add(() => this.Transmit(this.setHiTag2ModeCommand));
 
 			this.serialPort.Open();
-
 			this.piConnection =
 				new GpioConnection(
-					//this.transmitPin,
-					//this.receivePin,
-					this.busyPin
-					);
+					new GpioConnectionSettings()
+					{
+						PollInterval = TimeSpan.FromMilliseconds(5)
+					},
+					this.busyPin);
+			this.piConnection.PinStatusChanged += this.OnPinStatusChanged;
 
+			this.receiveWorker = Task.Run(() => this.ReceiveWorkerLoop());
+			this.pollingWorker = Task.Run(() => this.PollingWorkerLoop());
 			this.transmitWorker = Task.Run(() => this.TransmitWorkerLoop());
-			this.receiveWorker = Task.Run(() => this.ReceiveWorkerLopp());
-			this.dummyWorker = Task.Run(() => this.DummyWorkerLoop());
 
 			await Task.FromResult(0);
 			this.logger.Debug("... Started.");
@@ -78,49 +83,56 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 			this.logger.Debug("Stopping...");
 
 			this.transmitQueue.CompleteAdding();
-			this.piConnection.Close();
 			this.transmitWorker = null;
 
+			this.busyPin.OnStatusChanged(null);
+			this.piConnection.PinStatusChanged -= this.OnPinStatusChanged;
+			this.piConnection.Close();
 			this.serialPort.Close();
 
 			await Task.FromResult(0);
 			this.logger.Debug("... Stopped.");
 		}
 
-		private void OnBusyChanged(bool isBusy)
+		private void OnPinStatusChanged(object sender, PinStatusEventArgs e)
 		{
-			//this.logger.Debug($"Is Busy={isBusy}");
-
-			if (!isBusy)
+			if (e.Configuration == this.busyPin)
 			{
-				this.canTransmit.Set();
+				if (!e.Enabled)
+				{
+					this.canTransmit.Set();
+				}
 			}
 		}
 
-		private async Task DummyWorkerLoop()
+		private async Task PollingWorkerLoop()
 		{
-			this.logger.Debug("Dummy worker loop started.");
+			await Task.Delay(2000);
+
+			//for (int i = 0; i < 4; i++)
+			//{
+			//	this.FactoryReset();
+			//	this.EnableUID();
+			//	this.SetHiTag2Mode();
+			//	//this.SetEM400xMode();
+			//	this.EnableUID();
+			//}
+
 			while (true)
 			{
-				await Task.Delay(300);
+				await Task.Delay(50);
 
-				this.transmitQueue.Add(() => this.Transmit(this.readHiTag2UidCommand));
-
-				//this.logger.Debug("Queued up dummy command.");
+				if (this.transmitQueue.Count < 3)
+				{
+					//this.ReadHiTag2Uid();
+					this.ReadCardUid();
+				}
 			}
-		}
-
-		private void Transmit(byte[] payload)
-		{
-			//var message = String.Join(", ", payload.Select(item => $"{TokenReader.ToBitString(item)} ({item})"));
-			//this.logger.Debug($"Transmitting {message}.");
-
-			this.serialPort.Write(payload, 0, payload.Length);
 		}
 
 		private void TransmitWorkerLoop()
 		{
-			this.logger.Debug("Transmit worker loop started.");
+			//this.logger.Debug("Transmit worker loop started.");
 
 			foreach (var transmission in this.transmitQueue.GetConsumingEnumerable())
 			{
@@ -131,23 +143,39 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 			}
 		}
 
-		private void ReceiveWorkerLopp()
+		private void ReceiveWorkerLoop()
 		{
-			this.logger.Debug("Receive worker loop started.");
+			//this.logger.Debug("Receive worker loop started.");
 
+			var receiveBuffer = new byte[8];
 			while (true)
 			{
-				var receiveBuffer = new byte[8];
+				Array.Clear(receiveBuffer, 0, receiveBuffer.Length);
 				try
 				{
-					//byte ack = (byte)this.serialPort.ReadByte();
-					//this.logger.Debug($">>>>>> Received byte {TokenReader.ToBitString(ack)} ({ack})");
-
 					this.serialPort.Read(receiveBuffer, 0, 8);
-					this.logger.Debug($">>>>>> Received {String.Join(", ", receiveBuffer.Select(item => $"{TokenReader.ToBitString(item)} (0x{item.ToString("X2")})"))}");
+					var ack = receiveBuffer[0];
+					var wasTokenRead = (ack & TokenReader.TokenReadMask) == TokenReader.TokenReadMask;
 
-					//this.serialPort.Read(receiveBuffer, 0, 8);
-					//this.logger.Debug("Received: " + Encoding.ASCII.GetString(receiveBuffer));
+					uint tokenId = 0;
+
+					if (wasTokenRead)
+					{
+						tokenId = BitConverter.ToUInt32(receiveBuffer, 1);
+
+						//this.logger.Debug($"Read Token {tokenId} (0x{tokenId.ToString("X8")})");
+					}
+					//else
+					//{
+					//	this.logger.Debug($"-- no token --");
+					//}
+
+					this.eventAggregator.GetEvent<TokenReadEvent>().Publish(tokenId);
+
+					if (!wasTokenRead && ack != 0xC0)
+					{
+						//this.logger.Debug($">>>>>> Received {String.Join(", ", receiveBuffer.Select(item => $"{TokenReader.ToBitString(item)} (0x{item.ToString("X2")})"))}");
+					}
 				}
 				catch (Exception e)
 				{
@@ -156,10 +184,85 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 			}
 		}
 
-		private static string ToBitString(byte input)
+		private void ReadHiTag2Configuration()
 		{
-			return
-				new string(Enumerable.Range(0, 8).Reverse().Select(i => (int)Math.Pow(2, i)).Select(i => (input & i) != 0 ? '1' : '0').ToArray());
+			this.transmitQueue.Add(() => this.Transmit(this.readHiTag2ConfigurationCommand));
 		}
+
+		private void ReadHiTag2Uid()
+		{
+			this.transmitQueue.Add(() => this.Transmit(this.readHiTag2UidCommand));
+		}
+
+		private void ReadCardUid()
+		{
+			this.transmitQueue.Add(() => this.Transmit(this.readCardUidCommand));
+		}
+
+		private void FactoryReset()
+		{
+			this.logger.Debug("Performing Factory Reset.");
+			this.transmitQueue.Add(() => this.Transmit(this.factoryResetCommand));
+		}
+
+		private void SetHiTag2Mode()
+		{
+			this.logger.Debug("Setting HiTag2 Mode.");
+
+			var password = new byte[] { 0x21, 0xC3, 0x53, 0x83 };
+			//var password = new byte[] { 0x4D, 0x39, 0x4B, 0x52 };
+			//var password = new byte[] { 0xC9, 0x00, 0x00, 0xAA };
+			//var password = new byte[] { 0x4D, 0x49, 0x4B, 0x52 };
+
+			this.SetHiTag2Password(password);
+			//this.SetHiTag2Password("MIKR");
+
+			this.transmitQueue.Add(() => this.Transmit(this.setHiTag2ModeCommand));
+		}
+
+		private void SetHiTag2Password(string password)
+		{
+			var data = Encoding.ASCII.GetBytes(password ?? String.Empty).Take(4).ToArray();
+			this.SetHiTag2Password(data);
+		}
+
+		private void SetHiTag2Password(byte[] data)
+		{
+			this.logger.Debug("Setting HiTag2 password.");
+			this.WriteEeprom(TokenReader.HiTag2PasswordEepromAddress, data);
+		}
+
+		private void SetEM400xMode()
+		{
+			this.logger.Debug("Setting EM400X Mode.");
+			this.transmitQueue.Add(() => this.Transmit(this.setEM400xModeCommand));
+		}
+
+		private void EnableUID()
+		{
+			this.logger.Debug("Enabling UID reading.");
+			byte[] data = { 0xFF, 0xFF, 0xFF, 0xFF };
+			this.WriteEeprom(TokenReader.EnableUidEepromAddress, data);
+		}
+
+		private void Transmit(byte[] payload)
+		{
+			//var message = String.Join(", ", payload.Select(item => $"{TokenReader.ToBitString(item)} ({item})"));
+			//this.logger.Debug($"Transmitting {message}.");
+
+			this.serialPort.Write(payload, 0, payload.Length);
+		}
+
+		private void WriteEeprom(int startAddress, byte[] data)
+		{
+			for (int i = 0; i < data.Length; i++)
+			{
+				byte[] payload = { TokenReader.WriteEepromCommand, (byte)(startAddress + i), data[i] };
+				this.transmitQueue.Add(() => this.Transmit(payload));
+			}
+		}
+
+		private static string ToBitString(byte input)
+			=> new string(Enumerable.Range(0, 8).Reverse().Select(i => (int)Math.Pow(2, i)).Select(i => (input & i) != 0 ? '1' : '0').ToArray());
 	}
 }

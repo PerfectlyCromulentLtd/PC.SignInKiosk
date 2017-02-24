@@ -18,12 +18,15 @@ namespace OxHack.SignInKiosk.Messaging
 
 		private BusHandle bus;
 		private IBusControl busControl;
+		public static Type[] AllSubscribableTypes
+			=> new[] { typeof(PersonSignedIn), typeof(PersonSignedOut), typeof(SignInRequestSubmitted), typeof(TokenRead) };
 
 		public MessagingClient(
 			string username = "signInKiosk",
 			string password = "signInKiosk",
 			string connectionString = "rabbitmq://rampage:5672/",
-			string queueName = null
+			string queueName = null,
+			params Type[] subscriptions
 			)
 		{
 			var hostAddress = new Uri(connectionString);
@@ -52,10 +55,22 @@ namespace OxHack.SignInKiosk.Messaging
 						receiveConfig.AutoDelete = true;
 						receiveConfig.Durable = false;
 						receiveConfig.Exclusive = true;
-						receiveConfig.Consumer(() => new DelegateConsumer<PersonSignedIn>(message => this.PersonSignedIn?.Invoke(this, message)));
-						receiveConfig.Consumer(() => new DelegateConsumer<PersonSignedOut>(message => this.PersonSignedOut?.Invoke(this, message)));
-						receiveConfig.Consumer(() => new DelegateConsumer<SignInRequestSubmitted>(message => this.SignInRequestSubmitted?.Invoke(this, message)));
-						receiveConfig.Consumer(() => new DelegateConsumer<TokenRead>(message => this.TokenRead?.Invoke(this, message)));
+						if (subscriptions.Contains(typeof(PersonSignedIn)))
+						{
+							receiveConfig.Consumer(() => new DelegateConsumer<PersonSignedIn>(message => this.PersonSignedIn?.Invoke(this, message)));
+						}
+						if (subscriptions.Contains(typeof(PersonSignedOut)))
+						{
+							receiveConfig.Consumer(() => new DelegateConsumer<PersonSignedOut>(message => this.PersonSignedOut?.Invoke(this, message)));
+						}
+						if (subscriptions.Contains(typeof(SignInRequestSubmitted)))
+						{
+							receiveConfig.Consumer(() => new DelegateConsumer<SignInRequestSubmitted>(message => this.SignInRequestSubmitted?.Invoke(this, message)));
+						}
+						if (subscriptions.Contains(typeof(TokenRead)))
+						{
+							receiveConfig.Consumer(() => new DelegateConsumer<TokenRead>(message => this.TokenRead?.Invoke(this, message)));
+						}
 					});
 			});
 		}

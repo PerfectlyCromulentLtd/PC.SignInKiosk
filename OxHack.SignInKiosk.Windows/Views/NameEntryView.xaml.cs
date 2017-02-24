@@ -1,4 +1,6 @@
-﻿using OxHack.SignInKiosk.ViewModels;
+﻿using Caliburn.Micro;
+using OxHack.SignInKiosk.Services;
+using OxHack.SignInKiosk.ViewModels;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
@@ -21,10 +23,16 @@ namespace OxHack.SignInKiosk.Views
 		{
 			base.OnNavigatedTo(e);
 
-			var viewModel = this.DataContext as NameEntryViewModel;
+			this.ViewModel = this.DataContext as NameEntryViewModel;
 
 			var tokenId = e.Parameter as string;
-			await viewModel.Reset(tokenId);
+			await this.ViewModel.Reset(tokenId);
+		}
+
+		public NameEntryViewModel ViewModel
+		{
+			get;
+			private set;
 		}
 	}
 }

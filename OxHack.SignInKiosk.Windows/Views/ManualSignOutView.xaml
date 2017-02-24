@@ -7,53 +7,60 @@
     mc:Ignorable="d"
 	RequestedTheme="Light">
 
-	<Grid Background="MintCream">
+    <Grid Background="MintCream">
         <Grid.RowDefinitions>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="Auto"/>
-			<RowDefinition Height="*"/>
-			<RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-		<Grid.ColumnDefinitions>
-			<ColumnDefinition Width="Auto"/>
-			<ColumnDefinition Width="*"/>
-		</Grid.ColumnDefinitions>
-		<Viewbox
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Viewbox
 			Height="120"
 			HorizontalAlignment="Left"
 			Grid.Row="0">
-			<AppBarButton
+            <AppBarButton
 				x:Name="GoBack"
 				Margin="-20 0 0 -25"
 				Content="Back"
 				Icon="Back" />
-		</Viewbox>
+        </Viewbox>
 
-		<TextBlock 
+        <TextBlock 
 			Grid.Row="0" Grid.Column="1"
 			FontSize="72"
 			VerticalAlignment="Center"
 			Text="Select yourself from the list:" />
 
-		<ListView
-			x:Name="Candidates"
+        <ListBox
+			x:Name="SignInRecords"
 			Grid.Row="2" Grid.ColumnSpan="2"
-			Background="#22000000"
-            IsSwipeEnabled="False">
-		</ListView>
+            >
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical">
+                        <TextBlock FontSize="36" Text="{Binding DisplayName}"/>
+                        <TextBlock FontSize="24" Text="Signed-in at: 00:11:22 (today|yesterday|date)"/>
+                    </StackPanel>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
 
-		<StackPanel 
+        <StackPanel 
             Grid.Row="3" Grid.ColumnSpan="2"
 			Orientation="Horizontal"
             HorizontalAlignment="Right">
-			
-			<Button
+
+            <Button
 				x:Name="SignOut"
 				Grid.Row="2" Grid.Column="1"
 				VerticalAlignment="Stretch"
 				Margin="42"
 				FontSize="60"
 				Content="Sign-out"/>
-		</StackPanel>		
-	</Grid>
+        </StackPanel>
+    </Grid>
 </Page>

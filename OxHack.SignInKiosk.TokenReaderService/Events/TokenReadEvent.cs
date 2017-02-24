@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.TokenReaderService.Events
 {
-	class TokenReadEvent : PubSubEvent<TokenRead>
+	class TokenReadEvent : PubSubEvent<uint>
 	{
 	}
 }

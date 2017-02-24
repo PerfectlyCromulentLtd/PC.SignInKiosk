@@ -94,8 +94,6 @@
   <ItemGroup>
     <Compile Include="DelegateConsumer.cs" />
     <Compile Include="MessagingClient.cs" />
-    <Compile Include="MessageReceiver.cs" />
-    <Compile Include="MessagePublisher.cs" />
     <Compile Include="Messages\PersonSignedOut.cs" />
     <Compile Include="Messages\PersonSignedIn.cs" />
     <Compile Include="Messages\SignInRequestSubmitted.cs" />
