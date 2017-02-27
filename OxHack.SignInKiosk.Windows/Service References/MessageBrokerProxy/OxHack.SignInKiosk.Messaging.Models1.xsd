@@ -3,6 +3,7 @@
   <xs:complexType name="Person">
     <xs:sequence>
       <xs:element minOccurs="0" name="DisplayName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IsVisitor" type="xs:boolean" />
       <xs:element minOccurs="0" name="TokenId" nillable="true" type="xs:string" />
     </xs:sequence>
   </xs:complexType>

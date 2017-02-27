@@ -14,11 +14,14 @@ namespace OxHack.SignInKiosk.Services
 	{
 		private object syncLock = new object();
 		private readonly MessageBrokerService messageBrokerService;
+		private readonly UserInfoService userInfoService;
+
 		private readonly Dictionary<string, SignInRecord> signInRecordsByTokenId;
 
-		public SignInService(MessageBrokerService messageBrokerService, IEventAggregator eventAggregator)
+		public SignInService(MessageBrokerService messageBrokerService, UserInfoService userInfoService, IEventAggregator eventAggregator)
 		{
 			this.messageBrokerService = messageBrokerService;
+			this.userInfoService = userInfoService;
 			eventAggregator.Subscribe(this);
 
 			this.signInRecordsByTokenId = new Dictionary<string, SignInRecord>();
@@ -26,16 +29,19 @@ namespace OxHack.SignInKiosk.Services
 
 		public async Task RequestSignIn(Person person)
 		{
+			this.userInfoService.AddOrUpdateUser(person);
 			await this.messageBrokerService.PublishSignInRequestSubmitted(new SignInRequestSubmitted() { Person = person });
 		}
 
 		public bool IsSignedIn(Person person)
 		{
+			// TODO: Replace this with a call to the backend system
 			return this.signInRecordsByTokenId.ContainsKey(person.TokenId);
 		}
 
 		public IReadOnlyCollection<SignInRecord> GetPeopleSignedIn()
 		{
+			// TODO: Replace this with a call to the backend system
 			return this.signInRecordsByTokenId.Values.ToList();
 		}
 
@@ -47,7 +53,7 @@ namespace OxHack.SignInKiosk.Services
 			{
 				if (!this.signInRecordsByTokenId.ContainsKey(person.TokenId))
 				{
-					//this.signInRecordsByTokenId.Add(person.TokenId, new SignInRecord(message.Time, message.Person));
+					this.signInRecordsByTokenId.Add(person.TokenId, new SignInRecord(message.Time, message.Person));
 				}
 			}
 		}

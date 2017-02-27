@@ -16,12 +16,14 @@
   <xs:complexType name="PersonSignedIn">
     <xs:sequence>
       <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" minOccurs="0" name="Person" nillable="true" type="q2:Person" />
+      <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonSignedIn" nillable="true" type="tns:PersonSignedIn" />
   <xs:complexType name="PersonSignedOut">
     <xs:sequence>
       <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" minOccurs="0" name="Person" nillable="true" type="q3:Person" />
+      <xs:element minOccurs="0" name="Time" type="xs:dateTime" />
     </xs:sequence>
   </xs:complexType>
   <xs:element name="PersonSignedOut" nillable="true" type="tns:PersonSignedOut" />

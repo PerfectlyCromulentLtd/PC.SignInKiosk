@@ -15,22 +15,22 @@ namespace OxHack.SignInKiosk.Services
 
 		public Person GetUserByTokenId(string tokenId)
 		{
-			//TODO: properly implement this
+			//TODO: Replace this with a call to the backend system
 			Person result = null;
 			this.usersByTokenId.TryGetValue(tokenId, out result);
 
 			return result;
 		}
 
-		public void AddUser(Person newUser)
+		[Obsolete("This is just a dummy method to help simulate real behaviour.  It will need to be deleted.")]
+		public void AddOrUpdateUser(Person newUser)
 		{
-			//TODO: properly implement this
-			if (newUser == null || string.IsNullOrWhiteSpace(newUser.TokenId) || this.usersByTokenId.ContainsKey(newUser.TokenId))
+			if (newUser == null || string.IsNullOrWhiteSpace(newUser.TokenId))
 			{
 				throw new ArgumentException();
 			}
 
-			this.usersByTokenId.Add(newUser.TokenId, newUser);
+			this.usersByTokenId[newUser.TokenId] = newUser;
 		}
 	}
 }

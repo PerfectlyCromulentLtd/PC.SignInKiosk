@@ -52,6 +52,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         private string DisplayNameField;
         
+        private bool IsVisitorField;
+        
         private string TokenIdField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
@@ -63,6 +65,19 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
                 if ((object.ReferenceEquals(this.DisplayNameField, value) != true)) {
                     this.DisplayNameField = value;
                     this.RaisePropertyChanged("DisplayName");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public bool IsVisitor {
+            get {
+                return this.IsVisitorField;
+            }
+            set {
+                if ((this.IsVisitorField.Equals(value) != true)) {
+                    this.IsVisitorField = value;
+                    this.RaisePropertyChanged("IsVisitor");
                 }
             }
         }
@@ -127,6 +142,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         private OxHack.SignInKiosk.MessageBrokerProxy.Person PersonField;
         
+        private System.DateTime TimeField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public OxHack.SignInKiosk.MessageBrokerProxy.Person Person {
             get {
@@ -136,6 +153,19 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
                 if ((object.ReferenceEquals(this.PersonField, value) != true)) {
                     this.PersonField = value;
                     this.RaisePropertyChanged("Person");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Time {
+            get {
+                return this.TimeField;
+            }
+            set {
+                if ((this.TimeField.Equals(value) != true)) {
+                    this.TimeField = value;
+                    this.RaisePropertyChanged("Time");
                 }
             }
         }
@@ -157,6 +187,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         private OxHack.SignInKiosk.MessageBrokerProxy.Person PersonField;
         
+        private System.DateTime TimeField;
+        
         [System.Runtime.Serialization.DataMemberAttribute()]
         public OxHack.SignInKiosk.MessageBrokerProxy.Person Person {
             get {
@@ -166,6 +198,19 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
                 if ((object.ReferenceEquals(this.PersonField, value) != true)) {
                     this.PersonField = value;
                     this.RaisePropertyChanged("Person");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime Time {
+            get {
+                return this.TimeField;
+            }
+            set {
+                if ((this.TimeField.Equals(value) != true)) {
+                    this.TimeField = value;
+                    this.RaisePropertyChanged("Time");
                 }
             }
         }
@@ -281,6 +326,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
                 result.MaxBufferSize = int.MaxValue;
                 result.ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max;
                 result.MaxReceivedMessageSize = int.MaxValue;
+                result.Security.Mode = System.ServiceModel.SecurityMode.None;
                 return result;
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
@@ -288,7 +334,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         private static System.ServiceModel.EndpointAddress GetEndpointAddress(EndpointConfiguration endpointConfiguration) {
             if ((endpointConfiguration == EndpointConfiguration.ServiceEndpoint)) {
-                return new System.ServiceModel.EndpointAddress(new System.Uri("net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService"), new System.ServiceModel.UpnEndpointIdentity("ZODASREVENGE\\yargh"));
+                return new System.ServiceModel.EndpointAddress("net.tcp://localhost:8137/MessageBrokerProxyService");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }

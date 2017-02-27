@@ -93,6 +93,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DelegateConsumer.cs" />
+    <Compile Include="Messages\SignOutRequestSubmitted.cs" />
     <Compile Include="MessagingClient.cs" />
     <Compile Include="Messages\PersonSignedOut.cs" />
     <Compile Include="Messages\PersonSignedIn.cs" />

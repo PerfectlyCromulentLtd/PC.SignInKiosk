@@ -2,6 +2,7 @@
 using OxHack.SignInKiosk.MessageBrokerProxy;
 using OxHack.SignInKiosk.Services;
 using OxHack.SignInKiosk.Views;
+using Prism.Commands;
 using System;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
@@ -12,19 +13,21 @@ namespace OxHack.SignInKiosk.ViewModels
 	public class NameEntryViewModel : Screen
 	{
 		private readonly INavigationService navigationService;
-		private readonly MessageBrokerService messageBroker;
-		private readonly UserInfoService userInfoService;
+		private readonly SignInService signInService;
 
 		private string uniqueId;
 		private string name;
+		private bool showMembershipStatusPicker;
+		private bool isVisitor;
+		private bool isMember;
+		private bool isBusy;
 
-		public NameEntryViewModel(INavigationService navigationService, MessageBrokerService messageBroker, UserInfoService userInfoService)
+		public NameEntryViewModel(INavigationService navigationService, SignInService signInService)
 		{
 			this.navigationService = navigationService;
-			this.messageBroker = messageBroker;
-			this.userInfoService = userInfoService;
+			this.signInService = signInService;
 
-			this.CanSubmitName = true;
+			this.SubmitCommand = new DelegateCommand(this.Submit, this.CanSubmit);
 		}
 
 		public void GoBack()
@@ -34,38 +37,43 @@ namespace OxHack.SignInKiosk.ViewModels
 
 		public bool CanSubmitName
 		{
-			get;
-			set;
+			get
+			{
+				return !String.IsNullOrWhiteSpace(this.Name) && !this.ShowMembershipStatusPicker && !this.IsBusy;
+			}
 		}
 
-		public async void SubmitName()
+		internal void SubmitName()
 		{
-			var name = this.Name?.Trim();
-			if (String.IsNullOrWhiteSpace(name))
+			if (this.CanSubmitName)
 			{
-				// sacrilege:
-				var dialog = new MessageDialog("Please try entering some characters this time.", "Bleep blorp");
-				await dialog.ShowAsync();
+				this.ShowMembershipStatusPicker = true;
 			}
-			else
+		}
+
+		public DelegateCommand SubmitCommand
+		{
+			get;
+		}
+
+		public bool CanSubmit()
+		{
+			return (this.IsVisitor || this.IsMember) && !this.IsBusy;
+		}
+
+		public async void Submit()
+		{
+			this.IsBusy = true;
+			this.ShowMembershipStatusPicker = false;
+
+			var person = new Person()
 			{
-				this.CanSubmitName = false;
-				this.NotifyOfPropertyChange(nameof(this.CanSubmitName));
+				TokenId = this.uniqueId,
+				DisplayName = name,
+				IsVisitor = this.IsVisitor
+			};
 
-				var person = new Person()
-				{
-					TokenId = this.uniqueId,
-					DisplayName = name
-				};
-
-				await this.messageBroker.PublishSignInRequestSubmitted(
-					new SignInRequestSubmitted()
-					{
-						Person = person
-					});
-
-				this.userInfoService.AddUser(person);
-			}
+			await this.signInService.RequestSignIn(person);
 		}
 
 		internal async Task Reset(string tokenId = null)
@@ -95,11 +103,71 @@ namespace OxHack.SignInKiosk.ViewModels
 				{
 					this.name = (value ?? String.Empty).Trim();
 					this.NotifyOfPropertyChange();
+					this.NotifyOfPropertyChange(nameof(this.CanSubmitName));
+				}
+			}
+		}
 
-					if (value.Contains("\n"))
-					{
-						this.SubmitName();
-					}
+		public bool IsVisitor
+		{
+			get
+			{
+				return this.isVisitor;
+			}
+			set
+			{
+				this.isVisitor = value;
+				this.NotifyOfPropertyChange();
+				this.SubmitCommand.RaiseCanExecuteChanged();
+			}
+		}
+
+		public bool IsMember
+		{
+			get
+			{
+				return this.isMember;
+			}
+			set
+			{
+				this.isMember = value;
+				this.NotifyOfPropertyChange();
+				this.SubmitCommand.RaiseCanExecuteChanged();
+			}
+		}
+
+		public bool IsBusy
+		{
+			get
+			{
+				return this.isBusy;
+			}
+			set
+			{
+				this.isBusy = value;
+				this.NotifyOfPropertyChange();
+				this.NotifyOfPropertyChange(nameof(this.IsNotBusy));
+				this.NotifyOfPropertyChange(nameof(this.CanSubmitName));
+				this.SubmitCommand.RaiseCanExecuteChanged();
+			}
+		}
+
+		public bool IsNotBusy
+			=> !this.IsBusy;
+
+		public bool ShowMembershipStatusPicker
+		{
+			get
+			{
+				return this.showMembershipStatusPicker;
+			}
+			set
+			{
+				if (value != this.ShowMembershipStatusPicker)
+				{
+					this.showMembershipStatusPicker = value;
+					this.NotifyOfPropertyChange();
+					this.NotifyOfPropertyChange(nameof(this.CanSubmitName));
 				}
 			}
 		}

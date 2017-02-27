@@ -4,9 +4,9 @@ using System.Runtime.Serialization;
 namespace OxHack.SignInKiosk.Messaging.Messages
 {
 	[DataContract]
-	public class SignInRequestSubmitted
+	public class SignOutRequestSubmitted
 	{
-		public SignInRequestSubmitted(Person person)
+		public SignOutRequestSubmitted(Person person)
 		{
 			this.Person = person;
 		}

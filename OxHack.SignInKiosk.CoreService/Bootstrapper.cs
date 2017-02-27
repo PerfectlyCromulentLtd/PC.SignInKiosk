@@ -1,18 +1,26 @@
-﻿using System;
+﻿using OxHack.SignInKiosk.CoreService.SubServices;
+using System;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.CoreService
 {
 	class Bootstrapper
 	{
-		public Task<bool> Start()
+		private readonly SignInEventProcessor eventProcessor;
+
+		public Bootstrapper(SignInEventProcessor eventProcessor)
 		{
-			throw new NotImplementedException();
+			this.eventProcessor = eventProcessor;
 		}
 
-		public Task<bool> Stop()
+		public async Task Start()
 		{
-			throw new NotImplementedException();
+			await this.eventProcessor.Start();
+		}
+
+		public async Task Stop()
+		{
+			await this.eventProcessor.Stop();
 		}
 	}
 }

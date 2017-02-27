@@ -21,14 +21,14 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" Protocol="mex" SourceId="1" />
+    <MetadataSource Address="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" Protocol="mex" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="6ae0a004-5f0e-428a-933c-48607e3b375c" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="691c67ab-c148-41fb-a427-bd0ae94cdaa6" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="4e1cb32d-81ce-469f-a982-d93e651afb66" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="OxHack.SignInKiosk.Messaging.Messages.xsd" MetadataType="Schema" ID="1b4add30-0e52-408c-b618-e4ff1b5ea6f0" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="OxHack.SignInKiosk.Messaging.Models.xsd" MetadataType="Schema" ID="0b638207-5ed4-4345-8222-d2ac9d75d446" SourceId="1" SourceUrl="net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="042f35b0-fec2-4c3b-a646-078e8c9d0b2c" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="d6becec6-581e-4dea-845e-ceb97aa27f2c" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="service21.xsd" MetadataType="Schema" ID="962720d3-f2dd-4692-9c2b-06169e65f0fb" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Messaging.Messages1.xsd" MetadataType="Schema" ID="31489d16-5cdf-4356-b32e-25ec092b1d8f" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Messaging.Models1.xsd" MetadataType="Schema" ID="20d96d84-8bc2-4e6e-9192-e657dd705843" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

@@ -14,12 +14,13 @@ namespace OxHack.SignInKiosk.Messaging
 		public event EventHandler<PersonSignedIn> PersonSignedIn;
 		public event EventHandler<PersonSignedOut> PersonSignedOut;
 		public event EventHandler<SignInRequestSubmitted> SignInRequestSubmitted;
+		public event EventHandler<SignOutRequestSubmitted> SignOutRequestSubmitted;
 		public event EventHandler<TokenRead> TokenRead;
 
 		private BusHandle bus;
 		private IBusControl busControl;
 		public static Type[] AllSubscribableTypes
-			=> new[] { typeof(PersonSignedIn), typeof(PersonSignedOut), typeof(SignInRequestSubmitted), typeof(TokenRead) };
+			=> new[] { typeof(PersonSignedIn), typeof(PersonSignedOut), typeof(SignInRequestSubmitted), typeof(SignOutRequestSubmitted), typeof(TokenRead) };
 
 		public MessagingClient(
 			string username = "signInKiosk",
@@ -66,6 +67,10 @@ namespace OxHack.SignInKiosk.Messaging
 						if (subscriptions.Contains(typeof(SignInRequestSubmitted)))
 						{
 							receiveConfig.Consumer(() => new DelegateConsumer<SignInRequestSubmitted>(message => this.SignInRequestSubmitted?.Invoke(this, message)));
+						}
+						if (subscriptions.Contains(typeof(SignOutRequestSubmitted)))
+						{
+							receiveConfig.Consumer(() => new DelegateConsumer<SignOutRequestSubmitted>(message => this.SignOutRequestSubmitted?.Invoke(this, message)));
 						}
 						if (subscriptions.Contains(typeof(TokenRead)))
 						{

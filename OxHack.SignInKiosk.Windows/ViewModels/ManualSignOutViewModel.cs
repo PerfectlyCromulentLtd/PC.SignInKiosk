@@ -28,16 +28,16 @@ namespace OxHack.SignInKiosk.ViewModels
 		{
 		}
 
-		internal void LoadSignOutList(string selectedPersonTokenId = null)
+		internal void LoadSignOutList(string selectedTokenId = null)
 		{
 			var people = this.signInService.GetPeopleSignedIn();
 
 			this.SignInRecords = people.ToList();
 			this.NotifyOfPropertyChange(nameof(this.SignInRecords));
 
-			if (selectedPersonTokenId != null)
+			if (selectedTokenId != null)
 			{
-				this.SelectedSignInRecord = this.SignInRecords.FirstOrDefault(person => person.TokenId == selectedPersonTokenId);
+				this.SelectedSignInRecord = this.SignInRecords.FirstOrDefault(record => record.Person.TokenId == selectedTokenId);
 				this.NotifyOfPropertyChange(nameof(this.SelectedSignInRecord));
 			}
 		}

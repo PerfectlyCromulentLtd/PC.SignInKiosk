@@ -155,17 +155,17 @@
     <None Include="OxHack.SignInKiosk.Windows_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
-    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Messaging.Messages.xsd">
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Messaging.Messages1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Messaging.Models.xsd">
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Messaging.Models1.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\MessageBrokerProxy\service.wsdl" />
-    <None Include="Service References\MessageBrokerProxy\service.xsd">
+    <None Include="Service References\MessageBrokerProxy\service1.wsdl" />
+    <None Include="Service References\MessageBrokerProxy\service2.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\MessageBrokerProxy\service1.xsd">
+    <None Include="Service References\MessageBrokerProxy\service21.xsd">
       <SubType>Designer</SubType>
     </None>
   </ItemGroup>
@@ -232,6 +232,10 @@
     </Reference>
     <Reference Include="Microsoft.Xaml.Interactivity, Version=12.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Caliburn.Micro.3.0.3\lib\win81\Microsoft.Xaml.Interactivity.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
+      <HintPath>..\packages\Prism.Core.6.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Prism.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">

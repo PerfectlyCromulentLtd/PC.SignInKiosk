@@ -29,5 +29,12 @@ namespace OxHack.SignInKiosk.Messaging.Models
 			get;
 			private set;
 		}
+
+		[DataMember]
+		public bool IsVisitor
+		{
+			get;
+			private set;
+		}
 	}
 }
