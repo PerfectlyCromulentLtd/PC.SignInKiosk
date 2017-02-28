@@ -142,7 +142,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         private OxHack.SignInKiosk.MessageBrokerProxy.Person PersonField;
         
-        private System.DateTime TimeField;
+        private System.DateTime SignInTimeField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public OxHack.SignInKiosk.MessageBrokerProxy.Person Person {
@@ -158,14 +158,14 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Time {
+        public System.DateTime SignInTime {
             get {
-                return this.TimeField;
+                return this.SignInTimeField;
             }
             set {
-                if ((this.TimeField.Equals(value) != true)) {
-                    this.TimeField = value;
-                    this.RaisePropertyChanged("Time");
+                if ((this.SignInTimeField.Equals(value) != true)) {
+                    this.SignInTimeField = value;
+                    this.RaisePropertyChanged("SignInTime");
                 }
             }
         }
@@ -187,7 +187,9 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         private OxHack.SignInKiosk.MessageBrokerProxy.Person PersonField;
         
-        private System.DateTime TimeField;
+        private System.DateTime SignInTimeField;
+        
+        private System.DateTime SignOutTimeField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
         public OxHack.SignInKiosk.MessageBrokerProxy.Person Person {
@@ -203,14 +205,27 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.DateTime Time {
+        public System.DateTime SignInTime {
             get {
-                return this.TimeField;
+                return this.SignInTimeField;
             }
             set {
-                if ((this.TimeField.Equals(value) != true)) {
-                    this.TimeField = value;
-                    this.RaisePropertyChanged("Time");
+                if ((this.SignInTimeField.Equals(value) != true)) {
+                    this.SignInTimeField = value;
+                    this.RaisePropertyChanged("SignInTime");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime SignOutTime {
+            get {
+                return this.SignOutTimeField;
+            }
+            set {
+                if ((this.SignOutTimeField.Equals(value) != true)) {
+                    this.SignOutTimeField = value;
+                    this.RaisePropertyChanged("SignOutTime");
                 }
             }
         }

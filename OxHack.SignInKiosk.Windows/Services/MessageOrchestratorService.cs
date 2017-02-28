@@ -51,7 +51,7 @@ namespace OxHack.SignInKiosk.Services
 				}
 				else
 				{
-					if (this.signInService.IsSignedIn(person))
+					if (this.signInService.IsSignedIn(person.TokenId))
 					{
 						this.navigationService.NavigateToViewModel<ManualSignOutViewModel>(person.TokenId);
 					}

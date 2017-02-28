@@ -1,4 +1,5 @@
 ﻿using OxHack.SignInKiosk.Messaging.Models;
+using System;
 using System.Runtime.Serialization;
 
 namespace OxHack.SignInKiosk.Messaging.Messages
@@ -6,9 +7,17 @@ namespace OxHack.SignInKiosk.Messaging.Messages
 	[DataContract]
 	public class SignOutRequestSubmitted
 	{
-		public SignOutRequestSubmitted(Person person)
+		public SignOutRequestSubmitted(DateTime signInTime, Person person)
 		{
+			this.SignInTime = signInTime;
 			this.Person = person;
+		}
+
+		[DataMember]
+		public DateTime SignInTime
+		{
+			get;
+			private set;
 		}
 
 		[DataMember]

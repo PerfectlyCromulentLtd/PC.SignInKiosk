@@ -6,20 +6,40 @@ namespace OxHack.SignInKiosk.Database.Models
 {
     class AuditRecord
 	{
+		internal const string SignInRecordType = "SignIn";
+		internal const string SignOutRecordType = "SignOut";
+
+		public int SequenceNumber
+		{
+			get;
+			set;
+		}
+
 		public string RecordType
 		{
 			get;
 			set;
 		}
 
-		public string PersonIdentifier
+		public DateTime Time
 		{
 			get;
 			set;
 		}
 
+		public string PersonTokenId
+		{
+			get;
+			set;
+		}
 
-		public bool IsGuest
+		public string PersonDisplayName
+		{
+			get;
+			set;
+		}
+
+		public bool PersonIsVisitor
 		{
 			get;
 			set;

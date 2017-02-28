@@ -16,7 +16,7 @@ namespace OxHack.SignInKiosk.Services
 		private readonly MessageBrokerService messageBrokerService;
 		private readonly UserInfoService userInfoService;
 
-		private readonly Dictionary<string, SignInRecord> signInRecordsByTokenId;
+		private readonly List<SignedInRecord> signedInRecords;
 
 		public SignInService(MessageBrokerService messageBrokerService, UserInfoService userInfoService, IEventAggregator eventAggregator)
 		{
@@ -24,7 +24,7 @@ namespace OxHack.SignInKiosk.Services
 			this.userInfoService = userInfoService;
 			eventAggregator.Subscribe(this);
 
-			this.signInRecordsByTokenId = new Dictionary<string, SignInRecord>();
+			this.signedInRecords = new List<SignedInRecord>();
 		}
 
 		public async Task RequestSignIn(Person person)
@@ -33,16 +33,16 @@ namespace OxHack.SignInKiosk.Services
 			await this.messageBrokerService.PublishSignInRequestSubmitted(new SignInRequestSubmitted() { Person = person });
 		}
 
-		public bool IsSignedIn(Person person)
+		public bool IsSignedIn(string tokenId)
 		{
 			// TODO: Replace this with a call to the backend system
-			return this.signInRecordsByTokenId.ContainsKey(person.TokenId);
+			return (tokenId != null) && this.signedInRecords.Any(item => item.TokenId == tokenId);
 		}
 
-		public IReadOnlyCollection<SignInRecord> GetPeopleSignedIn()
+		public IReadOnlyCollection<SignedInRecord> GetPeopleSignedIn()
 		{
 			// TODO: Replace this with a call to the backend system
-			return this.signInRecordsByTokenId.Values.ToList();
+			return this.signedInRecords.ToList();
 		}
 
 		public void Handle(PersonSignedIn message)
@@ -51,9 +51,16 @@ namespace OxHack.SignInKiosk.Services
 			var person = message.Person;
 			lock (this.syncLock)
 			{
-				if (!this.signInRecordsByTokenId.ContainsKey(person.TokenId))
+				if (!IsSignedIn(message.SignInTime, message.Person.DisplayName))
 				{
-					this.signInRecordsByTokenId.Add(person.TokenId, new SignInRecord(message.Time, message.Person));
+					this.signedInRecords.Add(
+						new SignedInRecord()
+						{
+							DisplayName = message.Person.DisplayName,
+							IsVisitor = message.Person.IsVisitor,
+							SignInTime = message.SignInTime,
+							TokenId = message.Person.TokenId
+						});
 				}
 			}
 		}
@@ -64,29 +71,39 @@ namespace OxHack.SignInKiosk.Services
 			var person = message.Person;
 			lock (this.syncLock)
 			{
-				if (this.signInRecordsByTokenId.ContainsKey(person.TokenId))
-				{
-					this.signInRecordsByTokenId.Remove(person.TokenId);
-				}
+				this.signedInRecords.RemoveAll(item => item.SignInTime == message.SignInTime && item.DisplayName == message.Person.DisplayName);
 			}
 		}
 
-		public class SignInRecord
+		private bool IsSignedIn(DateTime signInTime, string displayName)
 		{
-			public SignInRecord(DateTime time, Person person)
-			{
-				this.Time = time;
-				this.Person = person;
-			}
+			return this.signedInRecords.Any(item => item.SignInTime == signInTime && item.DisplayName == displayName);
+		}
 
-			public DateTime Time
+		public class SignedInRecord
+		{
+			public string DisplayName
 			{
 				get;
+				set;
 			}
 
-			public Person Person
+			public DateTime SignInTime
 			{
 				get;
+				set;
+			}
+
+			public string TokenId
+			{
+				get;
+				set;
+			}
+
+			public bool IsVisitor
+			{
+				get;
+				set;
 			}
 		}
 	}

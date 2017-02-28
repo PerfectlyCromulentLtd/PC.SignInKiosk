@@ -1,4 +1,5 @@
 ﻿using System;
+using Humanizer;
 using Caliburn.Micro;
 using OxHack.SignInKiosk.Services;
 using System.Linq;
@@ -32,26 +33,48 @@ namespace OxHack.SignInKiosk.ViewModels
 		{
 			var people = this.signInService.GetPeopleSignedIn();
 
-			this.SignInRecords = people.ToList();
+			this.SignInRecords = people.Select(item => new SignedInRecordViewModel(item)).ToList();
 			this.NotifyOfPropertyChange(nameof(this.SignInRecords));
 
 			if (selectedTokenId != null)
 			{
-				this.SelectedSignInRecord = this.SignInRecords.FirstOrDefault(record => record.Person.TokenId == selectedTokenId);
+				this.SelectedSignInRecord = this.SignInRecords.FirstOrDefault(record => record.TokenId == selectedTokenId);
 				this.NotifyOfPropertyChange(nameof(this.SelectedSignInRecord));
 			}
 		}
 
-		public List<SignInRecord> SignInRecords
+		public List<SignedInRecordViewModel> SignInRecords
 		{
 			get;
 			private set;
 		}
 
-		public SignInRecord SelectedSignInRecord
+		public SignedInRecordViewModel SelectedSignInRecord
 		{
 			get;
 			set;
+		}
+
+		public class SignedInRecordViewModel
+		{
+			private readonly SignedInRecord model;
+
+			public SignedInRecordViewModel(SignedInRecord model)
+			{
+				this.model = model;
+			}
+
+			public string DisplayName
+				=> this.model.DisplayName;
+
+			public string SignInTime
+				=> $"Signed-in @ {this.model.SignInTime.ToString("t")}{(this.model.SignInTime.DayOfWeek != DateTime.Now.DayOfWeek ? " (" + this.model.SignInTime.Humanize() + ") " : String.Empty)}";
+
+			public string AdditionalInformation
+				=> $"[ {(this.model.IsVisitor ? "visitor" : "member")} ]{(this.model.TokenId != null ? " [ signed-in with fob ]" : String.Empty)}";
+
+			internal string TokenId
+				=> this.model.TokenId;
 		}
 	}
 }

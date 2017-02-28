@@ -15,7 +15,7 @@ namespace OxHack.SignInKiosk.ViewModels
 		private readonly INavigationService navigationService;
 		private readonly SignInService signInService;
 
-		private string uniqueId;
+		private string tokenId;
 		private string name;
 		private bool showMembershipStatusPicker;
 		private bool isVisitor;
@@ -68,22 +68,22 @@ namespace OxHack.SignInKiosk.ViewModels
 
 			var person = new Person()
 			{
-				TokenId = this.uniqueId,
-				DisplayName = name,
+				TokenId = this.tokenId,
+				DisplayName = this.Name,
 				IsVisitor = this.IsVisitor
 			};
 
 			await this.signInService.RequestSignIn(person);
 		}
 
-		internal async Task Reset(string tokenId = null)
+		internal async Task Reset(string tokenId)
 		{
 			bool popUpRequired = (tokenId != null);
-			this.uniqueId = tokenId ?? Guid.NewGuid().ToString();
+			this.tokenId = tokenId;
 
 			if (popUpRequired)
 			{
-				// more sacrilege:
+				// sacrilege:
 				var dialog = new MessageDialog("It doesn't look like we've seen you before.\n\nPlease take a moment to introduce yourself.", "Are you new?");
 				await dialog.ShowAsync();
 			}

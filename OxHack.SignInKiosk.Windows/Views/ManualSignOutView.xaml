@@ -35,19 +35,35 @@
 			VerticalAlignment="Center"
 			Text="Select yourself from the list:" />
 
-        <ListBox
+        <GridView
+            x:Name="SignInRecords"
+            
+            Grid.Row="2" Grid.ColumnSpan="2">
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Vertical" Width="480">
+                        <TextBlock FontSize="36" Margin="0 0 0 -4" Text="{Binding DisplayName}"/>
+                        <TextBlock FontSize="20" Text="{Binding AdditionalInformation}"/>
+                        <TextBlock FontSize="20" Text="{Binding SignInTime}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+        
+        <!--<ListBox
 			x:Name="SignInRecords"
 			Grid.Row="2" Grid.ColumnSpan="2"
             >
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="36" Text="{Binding DisplayName}"/>
-                        <TextBlock FontSize="24" Text="Signed-in at: 00:11:22 (today|yesterday|date)"/>
+                        <TextBlock FontSize="36" Margin="0 0 0 -4" Text="{Binding DisplayName}"/>
+                        <TextBlock FontSize="20" Text="{Binding AdditionalInformation}"/>
+                        <TextBlock FontSize="20" Text="{Binding SignInTime}"/>
                     </StackPanel>
                 </DataTemplate>
             </ListBox.ItemTemplate>
-        </ListBox>
+        </ListBox>-->
 
         <StackPanel 
             Grid.Row="3" Grid.ColumnSpan="2"

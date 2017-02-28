@@ -25,12 +25,15 @@ namespace OxHack.SignInKiosk.Services
 		[Obsolete("This is just a dummy method to help simulate real behaviour.  It will need to be deleted.")]
 		public void AddOrUpdateUser(Person newUser)
 		{
-			if (newUser == null || string.IsNullOrWhiteSpace(newUser.TokenId))
+			if (newUser == null)
 			{
-				throw new ArgumentException();
+				throw new ArgumentNullException();
 			}
 
-			this.usersByTokenId[newUser.TokenId] = newUser;
+			if (!string.IsNullOrWhiteSpace(newUser.TokenId))
+			{
+				this.usersByTokenId[newUser.TokenId] = newUser;
+			}
 		}
 	}
 }

@@ -7,14 +7,22 @@ namespace OxHack.SignInKiosk.Messaging.Messages
 	[DataContract]
 	public class PersonSignedOut
 	{
-		public PersonSignedOut(DateTime time, Person person)
+		public PersonSignedOut(DateTime signInTime, DateTime signOutTime, Person person)
 		{
-			this.Time = time;
+			this.SignInTime = signInTime;
+			this.SignOutTime = signOutTime;
 			this.Person = person;
 		}
 
 		[DataMember]
-		public DateTime Time
+		public DateTime SignInTime
+		{
+			get;
+			private set;
+		}
+
+		[DataMember]
+		public DateTime SignOutTime
 		{
 			get;
 			private set;

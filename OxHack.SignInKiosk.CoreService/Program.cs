@@ -2,6 +2,7 @@
 using NLog.Config;
 using NLog.Targets;
 using OxHack.SignInKiosk.CoreService.SubServices;
+using OxHack.SignInKiosk.Database.Services;
 using OxHack.SignInKiosk.Messaging;
 using OxHack.SignInKiosk.Messaging.Messages;
 using System;
@@ -28,7 +29,9 @@ namespace OxHack.SignInKiosk.CoreService
 					serviceConf.ConstructUsing(
 						name => new Bootstrapper(
 							new SignInEventProcessor(
-								new MessagingClient(subscriptions: new[] { typeof(SignInRequestSubmitted), typeof(SignOutRequestSubmitted) }))));
+								new MessagingClient(subscriptions: new[] { typeof(SignInRequestSubmitted), typeof(SignOutRequestSubmitted) }),
+								new SignInService(new SqlDbConfig())
+						)));
 					serviceConf.WhenStarted(async target => await target.Start());
 					serviceConf.WhenStopped(async target => await target.Stop());
 				});
