@@ -1,16 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using NLog;
+using OxHack.SignInKiosk.TokenReaderService.Events;
+using Prism.Events;
+using Raspberry.IO.GeneralPurpose;
+using System;
+using System.Collections.Concurrent;
+using System.IO.Ports;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using Prism.Events;
-using System.Collections.Concurrent;
-using Raspberry.IO.GeneralPurpose;
-using NLog;
 using System.Threading;
-using System.IO.Ports;
-using OxHack.SignInKiosk.TokenReaderService.Events;
-using OxHack.SignInKiosk.Messaging.Messages;
+using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 {

@@ -1,12 +1,11 @@
 ﻿using NLog;
+using OxHack.SignInKiosk.Domanin.Messages;
 using OxHack.SignInKiosk.Messaging;
 using System;
-using System.Threading.Tasks;
-using OxHack.SignInKiosk.Messaging.Messages;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Collections.Concurrent;
+using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.PrinterService.SubServices
 {

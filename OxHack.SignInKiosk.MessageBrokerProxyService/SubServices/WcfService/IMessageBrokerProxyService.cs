@@ -1,11 +1,5 @@
-﻿using OxHack.SignInKiosk.Messaging.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.Serialization;
+﻿using OxHack.SignInKiosk.Domanin.Messages;
 using System.ServiceModel;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 {
@@ -13,7 +7,10 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 	public interface IMessageBrokerProxyService
 	{
 		[OperationContract]
-		void PublishSignInRequestSubmitted(SignInRequestSubmitted message);
+		void PublishSignInRequest(SignInRequestSubmitted message);
+
+		[OperationContract]
+		void PublishSignOutRequest(SignOutRequestSubmitted message);
 
 		[OperationContract]
 		void Subscribe();

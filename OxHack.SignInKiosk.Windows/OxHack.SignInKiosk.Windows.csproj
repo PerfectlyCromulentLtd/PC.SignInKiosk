@@ -114,8 +114,11 @@
     <Compile Include="Events\Connected.cs" />
     <Compile Include="Events\Disconnected.cs" />
     <Compile Include="Services\MessageOrchestratorService.cs" />
+    <Compile Include="Services\SignInApiWrapper.cs" />
     <Compile Include="Services\SignInService.cs" />
     <Compile Include="Services\ToastService.cs" />
+    <Compile Include="ViewModels\SignedOutFarewellViewModel.cs" />
+    <Compile Include="ViewModels\SignedInRecordViewModel.cs" />
     <Compile Include="Views\NameEntryView.xaml.cs">
       <DependentUpon>NameEntryView.xaml</DependentUpon>
     </Compile>
@@ -124,6 +127,9 @@
     </Compile>
     <Compile Include="Views\DisconnectedView.xaml.cs">
       <DependentUpon>DisconnectedView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SignedOutFarewellView.xaml.cs">
+      <DependentUpon>SignedOutFarewellView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\SignedInGreetingView.xaml.cs">
       <DependentUpon>SignedInGreetingView.xaml</DependentUpon>
@@ -138,7 +144,7 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Services\MessageBrokerService.cs" />
-    <Compile Include="Services\UserInfoService.cs" />
+    <Compile Include="Services\TokenHolderInfoService.cs" />
     <Compile Include="ViewModels\ManualSignOutViewModel.cs" />
     <Compile Include="ViewModels\NameEntryViewModel.cs" />
     <Compile Include="ViewModels\SignedInGreetingViewModel.cs" />
@@ -151,10 +157,10 @@
     <None Include="OxHack.SignInKiosk.Windows_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
-    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Messaging.Messages1.xsd">
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domanin.Messages.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Messaging.Models1.xsd">
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domanin.Models.xsd">
       <SubType>Designer</SubType>
     </None>
     <None Include="Service References\MessageBrokerProxy\service1.wsdl" />
@@ -200,6 +206,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
+    <Page Include="Views\SignedOutFarewellView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Views\SignedInGreetingView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -234,6 +244,10 @@
       <HintPath>..\..\packages\Caliburn.Micro.3.0.3\lib\win81\Microsoft.Xaml.Interactivity.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.9.0.1\lib\portable-net45+wp80+win8+wpa81\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Prism, Version=6.2.0.0, Culture=neutral, PublicKeyToken=91a96d2a154366d8, processorArchitecture=MSIL">
       <HintPath>..\packages\Prism.Core.6.2.0\lib\portable-win+net45+wp80+win81+wpa81+MonoAndroid10+MonoTouch10+Xamarin.iOS10\Prism.dll</HintPath>
       <Private>True</Private>
@@ -252,6 +266,12 @@
   </ItemGroup>
   <ItemGroup>
     <WCFMetadataStorage Include="Service References\MessageBrokerProxy\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj">
+      <Project>{fb095b7e-da4e-43dc-b072-cba277fbc99f}</Project>
+      <Name>OxHack.SignInKiosk.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '12.0' ">
     <VisualStudioVersion>12.0</VisualStudioVersion>

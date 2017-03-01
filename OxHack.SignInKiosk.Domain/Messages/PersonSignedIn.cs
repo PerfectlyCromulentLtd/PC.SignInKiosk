@@ -1,13 +1,13 @@
-﻿using OxHack.SignInKiosk.Messaging.Models;
+﻿using OxHack.SignInKiosk.Domanin.Messages.Models;
 using System;
 using System.Runtime.Serialization;
 
-namespace OxHack.SignInKiosk.Messaging.Messages
+namespace OxHack.SignInKiosk.Domanin.Messages
 {
 	[DataContract]
-	public class SignOutRequestSubmitted
+	public class PersonSignedIn
 	{
-		public SignOutRequestSubmitted(DateTime signInTime, Person person)
+		public PersonSignedIn(DateTime signInTime, Person person)
 		{
 			this.SignInTime = signInTime;
 			this.Person = person;

@@ -1,12 +1,12 @@
-﻿using OxHack.SignInKiosk.Messaging;
-using OxHack.SignInKiosk.Messaging.Messages;
-using System;
-using System.Threading.Tasks;
-using Prism.Events;
+﻿using NLog;
+using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Messaging;
 using OxHack.SignInKiosk.TokenReaderService.Events;
+using Prism.Events;
+using System;
 using System.Reactive.Linq;
 using System.Security.Cryptography;
-using NLog;
+using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 {

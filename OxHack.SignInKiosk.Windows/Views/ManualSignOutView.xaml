@@ -36,9 +36,10 @@
 			Text="Select yourself from the list:" />
 
         <GridView
+            Grid.Row="2" Grid.ColumnSpan="2"
             x:Name="SignInRecords"
-            
-            Grid.Row="2" Grid.ColumnSpan="2">
+            Background="#20000000"
+            >
             <GridView.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Vertical" Width="480">
@@ -50,21 +51,6 @@
             </GridView.ItemTemplate>
         </GridView>
         
-        <!--<ListBox
-			x:Name="SignInRecords"
-			Grid.Row="2" Grid.ColumnSpan="2"
-            >
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel Orientation="Vertical">
-                        <TextBlock FontSize="36" Margin="0 0 0 -4" Text="{Binding DisplayName}"/>
-                        <TextBlock FontSize="20" Text="{Binding AdditionalInformation}"/>
-                        <TextBlock FontSize="20" Text="{Binding SignInTime}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>-->
-
         <StackPanel 
             Grid.Row="3" Grid.ColumnSpan="2"
 			Orientation="Horizontal"

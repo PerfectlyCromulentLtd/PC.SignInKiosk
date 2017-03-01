@@ -1,10 +1,6 @@
-﻿using OxHack.SignInKiosk.Messaging;
-using OxHack.SignInKiosk.Messaging.Messages;
+﻿using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Messaging;
 using OxHack.SignInKiosk.PrinterService.SubServices;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.PrinterService

@@ -1,4 +1,5 @@
-﻿using ToastHelper;
+﻿using System;
+using ToastHelper;
 using Windows.UI.Notifications;
 
 namespace OxHack.SignInKiosk.Services
@@ -20,6 +21,11 @@ namespace OxHack.SignInKiosk.Services
 				Text = text,
 			};
 			this.toastNotifier.Show(content.CreateNotification());
+		}
+
+		internal void ShowGenericError()
+		{
+			this.Show("Something went wrong.", "Please wait a moment and try again or speak with the KeyHolder about signing in or out manually.");
 		}
 	}
 }

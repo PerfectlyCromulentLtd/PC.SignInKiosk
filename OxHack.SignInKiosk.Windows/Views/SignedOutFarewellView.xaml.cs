@@ -6,9 +6,9 @@ using Windows.UI.Xaml.Navigation;
 
 namespace OxHack.SignInKiosk.Views
 {
-	public sealed partial class SignedInGreetingView : Page
+	public sealed partial class SignedOutFarewellView : Page
 	{
-		public SignedInGreetingView()
+		public SignedOutFarewellView()
 		{
 			this.InitializeComponent();
 		}
@@ -17,7 +17,7 @@ namespace OxHack.SignInKiosk.Views
 		{
 			base.OnNavigatedTo(e);
 
-			var viewModel = this.DataContext as SignedInGreetingViewModel;
+			var viewModel = this.DataContext as SignedOutFarewellViewModel;
 			viewModel.Name = e.Parameter as string;
 		}
 	}

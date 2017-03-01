@@ -1,12 +1,10 @@
 ﻿using Caliburn.Micro;
-using OxHack.SignInKiosk.MessageBrokerProxy;
+using OxHack.SignInKiosk.Domanin.Models;
 using OxHack.SignInKiosk.Services;
-using OxHack.SignInKiosk.Views;
 using Prism.Commands;
 using System;
 using System.Threading.Tasks;
 using Windows.UI.Popups;
-using Windows.UI.Xaml.Navigation;
 
 namespace OxHack.SignInKiosk.ViewModels
 {
@@ -14,6 +12,7 @@ namespace OxHack.SignInKiosk.ViewModels
 	{
 		private readonly INavigationService navigationService;
 		private readonly SignInService signInService;
+		private readonly ToastService toastService;
 
 		private string tokenId;
 		private string name;
@@ -22,10 +21,11 @@ namespace OxHack.SignInKiosk.ViewModels
 		private bool isMember;
 		private bool isBusy;
 
-		public NameEntryViewModel(INavigationService navigationService, SignInService signInService)
+		public NameEntryViewModel(INavigationService navigationService, SignInService signInService, ToastService toastService)
 		{
 			this.navigationService = navigationService;
 			this.signInService = signInService;
+			this.toastService = toastService;
 
 			this.SubmitCommand = new DelegateCommand(this.Submit, this.CanSubmit);
 		}
@@ -63,17 +63,21 @@ namespace OxHack.SignInKiosk.ViewModels
 
 		public async void Submit()
 		{
-			this.IsBusy = true;
-			this.ShowMembershipStatusPicker = false;
-
-			var person = new Person()
+			try
 			{
-				TokenId = this.tokenId,
-				DisplayName = this.Name,
-				IsVisitor = this.IsVisitor
-			};
+				this.IsBusy = true;
+				this.ShowMembershipStatusPicker = false;
 
-			await this.signInService.RequestSignIn(person);
+				await this.signInService.RequestSignIn(this.tokenId, this.name, this.IsVisitor);
+			}
+			catch (Exception e)
+			{
+				this.toastService.ShowGenericError();
+			}
+			finally
+			{
+				this.IsBusy = false;
+			}
 		}
 
 		internal async Task Reset(string tokenId)

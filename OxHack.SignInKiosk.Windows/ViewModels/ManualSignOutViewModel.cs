@@ -1,11 +1,9 @@
-﻿using System;
-using Humanizer;
-using Caliburn.Micro;
+﻿using Caliburn.Micro;
 using OxHack.SignInKiosk.Services;
-using System.Linq;
-using OxHack.SignInKiosk.MessageBrokerProxy;
+using System;
 using System.Collections.Generic;
-using static OxHack.SignInKiosk.Services.SignInService;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.ViewModels
 {
@@ -13,11 +11,17 @@ namespace OxHack.SignInKiosk.ViewModels
 	{
 		private readonly INavigationService navigationService;
 		private readonly SignInService signInService;
+		private readonly ToastService toastService;
+		private SignedInRecordViewModel selectedSignInRecord;
 
-		public ManualSignOutViewModel(INavigationService navigationService, SignInService signInService)
+		public ManualSignOutViewModel(
+			INavigationService navigationService,
+			SignInService signInService,
+			ToastService toastService)
 		{
 			this.navigationService = navigationService;
 			this.signInService = signInService;
+			this.toastService = toastService;
 		}
 
 		public void GoBack()
@@ -25,21 +29,46 @@ namespace OxHack.SignInKiosk.ViewModels
 			this.navigationService.GoBack();
 		}
 
-		public void SignOut()
+		public bool CanSignOut
+			=> this.SelectedSignInRecord != null;
+
+		public async void SignOut()
 		{
+			if (this.CanSignOut)
+			{
+				try
+				{
+					await this.signInService.RequestSignOut(this.SelectedSignInRecord.Model);
+				}
+				catch (Exception e)
+				{
+					// TODO: Log error.
+					this.toastService.ShowGenericError();
+					this.GoBack();
+				}
+			}
 		}
 
-		internal void LoadSignOutList(string selectedTokenId = null)
+		internal async Task LoadSignOutList(string selectedTokenId = null)
 		{
-			var people = this.signInService.GetPeopleSignedIn();
-
-			this.SignInRecords = people.Select(item => new SignedInRecordViewModel(item)).ToList();
-			this.NotifyOfPropertyChange(nameof(this.SignInRecords));
-
-			if (selectedTokenId != null)
+			try
 			{
-				this.SelectedSignInRecord = this.SignInRecords.FirstOrDefault(record => record.TokenId == selectedTokenId);
-				this.NotifyOfPropertyChange(nameof(this.SelectedSignInRecord));
+				var currentlySignedIn = await this.signInService.GetCurrentlySignedIn();
+
+				this.SignInRecords = currentlySignedIn.Select(item => new SignedInRecordViewModel(item)).ToList();
+				this.NotifyOfPropertyChange(nameof(this.SignInRecords));
+
+				if (selectedTokenId != null)
+				{
+					this.SelectedSignInRecord = this.SignInRecords.FirstOrDefault(record => record.TokenId == selectedTokenId);
+					this.NotifyOfPropertyChange(nameof(this.SelectedSignInRecord));
+				}
+			}
+			catch (Exception e)
+			{
+				// TODO: Log error.
+				this.toastService.ShowGenericError();
+				this.GoBack();
 			}
 		}
 
@@ -51,30 +80,16 @@ namespace OxHack.SignInKiosk.ViewModels
 
 		public SignedInRecordViewModel SelectedSignInRecord
 		{
-			get;
-			set;
-		}
-
-		public class SignedInRecordViewModel
-		{
-			private readonly SignedInRecord model;
-
-			public SignedInRecordViewModel(SignedInRecord model)
+			get
 			{
-				this.model = model;
+				return this.selectedSignInRecord;
 			}
-
-			public string DisplayName
-				=> this.model.DisplayName;
-
-			public string SignInTime
-				=> $"Signed-in @ {this.model.SignInTime.ToString("t")}{(this.model.SignInTime.DayOfWeek != DateTime.Now.DayOfWeek ? " (" + this.model.SignInTime.Humanize() + ") " : String.Empty)}";
-
-			public string AdditionalInformation
-				=> $"[ {(this.model.IsVisitor ? "visitor" : "member")} ]{(this.model.TokenId != null ? " [ signed-in with fob ]" : String.Empty)}";
-
-			internal string TokenId
-				=> this.model.TokenId;
+			set
+			{
+				this.selectedSignInRecord = value;
+				this.NotifyOfPropertyChange();
+				this.NotifyOfPropertyChange(nameof(this.CanSignOut));
+			}
 		}
 	}
 }

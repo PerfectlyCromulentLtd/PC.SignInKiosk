@@ -182,6 +182,10 @@
       <Project>{ffdf6303-40bc-44e7-9b15-ec512929e9ee}</Project>
       <Name>OxHack.SignInKiosk.Database</Name>
     </ProjectReference>
+    <ProjectReference Include="..\OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj">
+      <Project>{4CFE82FF-BBF0-4D65-A4E8-301448F491BC}</Project>
+      <Name>OxHack.SignInKiosk.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OxHack.SignInKiosk.Messaging\OxHack.SignInKiosk.Messaging.csproj">
       <Project>{DAE3A274-DE5E-48B0-B2BB-B5CDBA3CB806}</Project>
       <Name>OxHack.SignInKiosk.Messaging</Name>

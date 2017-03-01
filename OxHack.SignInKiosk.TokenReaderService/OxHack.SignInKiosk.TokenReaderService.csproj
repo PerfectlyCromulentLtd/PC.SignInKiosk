@@ -107,6 +107,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj">
+      <Project>{fb095b7e-da4e-43dc-b072-cba277fbc99f}</Project>
+      <Name>OxHack.SignInKiosk.Domain</Name>
+    </ProjectReference>
     <ProjectReference Include="..\OxHack.SignInKiosk.Messaging\OxHack.SignInKiosk.Messaging.csproj">
       <Project>{dae3a274-de5e-48b0-b2bb-b5cdba3cb806}</Project>
       <Name>OxHack.SignInKiosk.Messaging</Name>

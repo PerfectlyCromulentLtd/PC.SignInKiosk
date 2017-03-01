@@ -1,12 +1,10 @@
 ﻿using NLog;
 using OxHack.SignInKiosk.Database.Services;
+using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domanin.Messages.Models;
 using OxHack.SignInKiosk.Messaging;
-using OxHack.SignInKiosk.Messaging.Messages;
 using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.CoreService.SubServices
@@ -51,35 +49,32 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 			foreach (var processingAction in this.eventProcessingQueue.GetConsumingEnumerable())
 			{
 				this.logger.Debug("Processing sign-in event...");
-				processingAction();
+				try
+				{
+					processingAction();
+				}
+				catch (Exception exception)
+				{
+					this.logger.Error(exception);
+				}
 				this.logger.Debug("... finished processing sign-in event.");
 			}
 		}
 
 		private async Task StoreSignIn(SignInRequestSubmitted e)
 		{
-			try
-			{
-				var signInTime = this.signInService.SignIn(e.Person.DisplayName, e.Person.IsVisitor, e.Person.TokenId);
-				await this.messagingClient.Publish(new PersonSignedIn(signInTime, e.Person));
-			}
-			catch (Exception exception)
-			{
-				this.logger.Error(exception);
-			}
+			var signInTime = this.signInService.SignIn(e.Person.DisplayName, e.Person.IsVisitor, e.Person.TokenId);
+			await this.messagingClient.Publish(new PersonSignedIn(signInTime, e.Person));
 		}
 
 		private async Task StoreSignOut(SignOutRequestSubmitted e)
 		{
-			try
-			{
-				var signOutTime = this.signInService.SignOut(e.Person.DisplayName, e.SignInTime, e.Person.IsVisitor, e.Person.TokenId);
-				await this.messagingClient.Publish(new PersonSignedOut(e.SignInTime, signOutTime, e.Person));
-			}
-			catch (Exception exception)
-			{
-				this.logger.Error(exception);
-			}
+			var signOutTime = this.signInService.SignOut(e.SignedInRecord);
+			await this.messagingClient.Publish(
+				new PersonSignedOut(
+					e.SignedInRecord.SignInTime,
+					signOutTime,
+					new Person(e.SignedInRecord.TokenId, e.SignedInRecord.DisplayName, e.SignedInRecord.IsVisitor)));
 		}
 	}
 }

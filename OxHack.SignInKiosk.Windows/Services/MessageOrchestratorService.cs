@@ -1,6 +1,6 @@
 ﻿using Caliburn.Micro;
+using OxHack.SignInKiosk.Domanin.Messages;
 using OxHack.SignInKiosk.Events;
-using OxHack.SignInKiosk.MessageBrokerProxy;
 using OxHack.SignInKiosk.ViewModels;
 using OxHack.SignInKiosk.Views;
 using System;
@@ -15,19 +15,19 @@ namespace OxHack.SignInKiosk.Services
 	{
 		private readonly INavigationService navigationService;
 		private readonly SignInService signInService;
-		private readonly UserInfoService userInfoService;
+		private readonly TokenHolderInfoService tokenHolderInfoService;
 		private readonly ToastService toastService;
 
 		public MessageOrchestratorService(
 			INavigationService navigationService,
 			SignInService signInService,
-			UserInfoService userInfoService,
+			TokenHolderInfoService tokenHolderInfoService,
 			ToastService toastService,
 			IEventAggregator eventAggregator)
 		{
 			this.navigationService = navigationService;
 			this.signInService = signInService;
-			this.userInfoService = userInfoService;
+			this.tokenHolderInfoService = tokenHolderInfoService;
 			this.toastService = toastService;
 
 			eventAggregator.Subscribe(this);
@@ -43,21 +43,21 @@ namespace OxHack.SignInKiosk.Services
 			}
 			else
 			{
-				var person = this.userInfoService.GetUserByTokenId(message.Id);
+				var tokenHolder = this.tokenHolderInfoService.GetUserByTokenId(message.Id);
 
-				if (person == null)
+				if (tokenHolder == null)
 				{
 					this.navigationService.NavigateToViewModel<NameEntryViewModel>(message.Id);
 				}
 				else
 				{
-					if (this.signInService.IsSignedIn(person.TokenId))
+					if (await this.signInService.IsSignedIn(tokenHolder.TokenId))
 					{
-						this.navigationService.NavigateToViewModel<ManualSignOutViewModel>(person.TokenId);
+						this.navigationService.NavigateToViewModel<ManualSignOutViewModel>(tokenHolder.TokenId);
 					}
 					else
 					{
-						await this.signInService.RequestSignIn(person);
+						await this.signInService.RequestSignIn(tokenHolder);
 					}
 				}
 			}

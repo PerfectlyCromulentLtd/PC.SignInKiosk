@@ -1,8 +1,7 @@
 ﻿using MassTransit;
 using MassTransit.NLogIntegration;
-using OxHack.SignInKiosk.Messaging.Messages;
+using OxHack.SignInKiosk.Domanin.Messages;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;

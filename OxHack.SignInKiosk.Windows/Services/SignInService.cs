@@ -1,9 +1,10 @@
 ﻿using Caliburn.Micro;
-using OxHack.SignInKiosk.MessageBrokerProxy;
+using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domanin.Messages.Models;
+using OxHack.SignInKiosk.Domanin.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Services
@@ -14,35 +15,49 @@ namespace OxHack.SignInKiosk.Services
 	{
 		private object syncLock = new object();
 		private readonly MessageBrokerService messageBrokerService;
-		private readonly UserInfoService userInfoService;
+		private readonly TokenHolderInfoService tokenHolderInfoService;
 
 		private readonly List<SignedInRecord> signedInRecords;
+		private readonly SignInApiWrapper signInApiWrapper;
 
-		public SignInService(MessageBrokerService messageBrokerService, UserInfoService userInfoService, IEventAggregator eventAggregator)
+		public SignInService(
+			MessageBrokerService messageBrokerService,
+			TokenHolderInfoService tokenHolderInfoService,
+			SignInApiWrapper signInApiWrapper,
+			IEventAggregator eventAggregator)
 		{
 			this.messageBrokerService = messageBrokerService;
-			this.userInfoService = userInfoService;
+			this.tokenHolderInfoService = tokenHolderInfoService;
+			this.signInApiWrapper = signInApiWrapper;
 			eventAggregator.Subscribe(this);
 
 			this.signedInRecords = new List<SignedInRecord>();
 		}
 
-		public async Task RequestSignIn(Person person)
+		public async Task RequestSignIn(string tokenId, string displayName, bool isVisitor)
 		{
-			this.userInfoService.AddOrUpdateUser(person);
-			await this.messageBrokerService.PublishSignInRequestSubmitted(new SignInRequestSubmitted() { Person = person });
+			await this.RequestSignIn(new TokenHolder(tokenId, displayName, isVisitor));
 		}
 
-		public bool IsSignedIn(string tokenId)
+		public async Task RequestSignIn(TokenHolder tokenHolder)
 		{
-			// TODO: Replace this with a call to the backend system
-			return (tokenId != null) && this.signedInRecords.Any(item => item.TokenId == tokenId);
+			this.tokenHolderInfoService.AddOrUpdateUser(tokenHolder);
+			await this.messageBrokerService.Publish(new SignInRequestSubmitted(new Person(tokenHolder.TokenId, tokenHolder.DisplayName, tokenHolder.IsVisitor)));
 		}
 
-		public IReadOnlyCollection<SignedInRecord> GetPeopleSignedIn()
+		public async Task RequestSignOut(SignedInRecord signedInRecord)
 		{
-			// TODO: Replace this with a call to the backend system
-			return this.signedInRecords.ToList();
+			await this.messageBrokerService.Publish(new SignOutRequestSubmitted(signedInRecord));
+		}
+
+		public async Task<bool> IsSignedIn(string tokenId)
+		{
+			return (tokenId != null) && (await this.signInApiWrapper.GetCurrentlySignedIn()).Any(item => item.TokenId == tokenId);
+		}
+
+		public async Task<IReadOnlyList<SignedInRecord>> GetCurrentlySignedIn()
+		{
+			return await this.signInApiWrapper.GetCurrentlySignedIn();
 		}
 
 		public void Handle(PersonSignedIn message)
@@ -78,33 +93,6 @@ namespace OxHack.SignInKiosk.Services
 		private bool IsSignedIn(DateTime signInTime, string displayName)
 		{
 			return this.signedInRecords.Any(item => item.SignInTime == signInTime && item.DisplayName == displayName);
-		}
-
-		public class SignedInRecord
-		{
-			public string DisplayName
-			{
-				get;
-				set;
-			}
-
-			public DateTime SignInTime
-			{
-				get;
-				set;
-			}
-
-			public string TokenId
-			{
-				get;
-				set;
-			}
-
-			public bool IsVisitor
-			{
-				get;
-				set;
-			}
 		}
 	}
 }

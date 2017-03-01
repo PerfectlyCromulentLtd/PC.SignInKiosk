@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OxHack.SignInKiosk.Database.Models
+namespace OxHack.SignInKiosk.Domanin.Models
 {
     public class TokenHolder
     {

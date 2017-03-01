@@ -14,15 +14,21 @@
     <xsd:schema targetNamespace="http://tempuri.org/Imports">
       <xsd:import namespace="http://tempuri.org/" />
       <xsd:import namespace="http://schemas.microsoft.com/2003/10/Serialization/" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Messages" />
-      <xsd:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Messaging.Models" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" />
+      <xsd:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Models" />
     </xsd:schema>
   </wsdl:types>
-  <wsdl:message name="IMessageBrokerProxyService_PublishSignInRequestSubmitted_InputMessage">
-    <wsdl:part name="parameters" element="tns:PublishSignInRequestSubmitted" />
+  <wsdl:message name="IMessageBrokerProxyService_PublishSignInRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:PublishSignInRequest" />
   </wsdl:message>
-  <wsdl:message name="IMessageBrokerProxyService_PublishSignInRequestSubmitted_OutputMessage">
-    <wsdl:part name="parameters" element="tns:PublishSignInRequestSubmittedResponse" />
+  <wsdl:message name="IMessageBrokerProxyService_PublishSignInRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PublishSignInRequestResponse" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_PublishSignOutRequest_InputMessage">
+    <wsdl:part name="parameters" element="tns:PublishSignOutRequest" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_PublishSignOutRequest_OutputMessage">
+    <wsdl:part name="parameters" element="tns:PublishSignOutRequestResponse" />
   </wsdl:message>
   <wsdl:message name="IMessageBrokerProxyService_Subscribe_InputMessage">
     <wsdl:part name="parameters" element="tns:Subscribe" />
@@ -60,10 +66,20 @@
   <wsdl:message name="IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnSignInRequestSubmittedPublishedResponse" />
   </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnSignOutRequestSubmittedPublished" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:OnSignOutRequestSubmittedPublishedResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMessageBrokerProxyService">
-    <wsdl:operation name="PublishSignInRequestSubmitted">
-      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestSubmitted" message="tns:IMessageBrokerProxyService_PublishSignInRequestSubmitted_InputMessage" />
-      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestSubmittedResponse" message="tns:IMessageBrokerProxyService_PublishSignInRequestSubmitted_OutputMessage" />
+    <wsdl:operation name="PublishSignInRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequest" message="tns:IMessageBrokerProxyService_PublishSignInRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestResponse" message="tns:IMessageBrokerProxyService_PublishSignInRequest_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="PublishSignOutRequest">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignOutRequest" message="tns:IMessageBrokerProxyService_PublishSignOutRequest_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignOutRequestResponse" message="tns:IMessageBrokerProxyService_PublishSignOutRequest_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="Subscribe">
       <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/Subscribe" message="tns:IMessageBrokerProxyService_Subscribe_InputMessage" />
@@ -89,13 +105,26 @@
       <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublished" message="tns:IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublishedResponse" message="tns:IMessageBrokerProxyService_OnSignInRequestSubmittedPublished_InputCallbackMessage" />
     </wsdl:operation>
+    <wsdl:operation name="OnSignOutRequestSubmittedPublished">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublished" message="tns:IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublishedResponse" message="tns:IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_InputCallbackMessage" />
+    </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ServiceEndpoint" type="tns:IMessageBrokerProxyService">
     <wsp:PolicyReference URI="#ServiceEndpoint_policy">
     </wsp:PolicyReference>
     <soap12:binding transport="http://schemas.microsoft.com/soap/tcp" />
-    <wsdl:operation name="PublishSignInRequestSubmitted">
-      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestSubmitted" style="document" />
+    <wsdl:operation name="PublishSignInRequest">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequest" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="PublishSignOutRequest">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/PublishSignOutRequest" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -150,6 +179,15 @@
     </wsdl:operation>
     <wsdl:operation name="OnSignInRequestSubmittedPublished">
       <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="OnSignOutRequestSubmittedPublished">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublished" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

@@ -96,18 +96,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DelegateConsumer.cs" />
-    <Compile Include="Messages\SignOutRequestSubmitted.cs" />
     <Compile Include="MessagingClient.cs" />
-    <Compile Include="Messages\PersonSignedOut.cs" />
-    <Compile Include="Messages\PersonSignedIn.cs" />
-    <Compile Include="Messages\SignInRequestSubmitted.cs" />
-    <Compile Include="Messages\TokenRead.cs" />
-    <Compile Include="Models\Person.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj">
+      <Project>{fb095b7e-da4e-43dc-b072-cba277fbc99f}</Project>
+      <Name>OxHack.SignInKiosk.Domain</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -1,4 +1,5 @@
 ﻿using Caliburn.Micro;
+using OxHack.SignInKiosk.Domanin.Messages;
 using OxHack.SignInKiosk.Events;
 using OxHack.SignInKiosk.MessageBrokerProxy;
 using System;
@@ -16,29 +17,21 @@ namespace OxHack.SignInKiosk.Services
 		public MessageBrokerService(IEventAggregator eventAggregator)
 		{
 			this.eventAggregator = eventAggregator;
-
-			// the nasty:
-			// TODO: move this call to something that manages the subscription lifecycle
-			try
-			{
-				this.CreateNewConnection();
-			}
-			catch
-			{
-				// close eyes.  nothing happened.
-			}
 		}
 
-		public async Task PublishSignInRequestSubmitted(SignInRequestSubmitted message)
+		public async Task Publish(SignInRequestSubmitted message)
 		{
-			try
-			{
-				await this.serviceClient.PublishSignInRequestSubmittedAsync(message);
-			}
-			catch (Exception e)
-			{
-				//TODO: log error
-			}
+			await this.serviceClient.PublishSignInRequestAsync(message);
+		}
+
+		public async Task Publish(SignOutRequestSubmitted message)
+		{
+			await this.serviceClient.PublishSignOutRequestAsync(message);
+		}
+
+		public async Task Connect()
+		{
+			await this.CreateNewConnection();
 		}
 
 		private async Task CreateNewConnection()
@@ -127,6 +120,11 @@ namespace OxHack.SignInKiosk.Services
 			}
 
 			public async void OnSignInRequestSubmittedPublished(SignInRequestSubmitted message)
+			{
+				await this.eventAggregator.PublishOnUIThreadAsync(message);
+			}
+
+			public async void OnSignOutRequestSubmittedPublished(SignOutRequestSubmitted message)
 			{
 				await this.eventAggregator.PublishOnUIThreadAsync(message);
 			}

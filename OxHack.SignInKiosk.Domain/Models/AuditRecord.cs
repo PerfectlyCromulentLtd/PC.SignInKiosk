@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OxHack.SignInKiosk.Database.Models
+namespace OxHack.SignInKiosk.Domanin.Models
 {
-    class AuditRecord
+    public class AuditRecord
 	{
-		internal const string SignInRecordType = "SignIn";
-		internal const string SignOutRecordType = "SignOut";
+		public const string SignInRecordType = "SignIn";
+		public const string SignOutRecordType = "SignOut";
 
 		public int SequenceNumber
 		{

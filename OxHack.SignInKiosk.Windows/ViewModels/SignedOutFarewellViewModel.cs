@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.ViewModels
 {
-	public class SignedInGreetingViewModel : Screen
+	public class SignedOutFarewellViewModel : Screen
 	{
 		private readonly INavigationService navigationService;
 		private string name;
 
-		public SignedInGreetingViewModel(INavigationService navigationService)
+		public SignedOutFarewellViewModel(INavigationService navigationService)
 		{
 			this.navigationService = navigationService;
 		}
@@ -17,7 +17,7 @@ namespace OxHack.SignInKiosk.ViewModels
 		protected override async void OnActivate()
 		{
 			base.OnActivate();
-			await Task.Delay(TimeSpan.FromSeconds(3));
+			await Task.Delay(TimeSpan.FromSeconds(2));
 			this.navigationService.NavigateToViewModel<StartViewModel>();
 		}
 

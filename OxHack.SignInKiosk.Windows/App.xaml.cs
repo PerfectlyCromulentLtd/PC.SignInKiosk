@@ -9,6 +9,7 @@ using Windows.ApplicationModel.Activation;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Notifications;
+using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk
 {
@@ -36,9 +37,12 @@ namespace OxHack.SignInKiosk
 
 			this.container.Singleton<MessageBrokerService>();
 			this.container.Singleton<MessageOrchestratorService>();
-			this.container.Singleton<UserInfoService>();
+			this.container.Singleton<TokenHolderInfoService>();
 			this.container.Singleton<SignInService>();
 			this.container.PerRequest<ToastService>();
+
+			// TODO: Move this hardcoded URI to somesort of configuration file
+			this.container.RegisterHandler(typeof(SignInApiWrapper), null, c => new SignInApiWrapper(new Uri("http://SignInKioskWebApi:5001")));
 
 			this.container.RegisterHandler(typeof(ToastNotifier), null, c => ToastNotificationManager.CreateToastNotifier());
 		}
@@ -70,7 +74,7 @@ namespace OxHack.SignInKiosk
 			this.container.RegisterNavigationService(rootFrame);
 		}
 
-		protected override void OnLaunched(LaunchActivatedEventArgs e)
+		protected async override void OnLaunched(LaunchActivatedEventArgs e)
 		{
 			//#if DEBUG
 			//			if (System.Diagnostics.Debugger.IsAttached)
@@ -82,15 +86,25 @@ namespace OxHack.SignInKiosk
 			if (e.PreviousExecutionState != ApplicationExecutionState.Running)
 			{
 				this.DisplayRootView<StartView>();
-				this.EnsureSingletonsAreRunning();
+				await this.EnsureSingletonsAreRunning();
 			}
 		}
 
-		private void EnsureSingletonsAreRunning()
+		private async Task EnsureSingletonsAreRunning()
 		{
-			this.container.GetInstance<MessageBrokerService>();
+			var messageBrokerService = this.container.GetInstance<MessageBrokerService>();
+
+			try
+			{
+				await messageBrokerService.Connect();
+			}
+			catch (Exception e)
+			{
+				// TODO: log error
+			}
+
 			this.container.GetInstance<MessageOrchestratorService>();
-			this.container.GetInstance<UserInfoService>();
+			this.container.GetInstance<TokenHolderInfoService>();
 		}
 
 		private void SuspendedHandler(object sender, SuspendingEventArgs e)

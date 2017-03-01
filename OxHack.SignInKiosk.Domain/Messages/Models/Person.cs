@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OxHack.SignInKiosk.Messaging.Models
+namespace OxHack.SignInKiosk.Domanin.Messages.Models
 {
 	[DataContract]
 	public class Person

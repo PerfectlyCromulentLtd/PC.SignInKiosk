@@ -1,19 +1,28 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using OxHack.SignInKiosk.Database.Services;
+using OxHack.SignInKiosk.Domanin.Models;
 using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace OxHack.SignInKiosk.Web.Controllers
 {
-    [Route("api/[controller]")]
-    public class ValuesController : Controller
+	[ApiVersion("1.0")]
+	[Route("api/v{version:apiVersion}/[controller]")]
+    public class CurrentlySignedInController : Controller
     {
-        // GET api/values
-        [HttpGet]
-        public IEnumerable<string> Get()
+		private readonly SignInService signInService;
+
+		public CurrentlySignedInController(SignInService signInService)
+		{
+			this.signInService = signInService;
+		}
+
+		// GET api/values
+		[HttpGet]
+        public IEnumerable<SignedInRecord> Get()
         {
-            return new string[] { "value1", "value2" };
+			var currentlySignedIn = this.signInService.GetCurrentlySignedIn();
+
+			return currentlySignedIn;
         }
 
         // GET api/values/5

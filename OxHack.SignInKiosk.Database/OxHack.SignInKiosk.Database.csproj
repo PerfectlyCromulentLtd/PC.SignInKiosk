@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="1.1.0-preview4-final" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj" />
+  </ItemGroup>
+
 </Project>

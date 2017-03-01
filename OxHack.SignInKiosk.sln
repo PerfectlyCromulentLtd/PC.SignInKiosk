@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.26206.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User Interfaces", "User Interfaces", "{657C0E27-735A-4034-9C52-D511E4B17F1B}"
 EndProject
@@ -24,6 +24,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Windows", "OxHack.SignInKiosk.Windows\OxHack.SignInKiosk.Windows.csproj", "{6016CBFC-8E73-4C38-A293-DEB2FD125169}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Database", "OxHack.SignInKiosk.Database\OxHack.SignInKiosk.Database.csproj", "{FFDF6303-40BC-44E7-9B15-EC512929E9EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Domain", "OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj", "{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -173,6 +175,22 @@ Global
 		{FFDF6303-40BC-44E7-9B15-EC512929E9EE}.Release|x64.Build.0 = Release|x64
 		{FFDF6303-40BC-44E7-9B15-EC512929E9EE}.Release|x86.ActiveCfg = Release|x86
 		{FFDF6303-40BC-44E7-9B15-EC512929E9EE}.Release|x86.Build.0 = Release|x86
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|ARM.ActiveCfg = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|ARM.Build.0 = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|x64.Build.0 = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Debug|x86.Build.0 = Debug|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|ARM.ActiveCfg = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|ARM.Build.0 = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|x64.ActiveCfg = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|x64.Build.0 = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|x86.ActiveCfg = Release|Any CPU
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -186,5 +204,6 @@ Global
 		{BB912513-CA1E-475B-9B29-F6D8512D8DD9} = {84A389A1-7ECE-42B2-9EE9-00A5610DFC2B}
 		{6016CBFC-8E73-4C38-A293-DEB2FD125169} = {657C0E27-735A-4034-9C52-D511E4B17F1B}
 		{FFDF6303-40BC-44E7-9B15-EC512929E9EE} = {A9B0A2CB-F9B9-4201-BA91-C758CECD78B3}
+		{FB095B7E-DA4E-43DC-B072-CBA277FBC99F} = {A9B0A2CB-F9B9-4201-BA91-C758CECD78B3}
 	EndGlobalSection
 EndGlobal

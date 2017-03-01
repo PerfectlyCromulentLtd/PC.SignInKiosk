@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OxHack.SignInKiosk.Database.Models;
+using OxHack.SignInKiosk.Domanin.Models;
 
 namespace OxHack.SignInKiosk.Database
 {

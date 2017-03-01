@@ -1,12 +1,7 @@
 ﻿using NLog;
 using NLog.Config;
 using NLog.Targets;
-using OxHack.SignInKiosk.Messaging.Messages;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using OxHack.SignInKiosk.Domanin.Messages;
 using Topshelf;
 
 namespace OxHack.SignInKiosk.PrinterService

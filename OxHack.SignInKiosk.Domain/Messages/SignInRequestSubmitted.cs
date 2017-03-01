@@ -1,7 +1,7 @@
-﻿using OxHack.SignInKiosk.Messaging.Models;
+﻿using OxHack.SignInKiosk.Domanin.Messages.Models;
 using System.Runtime.Serialization;
 
-namespace OxHack.SignInKiosk.Messaging.Messages
+namespace OxHack.SignInKiosk.Domanin.Messages
 {
 	[DataContract]
 	public class SignInRequestSubmitted

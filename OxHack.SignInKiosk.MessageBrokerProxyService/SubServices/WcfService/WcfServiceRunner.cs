@@ -1,8 +1,6 @@
 ﻿using NLog;
 using OxHack.SignInKiosk.Messaging;
-using OxHack.SignInKiosk.Messaging.Messages;
 using System;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Threading.Tasks;
 

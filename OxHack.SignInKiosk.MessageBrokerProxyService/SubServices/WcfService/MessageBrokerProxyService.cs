@@ -1,6 +1,6 @@
 ﻿using NLog;
+using OxHack.SignInKiosk.Domanin.Messages;
 using OxHack.SignInKiosk.Messaging;
-using OxHack.SignInKiosk.Messaging.Messages;
 using System;
 using System.ServiceModel;
 
@@ -77,11 +77,25 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			}
 		}
 
-		public async void PublishSignInRequestSubmitted(SignInRequestSubmitted message)
+		public async void PublishSignInRequest(SignInRequestSubmitted message)
 		{
 			try
 			{
 				this.logger.Debug($"Publishing {nameof(SignInRequestSubmitted)} message: {message.Person.DisplayName}");
+
+				await this.messagingClient.Publish(message);
+			}
+			catch (Exception exception)
+			{
+				this.logger.Error(exception);
+			}
+		}
+
+		public async void PublishSignOutRequest(SignOutRequestSubmitted message)
+		{
+			try
+			{
+				this.logger.Debug($"Publishing {nameof(SignOutRequestSubmitted)} message: {message.SignedInRecord.DisplayName}");
 
 				await this.messagingClient.Publish(message);
 			}

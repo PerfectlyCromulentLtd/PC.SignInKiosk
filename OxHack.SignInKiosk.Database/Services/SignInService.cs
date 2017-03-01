@@ -1,5 +1,6 @@
-﻿using OxHack.SignInKiosk.Database.Models;
+﻿using OxHack.SignInKiosk.Domanin.Models;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace OxHack.SignInKiosk.Database.Services
@@ -17,11 +18,6 @@ namespace OxHack.SignInKiosk.Database.Services
 		public SignInService(IDbConfig dbConfig)
 		{
 			this.dbConfig = dbConfig;
-		}
-
-		private SignInContext GetDbContext()
-		{
-			return new SignInContext(this.dbConfig);
 		}
 
 		public DateTime SignIn(string displayName, bool isVisitor, string tokenId = null)
@@ -69,41 +65,54 @@ namespace OxHack.SignInKiosk.Database.Services
 			return signInTime;
 		}
 
-		public DateTime SignOut(string displayName, DateTime signInTime, bool isVisitor, string tokenId = null)
+		public DateTime SignOut(SignedInRecord signedInRecord)
 		{
-			if (String.IsNullOrWhiteSpace(displayName))
+			if (signedInRecord == null)
 			{
-				throw new ArgumentException(nameof(displayName));
+				throw new ArgumentNullException();
 			}
 
 			var signOutTime = DateTime.Now;
 
 			using (var context = this.GetDbContext())
 			{
-				var signedInRecord =
-					context.CurrentlySignedIn.FirstOrDefault(item => item.DisplayName == displayName && item.SignInTime == signInTime);
+				var originalSignedInRecord =
+					context.CurrentlySignedIn.SingleOrDefault(item => item.Id == signedInRecord.Id);
 
-				if (signedInRecord == null)
+				if (originalSignedInRecord == null)
 				{
 					throw new InvalidOperationException("Can't find matching Signed-In record.  Are you sure this user is signed in?");
 				}
 
 				var auditRecord = new AuditRecord()
 				{
-					PersonDisplayName = displayName,
-					PersonTokenId = tokenId,
-					PersonIsVisitor = isVisitor,
+					PersonDisplayName = originalSignedInRecord.DisplayName,
+					PersonTokenId = originalSignedInRecord.TokenId,
+					PersonIsVisitor = originalSignedInRecord.IsVisitor,
 					RecordType = AuditRecord.SignOutRecordType,
 					Time = signOutTime
 				};
 
 				context.AuditRecords.Add(auditRecord);
-				context.CurrentlySignedIn.Remove(signedInRecord);
+				context.CurrentlySignedIn.Remove(originalSignedInRecord);
 
 				context.SaveChanges();
 			}
 
 			return signOutTime;
+		}
+
+		public IReadOnlyList<SignedInRecord> GetCurrentlySignedIn()
+		{
+			using (var context = this.GetDbContext())
+			{
+				return context.CurrentlySignedIn.ToList();
+			}
+		}
+
+		private SignInContext GetDbContext()
+		{
+			return new SignInContext(this.dbConfig);
 		}
 	}
 }

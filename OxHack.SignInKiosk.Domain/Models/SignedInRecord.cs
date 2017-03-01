@@ -2,10 +2,16 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OxHack.SignInKiosk.Database.Models
+namespace OxHack.SignInKiosk.Domanin.Models
 {
-    class SignedInRecord
+    public class SignedInRecord
 	{
+		public Guid Id
+		{
+			get;
+			set;
+		}
+
 		public string DisplayName
 		{
 			get;
