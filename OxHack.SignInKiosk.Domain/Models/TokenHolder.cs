@@ -2,33 +2,26 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OxHack.SignInKiosk.Domanin.Models
+namespace OxHack.SignInKiosk.Domain.Models
 {
     public class TokenHolder
     {
-		public TokenHolder(string tokenId, string displayName, bool isVisitor)
-		{
-			this.TokenId = tokenId;
-			this.DisplayName = displayName;
-			this.IsVisitor = isVisitor;
-		}
-
 		public string TokenId
 		{
 			get;
-			private set;
+			set;
 		}
 
 		public string DisplayName
 		{
 			get;
-			private set;
+			set;
 		}
 
 		public bool IsVisitor
 		{
 			get;
-			private set;
+			set;
 		}
 	}
 }

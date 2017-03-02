@@ -1,7 +1,7 @@
 ﻿using NLog;
 using NLog.Config;
 using NLog.Targets;
-using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domain.Messages;
 using Topshelf;
 
 namespace OxHack.SignInKiosk.PrinterService

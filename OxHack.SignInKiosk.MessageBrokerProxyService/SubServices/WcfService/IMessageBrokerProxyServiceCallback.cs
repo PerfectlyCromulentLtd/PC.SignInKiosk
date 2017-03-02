@@ -1,4 +1,4 @@
-﻿using OxHack.SignInKiosk.Domanin.Messages;
+﻿using OxHack.SignInKiosk.Domain.Messages;
 using System.ServiceModel;
 
 namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService

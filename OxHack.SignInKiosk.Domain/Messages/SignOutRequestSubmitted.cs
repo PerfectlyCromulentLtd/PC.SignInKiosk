@@ -1,8 +1,8 @@
-﻿using OxHack.SignInKiosk.Domanin.Models;
+﻿using OxHack.SignInKiosk.Domain.Models;
 using System;
 using System.Runtime.Serialization;
 
-namespace OxHack.SignInKiosk.Domanin.Messages
+namespace OxHack.SignInKiosk.Domain.Messages
 {
 	[DataContract]
 	public class SignOutRequestSubmitted

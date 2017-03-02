@@ -1,7 +1,8 @@
 ﻿using NLog;
 using OxHack.SignInKiosk.Database.Services;
-using OxHack.SignInKiosk.Domanin.Messages;
-using OxHack.SignInKiosk.Domanin.Messages.Models;
+using OxHack.SignInKiosk.Domain.Messages;
+using OxHack.SignInKiosk.Domain.Messages.Models;
+using OxHack.SignInKiosk.Domain.Models;
 using OxHack.SignInKiosk.Messaging;
 using System;
 using System.Collections.Concurrent;
@@ -15,22 +16,27 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 
 		private readonly MessagingClient messagingClient;
 		private readonly SignInService signInService;
+		private readonly TokenHolderService tokenHolderService;
 
-		private BlockingCollection<Action> eventProcessingQueue;
+		private BlockingCollection<Func<Task>> eventProcessingQueue;
 		private Task worker;
 
-		public SignInEventProcessor(MessagingClient messagingClient, SignInService signInService)
+		public SignInEventProcessor(
+			MessagingClient messagingClient,
+			SignInService signInService,
+			TokenHolderService tokenHolderService)
 		{
 			this.messagingClient = messagingClient;
 			this.signInService = signInService;
+			this.tokenHolderService = tokenHolderService;
 
-			this.messagingClient.SignInRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(() => this.StoreSignIn(e));
-			this.messagingClient.SignOutRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(() => this.StoreSignOut(e));
+			this.messagingClient.SignInRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(async () => await this.StoreSignIn(e));
+			this.messagingClient.SignOutRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(async () => await this.StoreSignOut(e));
 		}
 
 		internal async Task Start()
 		{
-			this.eventProcessingQueue = new BlockingCollection<Action>();
+			this.eventProcessingQueue = new BlockingCollection<Func<Task>>();
 			this.worker = Task.Run(() => this.EventProcessingLoop());
 
 			await this.messagingClient.Connect();
@@ -44,20 +50,20 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 			this.worker = null;
 		}
 
-		private void EventProcessingLoop()
+		private async Task EventProcessingLoop()
 		{
 			foreach (var processingAction in this.eventProcessingQueue.GetConsumingEnumerable())
 			{
-				this.logger.Debug("Processing sign-in event...");
+				this.logger.Debug("Processing event...");
 				try
 				{
-					processingAction();
+					await processingAction();
 				}
 				catch (Exception exception)
 				{
 					this.logger.Error(exception);
 				}
-				this.logger.Debug("... finished processing sign-in event.");
+				this.logger.Debug("... finished processing event.");
 			}
 		}
 
@@ -65,6 +71,23 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 		{
 			var signInTime = this.signInService.SignIn(e.Person.DisplayName, e.Person.IsVisitor, e.Person.TokenId);
 			await this.messagingClient.Publish(new PersonSignedIn(signInTime, e.Person));
+
+			if (!String.IsNullOrWhiteSpace(e.Person.TokenId))
+			{
+				var tokenHolder = new TokenHolder()
+				{ 
+					DisplayName = e.Person.DisplayName,
+					IsVisitor = e.Person.IsVisitor,
+					TokenId = e.Person.TokenId
+			};
+
+				var existingTokenHolder = this.tokenHolderService.GetTokenHolderByTokenId(tokenHolder.TokenId);
+
+				if (existingTokenHolder == null)
+				{
+					this.tokenHolderService.AddTokenHolder(tokenHolder);
+				}
+			}
 		}
 
 		private async Task StoreSignOut(SignOutRequestSubmitted e)

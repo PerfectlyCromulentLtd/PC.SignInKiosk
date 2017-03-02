@@ -19,10 +19,10 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
     public interface IMessageBrokerProxyService {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequest", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequestResponse")]
-        System.Threading.Tasks.Task PublishSignInRequestAsync(OxHack.SignInKiosk.Domanin.Messages.SignInRequestSubmitted message);
+        System.Threading.Tasks.Task PublishSignInRequestAsync(OxHack.SignInKiosk.Domain.Messages.SignInRequestSubmitted message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignOutRequest", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/PublishSignOutRequestResponse")]
-        System.Threading.Tasks.Task PublishSignOutRequestAsync(OxHack.SignInKiosk.Domanin.Messages.SignOutRequestSubmitted message);
+        System.Threading.Tasks.Task PublishSignOutRequestAsync(OxHack.SignInKiosk.Domain.Messages.SignOutRequestSubmitted message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/Subscribe", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/SubscribeResponse")]
         System.Threading.Tasks.Task SubscribeAsync();
@@ -35,21 +35,21 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
     public interface IMessageBrokerProxyServiceCallback {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/OnTokenReadPublished", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/OnTokenReadPublishedResponse")]
-        void OnTokenReadPublished(OxHack.SignInKiosk.Domanin.Messages.TokenRead message);
+        void OnTokenReadPublished(OxHack.SignInKiosk.Domain.Messages.TokenRead message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedInPublished", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedInPublishedResponse")]
-        void OnPersonSignedInPublished(OxHack.SignInKiosk.Domanin.Messages.PersonSignedIn message);
+        void OnPersonSignedInPublished(OxHack.SignInKiosk.Domain.Messages.PersonSignedIn message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedOutPublished", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/OnPersonSignedOutPublishedResponse")]
-        void OnPersonSignedOutPublished(OxHack.SignInKiosk.Domanin.Messages.PersonSignedOut message);
+        void OnPersonSignedOutPublished(OxHack.SignInKiosk.Domain.Messages.PersonSignedOut message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublished", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/OnSignInRequestSubmittedPublishedRe" +
             "sponse")]
-        void OnSignInRequestSubmittedPublished(OxHack.SignInKiosk.Domanin.Messages.SignInRequestSubmitted message);
+        void OnSignInRequestSubmittedPublished(OxHack.SignInKiosk.Domain.Messages.SignInRequestSubmitted message);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublished", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublishedR" +
             "esponse")]
-        void OnSignOutRequestSubmittedPublished(OxHack.SignInKiosk.Domanin.Messages.SignOutRequestSubmitted message);
+        void OnSignOutRequestSubmittedPublished(OxHack.SignInKiosk.Domain.Messages.SignOutRequestSubmitted message);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -95,11 +95,11 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
                 base(callbackInstance, binding, remoteAddress) {
         }
         
-        public System.Threading.Tasks.Task PublishSignInRequestAsync(OxHack.SignInKiosk.Domanin.Messages.SignInRequestSubmitted message) {
+        public System.Threading.Tasks.Task PublishSignInRequestAsync(OxHack.SignInKiosk.Domain.Messages.SignInRequestSubmitted message) {
             return base.Channel.PublishSignInRequestAsync(message);
         }
         
-        public System.Threading.Tasks.Task PublishSignOutRequestAsync(OxHack.SignInKiosk.Domanin.Messages.SignOutRequestSubmitted message) {
+        public System.Threading.Tasks.Task PublishSignOutRequestAsync(OxHack.SignInKiosk.Domain.Messages.SignOutRequestSubmitted message) {
             return base.Channel.PublishSignOutRequestAsync(message);
         }
         

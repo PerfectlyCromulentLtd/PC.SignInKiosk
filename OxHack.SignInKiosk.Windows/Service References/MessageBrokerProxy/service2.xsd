@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xs:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" />
+  <xs:import namespace="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" />
   <xs:element name="PublishSignInRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q1:SignInRequestSubmitted" />
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q1:SignInRequestSubmitted" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -16,7 +16,7 @@
   <xs:element name="PublishSignOutRequest">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q2:SignOutRequestSubmitted" />
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q2:SignOutRequestSubmitted" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -48,7 +48,7 @@
   <xs:element name="OnTokenReadPublished">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q3:TokenRead" />
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q3:TokenRead" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -60,7 +60,7 @@
   <xs:element name="OnPersonSignedInPublished">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q4:PersonSignedIn" />
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q4:PersonSignedIn" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -72,7 +72,7 @@
   <xs:element name="OnPersonSignedOutPublished">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q5:PersonSignedOut" />
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q5:PersonSignedOut" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -84,7 +84,7 @@
   <xs:element name="OnSignInRequestSubmittedPublished">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q6:SignInRequestSubmitted" />
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q6:SignInRequestSubmitted" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
@@ -96,7 +96,7 @@
   <xs:element name="OnSignOutRequestSubmittedPublished">
     <xs:complexType>
       <xs:sequence>
-        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domanin.Messages" minOccurs="0" name="message" nillable="true" type="q7:SignOutRequestSubmitted" />
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/OxHack.SignInKiosk.Domain.Messages" minOccurs="0" name="message" nillable="true" type="q7:SignOutRequestSubmitted" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>

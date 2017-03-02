@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using OxHack.SignInKiosk.Domanin.Models;
+using OxHack.SignInKiosk.Domain.Models;
 
 namespace OxHack.SignInKiosk.Database
 {
@@ -39,10 +39,10 @@ namespace OxHack.SignInKiosk.Database
 				.ValueGeneratedOnAdd();
 
 			modelBuilder.Entity<SignedInRecord>()
-				.HasKey(item => nameof(item.Id));
+				.HasKey(item => item.Id);
 
 			modelBuilder.Entity<SignedInRecord>()
-				.Property(item => nameof(item.Id))
+				.Property(item => item.Id)
 				.ValueGeneratedOnAdd();
 		}
 	}

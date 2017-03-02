@@ -1,4 +1,4 @@
-﻿using OxHack.SignInKiosk.Domanin.Models;
+﻿using OxHack.SignInKiosk.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,12 +8,6 @@ namespace OxHack.SignInKiosk.Database.Services
 	public class SignInService
 	{
 		private readonly IDbConfig dbConfig;
-
-		public static object LogManager
-		{
-			get;
-			private set;
-		}
 
 		public SignInService(IDbConfig dbConfig)
 		{

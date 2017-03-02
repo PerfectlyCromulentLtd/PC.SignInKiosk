@@ -30,14 +30,15 @@ namespace OxHack.SignInKiosk.Database.Migrations
                 name: "CurrentlySignedIn",
                 columns: table => new
                 {
-                    DisplayName = table.Column<string>(nullable: false),
-                    SignInTime = table.Column<DateTime>(nullable: false),
+                    Id = table.Column<Guid>(nullable: false),
+                    DisplayName = table.Column<string>(nullable: true),
                     IsVisitor = table.Column<bool>(nullable: false),
+                    SignInTime = table.Column<DateTime>(type: "datetime2(7)", nullable: false),
                     TokenId = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_CurrentlySignedIn", x => new { x.DisplayName, x.SignInTime });
+                    table.PrimaryKey("PK_CurrentlySignedIn", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(

@@ -1,5 +1,5 @@
 ﻿using NLog;
-using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domain.Messages;
 using OxHack.SignInKiosk.Messaging;
 using OxHack.SignInKiosk.TokenReaderService.Events;
 using Prism.Events;

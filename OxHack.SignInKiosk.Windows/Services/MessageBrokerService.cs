@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domain.Messages;
 using OxHack.SignInKiosk.Events;
 using OxHack.SignInKiosk.MessageBrokerProxy;
 using System;

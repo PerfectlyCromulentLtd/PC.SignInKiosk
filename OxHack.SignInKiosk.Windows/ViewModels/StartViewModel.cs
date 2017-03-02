@@ -24,7 +24,7 @@ namespace OxHack.SignInKiosk.ViewModels
 
 		public void SignOut()
 		{
-			this.navigationService.NavigateToViewModel<ManualSignOutViewModel>();
+			this.navigationService.NavigateToViewModel<SignOutViewModel>();
 		}
 	}
 }

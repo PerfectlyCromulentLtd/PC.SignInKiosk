@@ -1,5 +1,5 @@
 ﻿using Humanizer;
-using OxHack.SignInKiosk.Domanin.Models;
+using OxHack.SignInKiosk.Domain.Models;
 using System;
 
 namespace OxHack.SignInKiosk.ViewModels

@@ -40,6 +40,7 @@ namespace OxHack.SignInKiosk.Web
 
 			services.AddSingleton<IDbConfig, SqlDbConfig>();
 			services.AddTransient<SignInService>();
+			services.AddTransient<TokenHolderService>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

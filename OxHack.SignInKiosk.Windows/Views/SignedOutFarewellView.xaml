@@ -36,16 +36,9 @@
         <TextBlock 
             Grid.Row="2"
             Margin="150 0"
-            HorizontalAlignment="Left"
+            HorizontalAlignment="Center"
             FontSize="144"
 			TextAlignment="Center"
-            Text="🖖" />
-        <TextBlock 
-            Grid.Row="2"
-            Margin="150 0"
-            HorizontalAlignment="Right"
-            FontSize="144"
-			TextAlignment="Center"
-            Text="👍" />
+            Text="😎✌️" />
     </Grid>
 </Page>

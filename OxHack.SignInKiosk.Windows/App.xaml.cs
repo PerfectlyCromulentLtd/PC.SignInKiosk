@@ -33,17 +33,20 @@ namespace OxHack.SignInKiosk
 			this.container.PerRequest<StartViewModel>();
 			this.container.PerRequest<NameEntryViewModel>();
 			this.container.PerRequest<SignedInGreetingViewModel>();
-			this.container.PerRequest<ManualSignOutViewModel>();
+			this.container.PerRequest<SignedOutFarewellViewModel>();
+			this.container.PerRequest<SignOutViewModel>();
+			this.container.PerRequest<ToastService>();
 
 			this.container.Singleton<MessageBrokerService>();
 			this.container.Singleton<MessageOrchestratorService>();
-			this.container.Singleton<TokenHolderInfoService>();
+			this.container.Singleton<TokenHolderService>();
 			this.container.Singleton<SignInService>();
-			this.container.PerRequest<ToastService>();
+			this.container.Singleton<SoundEffectsService>();
 
 			// TODO: Move this hardcoded URI to somesort of configuration file
-			this.container.RegisterHandler(typeof(SignInApiWrapper), null, c => new SignInApiWrapper(new Uri("http://SignInKioskWebApi:5001")));
-
+			var serviceBase = new Uri("http://SignInKioskWebApi:5001");
+			this.container.RegisterHandler(typeof(SignInApiWrapper), null, c => new SignInApiWrapper(serviceBase));
+			this.container.RegisterHandler(typeof(TokenHolderApiWrapper), null, c => new TokenHolderApiWrapper(serviceBase));
 			this.container.RegisterHandler(typeof(ToastNotifier), null, c => ToastNotificationManager.CreateToastNotifier());
 		}
 
@@ -87,6 +90,8 @@ namespace OxHack.SignInKiosk
 			{
 				this.DisplayRootView<StartView>();
 				await this.EnsureSingletonsAreRunning();
+
+				
 			}
 		}
 
@@ -104,7 +109,11 @@ namespace OxHack.SignInKiosk
 			}
 
 			this.container.GetInstance<MessageOrchestratorService>();
-			this.container.GetInstance<TokenHolderInfoService>();
+			this.container.GetInstance<TokenHolderService>();
+			var soundEffectsService = this.container.GetInstance<SoundEffectsService>();
+
+			this.RootFrame.Resources.Add("navigationSoundPlayer", soundEffectsService.NavigationSoundPlayer);
+			this.RootFrame.Resources.Add("tokenReadSoundPlayer", soundEffectsService.TokenReadSoundPlayer);
 		}
 
 		private void SuspendedHandler(object sender, SuspendingEventArgs e)

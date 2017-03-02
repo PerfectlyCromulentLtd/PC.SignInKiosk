@@ -1,6 +1,6 @@
 ﻿using MassTransit;
 using MassTransit.NLogIntegration;
-using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domain.Messages;
 using System;
 using System.Linq;
 using System.Reflection;

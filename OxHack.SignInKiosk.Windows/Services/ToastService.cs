@@ -25,7 +25,7 @@ namespace OxHack.SignInKiosk.Services
 
 		internal void ShowGenericError()
 		{
-			this.Show("Something went wrong.", "Please wait a moment and try again or speak with the KeyHolder about signing in or out manually.");
+			this.Show("Something went wrong.", "Please try again, or speak with the KeyHolder about signing in or out manually.");
 		}
 	}
 }

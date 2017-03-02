@@ -5,7 +5,7 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace OxHack.SignInKiosk.Domanin.Messages
+namespace OxHack.SignInKiosk.Domain.Messages
 {
 	[DataContract]
 	public class TokenRead

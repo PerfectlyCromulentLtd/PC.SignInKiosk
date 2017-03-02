@@ -8,7 +8,7 @@ using OxHack.SignInKiosk.Database;
 namespace OxHack.SignInKiosk.Database.Migrations
 {
     [DbContext(typeof(SignInContext))]
-    [Migration("20170227210313_InitialSchema")]
+    [Migration("20170301193309_InitialSchema")]
     partial class InitialSchema
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -17,7 +17,7 @@ namespace OxHack.SignInKiosk.Database.Migrations
                 .HasAnnotation("ProductVersion", "1.1.0-rtm-22752")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("OxHack.SignInKiosk.Database.Models.AuditRecord", b =>
+            modelBuilder.Entity("OxHack.SignInKiosk.Domain.Models.AuditRecord", b =>
                 {
                     b.Property<int>("SequenceNumber")
                         .ValueGeneratedOnAdd();
@@ -37,22 +37,26 @@ namespace OxHack.SignInKiosk.Database.Migrations
                     b.ToTable("AuditRecords");
                 });
 
-            modelBuilder.Entity("OxHack.SignInKiosk.Database.Models.SignedInRecord", b =>
+            modelBuilder.Entity("OxHack.SignInKiosk.Domain.Models.SignedInRecord", b =>
                 {
-                    b.Property<string>("DisplayName");
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
-                    b.Property<DateTime>("SignInTime");
+                    b.Property<string>("DisplayName");
 
                     b.Property<bool>("IsVisitor");
 
+                    b.Property<DateTime>("SignInTime")
+                        .HasAnnotation("SqlServer:ColumnType", "datetime2(7)");
+
                     b.Property<string>("TokenId");
 
-                    b.HasKey("DisplayName", "SignInTime");
+                    b.HasKey("Id");
 
                     b.ToTable("CurrentlySignedIn");
                 });
 
-            modelBuilder.Entity("OxHack.SignInKiosk.Database.Models.TokenHolder", b =>
+            modelBuilder.Entity("OxHack.SignInKiosk.Domain.Models.TokenHolder", b =>
                 {
                     b.Property<string>("TokenId")
                         .ValueGeneratedOnAdd();

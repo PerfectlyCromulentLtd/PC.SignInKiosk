@@ -3,35 +3,38 @@ using OxHack.SignInKiosk.Domain.Models;
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Services
 {
-	public class SignInApiWrapper
+	public class TokenHolderApiWrapper
 	{
 		private readonly Uri serviceBase;
 
-		public SignInApiWrapper(Uri serviceBase)
+		public TokenHolderApiWrapper(Uri serviceBase)
 		{
 			this.serviceBase = serviceBase;
 		}
 
-		public async Task<IReadOnlyList<SignedInRecord>> GetCurrentlySignedIn()
+		public async Task<TokenHolder> GetTokenHolderByTokenId(string tokenId)
 		{
 			string responseBody;
 			using (var client = new HttpClient())
 			{
-				var response = await client.GetAsync(this.CurrentlySignedInResource);
+				var uri = new Uri(this.TokenHolderResource, Uri.EscapeUriString(tokenId));
+
+				var response = await client.GetAsync(uri);
 				response.EnsureSuccessStatusCode();
 				responseBody = await response.Content.ReadAsStringAsync();
 			}
 
-			var result = JsonConvert.DeserializeObject<List<SignedInRecord>>(responseBody);
+			var result = JsonConvert.DeserializeObject<TokenHolder>(responseBody);
 
 			return result;
 		}
 
-		private Uri CurrentlySignedInResource
-			=> new Uri(this.serviceBase, "/api/v1/currentlySignedIn/");
+		private Uri TokenHolderResource
+			=> new Uri(this.serviceBase, "/api/v1/tokenHolders/");
 	}
 }

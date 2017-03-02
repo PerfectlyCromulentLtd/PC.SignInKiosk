@@ -1,5 +1,5 @@
 ﻿using Caliburn.Micro;
-using OxHack.SignInKiosk.Domanin.Models;
+using OxHack.SignInKiosk.Domain.Models;
 using OxHack.SignInKiosk.Services;
 using Prism.Commands;
 using System;
@@ -73,9 +73,6 @@ namespace OxHack.SignInKiosk.ViewModels
 			catch (Exception e)
 			{
 				this.toastService.ShowGenericError();
-			}
-			finally
-			{
 				this.IsBusy = false;
 			}
 		}

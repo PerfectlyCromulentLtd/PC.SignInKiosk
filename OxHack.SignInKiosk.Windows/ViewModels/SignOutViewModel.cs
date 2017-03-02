@@ -7,14 +7,15 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.ViewModels
 {
-	public class ManualSignOutViewModel : Screen
+	public class SignOutViewModel : Screen
 	{
 		private readonly INavigationService navigationService;
 		private readonly SignInService signInService;
 		private readonly ToastService toastService;
 		private SignedInRecordViewModel selectedSignInRecord;
+		private bool isBusy;
 
-		public ManualSignOutViewModel(
+		public SignOutViewModel(
 			INavigationService navigationService,
 			SignInService signInService,
 			ToastService toastService)
@@ -30,12 +31,13 @@ namespace OxHack.SignInKiosk.ViewModels
 		}
 
 		public bool CanSignOut
-			=> this.SelectedSignInRecord != null;
+			=> this.SelectedSignInRecord != null && !this.IsBusy;
 
 		public async void SignOut()
 		{
 			if (this.CanSignOut)
 			{
+				this.IsBusy = true;
 				try
 				{
 					await this.signInService.RequestSignOut(this.SelectedSignInRecord.Model);
@@ -44,7 +46,7 @@ namespace OxHack.SignInKiosk.ViewModels
 				{
 					// TODO: Log error.
 					this.toastService.ShowGenericError();
-					this.GoBack();
+					this.IsBusy = false;
 				}
 			}
 		}
@@ -87,6 +89,20 @@ namespace OxHack.SignInKiosk.ViewModels
 			set
 			{
 				this.selectedSignInRecord = value;
+				this.NotifyOfPropertyChange();
+				this.NotifyOfPropertyChange(nameof(this.CanSignOut));
+			}
+		}
+
+		public bool IsBusy
+		{
+			get
+			{
+				return this.isBusy;
+			}
+			private set
+			{
+				this.isBusy = value;
 				this.NotifyOfPropertyChange();
 				this.NotifyOfPropertyChange(nameof(this.CanSignOut));
 			}

@@ -113,7 +113,9 @@
     </Compile>
     <Compile Include="Events\Connected.cs" />
     <Compile Include="Events\Disconnected.cs" />
+    <Compile Include="Services\SoundEffectsService.cs" />
     <Compile Include="Services\MessageOrchestratorService.cs" />
+    <Compile Include="Services\TokenHolderApiWrapper.cs" />
     <Compile Include="Services\SignInApiWrapper.cs" />
     <Compile Include="Services\SignInService.cs" />
     <Compile Include="Services\ToastService.cs" />
@@ -122,8 +124,8 @@
     <Compile Include="Views\NameEntryView.xaml.cs">
       <DependentUpon>NameEntryView.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Views\ManualSignOutView.xaml.cs">
-      <DependentUpon>ManualSignOutView.xaml</DependentUpon>
+    <Compile Include="Views\SignOutView.xaml.cs">
+      <DependentUpon>SignOutView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Views\DisconnectedView.xaml.cs">
       <DependentUpon>DisconnectedView.xaml</DependentUpon>
@@ -144,8 +146,8 @@
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
     <Compile Include="Services\MessageBrokerService.cs" />
-    <Compile Include="Services\TokenHolderInfoService.cs" />
-    <Compile Include="ViewModels\ManualSignOutViewModel.cs" />
+    <Compile Include="Services\TokenHolderService.cs" />
+    <Compile Include="ViewModels\SignOutViewModel.cs" />
     <Compile Include="ViewModels\NameEntryViewModel.cs" />
     <Compile Include="ViewModels\SignedInGreetingViewModel.cs" />
     <Compile Include="ViewModels\StartViewModel.cs" />
@@ -157,6 +159,9 @@
     <None Include="OxHack.SignInKiosk.Windows_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domanin.Messages.Models.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domanin.Messages.xsd">
       <SubType>Designer</SubType>
     </None>
@@ -173,12 +178,19 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Attributions.txt" />
+    <Content Include="Assets\Connected.wav" />
     <Content Include="Assets\Disconnected.svg" />
+    <Content Include="Assets\Disconnected.wav" />
     <Content Include="Assets\HandWithFob.png" />
     <Content Include="Assets\Logo.scale-100.png" />
+    <Content Include="Assets\oxhack-240.png" />
+    <Content Include="Assets\oxhack-30.png" />
+    <Content Include="Assets\SignedIn.wav" />
+    <Content Include="Assets\SignedOut.wav" />
     <Content Include="Assets\SmallLogo.scale-100.png" />
     <Content Include="Assets\SplashScreen.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-100.png" />
+    <Content Include="Assets\TokenRead.wav" />
     <None Include="Service References\MessageBrokerProxy\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.cs</LastGenOutput>
@@ -198,7 +210,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Views\ManualSignOutView.xaml">
+    <Page Include="Views\SignOutView.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>

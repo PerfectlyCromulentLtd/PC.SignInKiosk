@@ -1,5 +1,6 @@
 ﻿using Caliburn.Micro;
-using OxHack.SignInKiosk.Domanin.Messages;
+using OxHack.SignInKiosk.Domain.Messages;
+using OxHack.SignInKiosk.Domain.Models;
 using OxHack.SignInKiosk.Events;
 using OxHack.SignInKiosk.ViewModels;
 using OxHack.SignInKiosk.Views;
@@ -9,25 +10,26 @@ namespace OxHack.SignInKiosk.Services
 {
 	class MessageOrchestratorService :
 		IHandle<PersonSignedIn>,
+		IHandle<PersonSignedOut>,
 		IHandle<Disconnected>,
 		IHandle<Connected>,
 		IHandle<TokenRead>
 	{
 		private readonly INavigationService navigationService;
 		private readonly SignInService signInService;
-		private readonly TokenHolderInfoService tokenHolderInfoService;
+		private readonly TokenHolderService tokenHolderService;
 		private readonly ToastService toastService;
 
 		public MessageOrchestratorService(
 			INavigationService navigationService,
 			SignInService signInService,
-			TokenHolderInfoService tokenHolderInfoService,
+			TokenHolderService tokenHolderService,
 			ToastService toastService,
 			IEventAggregator eventAggregator)
 		{
 			this.navigationService = navigationService;
 			this.signInService = signInService;
-			this.tokenHolderInfoService = tokenHolderInfoService;
+			this.tokenHolderService = tokenHolderService;
 			this.toastService = toastService;
 
 			eventAggregator.Subscribe(this);
@@ -37,29 +39,38 @@ namespace OxHack.SignInKiosk.Services
 		{
 			// TODO: Play success beep
 
-			if (this.navigationService.CurrentSourcePageType != typeof(StartView))
+			try
 			{
-				this.toastService.Show("A fob was read and ignored.", "To sign-in with it go BACK to the sign-in screen and try again.");
-			}
-			else
-			{
-				var tokenHolder = this.tokenHolderInfoService.GetUserByTokenId(message.Id);
-
-				if (tokenHolder == null)
+				if (this.navigationService.CurrentSourcePageType != typeof(StartView))
 				{
-					this.navigationService.NavigateToViewModel<NameEntryViewModel>(message.Id);
+					this.toastService.Show("A fob was read and ignored.", "To sign-in with it go BACK to the first screen and try again.");
 				}
 				else
 				{
-					if (await this.signInService.IsSignedIn(tokenHolder.TokenId))
+					var tokenHolder = await this.tokenHolderService.GetTokenHolderByTokenId(message.Id);
+
+					if (tokenHolder == null)
 					{
-						this.navigationService.NavigateToViewModel<ManualSignOutViewModel>(tokenHolder.TokenId);
+						this.navigationService.NavigateToViewModel<NameEntryViewModel>(message.Id);
 					}
 					else
 					{
-						await this.signInService.RequestSignIn(tokenHolder);
+						SignedInRecord signedInRecord;
+						if (this.signInService.TryGetSignedInRecord(tokenHolder.TokenId, out signedInRecord))
+						{
+							await this.signInService.RequestSignOut(signedInRecord);
+						}
+						else
+						{
+							await this.signInService.RequestSignIn(tokenHolder);
+						}
 					}
 				}
+			}
+			catch (Exception e)
+			{
+				// TODO: log error
+				this.toastService.ShowGenericError();
 			}
 		}
 
@@ -82,6 +93,11 @@ namespace OxHack.SignInKiosk.Services
 		public void Handle(PersonSignedIn message)
 		{
 			this.navigationService.NavigateToViewModel<SignedInGreetingViewModel>(message.Person.DisplayName);
+		}
+
+		public void Handle(PersonSignedOut message)
+		{
+			this.navigationService.NavigateToViewModel<SignedOutFarewellViewModel>(message.Person.DisplayName);
 		}
 	}
 }

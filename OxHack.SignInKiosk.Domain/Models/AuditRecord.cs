@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace OxHack.SignInKiosk.Domanin.Models
+namespace OxHack.SignInKiosk.Domain.Models
 {
     public class AuditRecord
 	{
