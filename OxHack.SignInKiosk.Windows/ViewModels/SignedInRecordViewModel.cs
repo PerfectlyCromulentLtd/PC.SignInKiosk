@@ -15,7 +15,7 @@ namespace OxHack.SignInKiosk.ViewModels
 			=> this.Model.DisplayName;
 
 		public string SignInTime
-			=> $"Signed-in @ {this.Model.SignInTime.ToString("t")}{(this.Model.SignInTime.DayOfWeek != DateTime.Now.DayOfWeek ? " (" + this.Model.SignInTime.Humanize() + ") " : String.Empty)}";
+			=> $"Signed-in @ {this.Model.SignInTime.ToString("t")}{(this.Model.SignInTime.Date != DateTime.Now.Date ? " (" + this.Model.SignInTime.Humanize() + ") " : String.Empty)}";
 
 		public string AdditionalInformation
 			=> $"[ {(this.Model.IsVisitor ? "visitor" : "member")} ]{(this.Model.TokenId != null ? " [ signed-in with fob ]" : String.Empty)}";

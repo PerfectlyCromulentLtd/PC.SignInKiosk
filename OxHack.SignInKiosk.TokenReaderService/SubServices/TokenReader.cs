@@ -161,19 +161,15 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 					{
 						tokenId = BitConverter.ToUInt32(receiveBuffer, 1);
 
-						//this.logger.Debug($"Read Token {tokenId} (0x{tokenId.ToString("X8")})");
+						//this.logger.Debug($"ACK: 0x{ack.ToString("X2")} {TokenReader.ToBitString(ack)} TokenId: {tokenId}");
 					}
-					//else
-					//{
-					//	this.logger.Debug($"-- no token --");
-					//}
 
 					this.eventAggregator.GetEvent<TokenReadEvent>().Publish(tokenId);
 
-					if (!wasTokenRead && ack != 0xC0)
-					{
-						//this.logger.Debug($">>>>>> Received {String.Join(", ", receiveBuffer.Select(item => $"{TokenReader.ToBitString(item)} (0x{item.ToString("X2")})"))}");
-					}
+					//if (!wasTokenRead && ack != 0xC0)
+					//{
+					//	this.logger.Debug($">>>>>> Received {String.Join(", ", receiveBuffer.Select(item => $"{TokenReader.ToBitString(item)} (0x{item.ToString("X2")})"))}");
+					//}
 				}
 				catch (Exception e)
 				{

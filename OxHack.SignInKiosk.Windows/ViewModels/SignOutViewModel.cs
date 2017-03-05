@@ -57,7 +57,11 @@ namespace OxHack.SignInKiosk.ViewModels
 			{
 				var currentlySignedIn = await this.signInService.GetCurrentlySignedIn();
 
-				this.SignInRecords = currentlySignedIn.Select(item => new SignedInRecordViewModel(item)).ToList();
+				this.SignInRecords = 
+					currentlySignedIn
+						.OrderBy(item => item.TokenId != null)
+						.ThenBy(item => item.DisplayName)
+						.Select(item => new SignedInRecordViewModel(item)).ToList();
 				this.NotifyOfPropertyChange(nameof(this.SignInRecords));
 
 				if (selectedTokenId != null)

@@ -34,6 +34,7 @@ namespace OxHack.SignInKiosk.Messaging
 
 			this.busControl = Bus.Factory.CreateUsingRabbitMq(busConfig =>
 			{
+				// TODO: Decide whether MassTransit should default to using NLog
 				busConfig.UseNLog();
 
 				busConfig.AutoDelete = true;

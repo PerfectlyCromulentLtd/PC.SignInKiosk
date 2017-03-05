@@ -30,7 +30,10 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 				Observable.FromEvent<uint>(
 					addHandler => eventAggregator.GetEvent<TokenReadEvent>().Subscribe(addHandler),
 					removeHandler => eventAggregator.GetEvent<TokenReadEvent>().Unsubscribe(removeHandler))
-				.DistinctUntilChanged(keySelector => keySelector)
+				//.DistinctUntilChanged(keySelector => keySelector)
+				.Buffer(2)
+				.Where(buffer => buffer[0] == buffer[1])
+				.Select(buffer => buffer[0])
 				.Where(item => item != 0)
 				.Subscribe(this.OnTokenRead);
 		}
@@ -45,7 +48,7 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 					var tokenIdHash = hasher.ComputeHash(BitConverter.GetBytes(tokenId));
 					var formattedTokenIdHash = BitConverter.ToString(tokenIdHash).Replace("-", String.Empty);
 
-					//this.logger.Debug($"Relaying token {item} as {formattedTokenIdHash}.");
+					this.logger.Debug($"Relaying token {tokenId} as {formattedTokenIdHash}.");
 
 					var message = new TokenRead(formattedTokenIdHash);
 					await this.messagingClient.Publish(message);
