@@ -19,5 +19,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 
 		[OperationContract]
 		void OnSignOutRequestSubmittedPublished(SignOutRequestSubmitted message);
+
+		[OperationContract]
+		void KeepCallbackAlive();
 	}
 }

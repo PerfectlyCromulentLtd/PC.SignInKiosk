@@ -159,6 +159,15 @@
     <None Include="OxHack.SignInKiosk.Windows_TemporaryKey.pfx" />
     <None Include="packages.config" />
     <None Include="Properties\ServiceReferences.Designer.ClientConfig" />
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domain.Messages.Models1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domain.Messages1.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domain.Models1.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Service References\MessageBrokerProxy\OxHack.SignInKiosk.Domanin.Messages.Models.xsd">
       <SubType>Designer</SubType>
     </None>

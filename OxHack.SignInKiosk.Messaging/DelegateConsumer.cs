@@ -20,6 +20,7 @@ namespace OxHack.SignInKiosk.Messaging
 			try
 			{
 				this.action(context.Message);
+				await Task.FromResult(0);
 			}
 			catch (Exception e)
 			{

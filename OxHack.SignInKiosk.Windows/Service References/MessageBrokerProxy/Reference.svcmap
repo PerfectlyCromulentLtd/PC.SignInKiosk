@@ -27,9 +27,9 @@
     <MetadataFile FileName="service1.wsdl" MetadataType="Wsdl" ID="d05287e3-f766-4851-9ad5-23d6692d6b85" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
     <MetadataFile FileName="service2.xsd" MetadataType="Schema" ID="6b84022a-95a3-4032-9c1b-136f9287475b" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
     <MetadataFile FileName="service21.xsd" MetadataType="Schema" ID="c948096e-8f02-4e68-99b1-fb7c94760d45" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="OxHack.SignInKiosk.Domain.Messages.xsd" MetadataType="Schema" ID="163d0e61-d2e2-44ff-9af4-bcc640043b9d" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="OxHack.SignInKiosk.Domain.Messages.Models.xsd" MetadataType="Schema" ID="176223bf-0e8e-423f-9944-29faae48c901" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
-    <MetadataFile FileName="OxHack.SignInKiosk.Domain.Models.xsd" MetadataType="Schema" ID="7ccec02a-f6a4-436a-aeb5-001cb0249bc5" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Domain.Messages1.xsd" MetadataType="Schema" ID="2c76f531-8f4e-4ba5-a1ea-622f6954c499" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Domain.Messages.Models1.xsd" MetadataType="Schema" ID="25a8496d-908d-455c-8eeb-6f24de823eab" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
+    <MetadataFile FileName="OxHack.SignInKiosk.Domain.Models1.xsd" MetadataType="Schema" ID="e25a2614-e2b0-46ac-8367-98cc8e90a9a7" SourceId="1" SourceUrl="net.tcp://messagebrokerproxyservice:8137/MessageBrokerProxyService/mex" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

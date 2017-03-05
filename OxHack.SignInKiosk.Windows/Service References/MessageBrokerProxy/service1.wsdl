@@ -43,6 +43,12 @@
   <wsdl:message name="IMessageBrokerProxyService_Unsubscribe_OutputMessage">
     <wsdl:part name="parameters" element="tns:UnsubscribeResponse" />
   </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_KeepAlive_InputMessage">
+    <wsdl:part name="parameters" element="tns:KeepAlive" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_KeepAlive_OutputMessage">
+    <wsdl:part name="parameters" element="tns:KeepAliveResponse" />
+  </wsdl:message>
   <wsdl:message name="IMessageBrokerProxyService_OnTokenReadPublished_OutputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnTokenReadPublished" />
   </wsdl:message>
@@ -73,6 +79,12 @@
   <wsdl:message name="IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_InputCallbackMessage">
     <wsdl:part name="parameters" element="tns:OnSignOutRequestSubmittedPublishedResponse" />
   </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_KeepCallbackAlive_OutputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:KeepCallbackAlive" />
+  </wsdl:message>
+  <wsdl:message name="IMessageBrokerProxyService_KeepCallbackAlive_InputCallbackMessage">
+    <wsdl:part name="parameters" element="tns:KeepCallbackAliveResponse" />
+  </wsdl:message>
   <wsdl:portType name="IMessageBrokerProxyService">
     <wsdl:operation name="PublishSignInRequest">
       <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/PublishSignInRequest" message="tns:IMessageBrokerProxyService_PublishSignInRequest_InputMessage" />
@@ -89,6 +101,10 @@
     <wsdl:operation name="Unsubscribe">
       <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/Unsubscribe" message="tns:IMessageBrokerProxyService_Unsubscribe_InputMessage" />
       <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/UnsubscribeResponse" message="tns:IMessageBrokerProxyService_Unsubscribe_OutputMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="KeepAlive">
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/KeepAlive" message="tns:IMessageBrokerProxyService_KeepAlive_InputMessage" />
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/KeepAliveResponse" message="tns:IMessageBrokerProxyService_KeepAlive_OutputMessage" />
     </wsdl:operation>
     <wsdl:operation name="OnTokenReadPublished">
       <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnTokenReadPublished" message="tns:IMessageBrokerProxyService_OnTokenReadPublished_OutputCallbackMessage" />
@@ -109,6 +125,10 @@
     <wsdl:operation name="OnSignOutRequestSubmittedPublished">
       <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublished" message="tns:IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_OutputCallbackMessage" />
       <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublishedResponse" message="tns:IMessageBrokerProxyService_OnSignOutRequestSubmittedPublished_InputCallbackMessage" />
+    </wsdl:operation>
+    <wsdl:operation name="KeepCallbackAlive">
+      <wsdl:output wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/KeepCallbackAlive" message="tns:IMessageBrokerProxyService_KeepCallbackAlive_OutputCallbackMessage" />
+      <wsdl:input wsaw:Action="http://tempuri.org/IMessageBrokerProxyService/KeepCallbackAliveResponse" message="tns:IMessageBrokerProxyService_KeepCallbackAlive_InputCallbackMessage" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="ServiceEndpoint" type="tns:IMessageBrokerProxyService">
@@ -144,6 +164,15 @@
     </wsdl:operation>
     <wsdl:operation name="Unsubscribe">
       <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/Unsubscribe" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="KeepAlive">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/KeepAlive" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>
@@ -189,6 +218,15 @@
     </wsdl:operation>
     <wsdl:operation name="OnSignOutRequestSubmittedPublished">
       <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublished" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="KeepCallbackAlive">
+      <soap12:operation soapAction="http://tempuri.org/IMessageBrokerProxyService/KeepCallbackAlive" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

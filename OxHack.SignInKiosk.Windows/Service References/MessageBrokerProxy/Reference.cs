@@ -29,6 +29,9 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/Unsubscribe", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/UnsubscribeResponse")]
         System.Threading.Tasks.Task UnsubscribeAsync();
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/KeepAlive", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/KeepAliveResponse")]
+        System.Threading.Tasks.Task KeepAliveAsync();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -50,6 +53,9 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublished", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/OnSignOutRequestSubmittedPublishedR" +
             "esponse")]
         void OnSignOutRequestSubmittedPublished(OxHack.SignInKiosk.Domain.Messages.SignOutRequestSubmitted message);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IMessageBrokerProxyService/KeepCallbackAlive", ReplyAction="http://tempuri.org/IMessageBrokerProxyService/KeepCallbackAliveResponse")]
+        void KeepCallbackAlive();
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
@@ -109,6 +115,10 @@ namespace OxHack.SignInKiosk.MessageBrokerProxy {
         
         public System.Threading.Tasks.Task UnsubscribeAsync() {
             return base.Channel.UnsubscribeAsync();
+        }
+        
+        public System.Threading.Tasks.Task KeepAliveAsync() {
+            return base.Channel.KeepAliveAsync();
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync() {

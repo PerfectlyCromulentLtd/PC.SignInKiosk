@@ -13,6 +13,7 @@ namespace OxHack.SignInKiosk.Services
 		private ServiceCallback serviceCallback;
 		private MessageBrokerProxyServiceClient serviceClient;
 		private readonly IEventAggregator eventAggregator;
+		private Task keepAliveWorker;
 
 		public MessageBrokerService(IEventAggregator eventAggregator)
 		{
@@ -32,6 +33,23 @@ namespace OxHack.SignInKiosk.Services
 		public async Task Connect()
 		{
 			await this.CreateNewConnection();
+			this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
+		}
+
+		private async Task KeepAliveWorkerLoop()
+		{
+			while (true)
+			{
+				try
+				{
+					await Task.Delay(TimeSpan.FromMinutes(5));
+					await this.serviceClient?.KeepAliveAsync();
+				}
+				catch
+				{
+					// Do nothing
+				}
+			}
 		}
 
 		private async Task CreateNewConnection()
@@ -41,7 +59,7 @@ namespace OxHack.SignInKiosk.Services
 				this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
 			}
 
-			var timeout = TimeSpan.FromSeconds(15);
+			var timeout = TimeSpan.FromSeconds(7);
 
 			//TODO: Enable transport security.
 			var binding = new NetTcpBinding()
@@ -71,11 +89,9 @@ namespace OxHack.SignInKiosk.Services
 
 			this.serviceCallback = new ServiceCallback(this.eventAggregator);
 			this.serviceClient = new MessageBrokerProxyServiceClient(new InstanceContext(this.serviceCallback), binding, remoteAddress);
-			//this.serviceClient = new MessageBrokerProxyServiceClient(new InstanceContext(this.serviceCallback));
 			this.serviceClient.InnerChannel.Faulted += this.HandleServiceClientFaults;
 
 			await this.serviceClient.SubscribeAsync();
-
 			await this.eventAggregator.PublishOnUIThreadAsync(new Connected());
 		}
 
@@ -89,7 +105,7 @@ namespace OxHack.SignInKiosk.Services
 			{
 				await this.CreateNewConnection();
 			}
-			catch (Exception exception)
+			catch
 			{
 				//TODO: log error
 			}
@@ -127,6 +143,11 @@ namespace OxHack.SignInKiosk.Services
 			public async void OnSignOutRequestSubmittedPublished(SignOutRequestSubmitted message)
 			{
 				await this.eventAggregator.PublishOnUIThreadAsync(message);
+			}
+
+			public void KeepCallbackAlive()
+			{
+				// To nothing.
 			}
 		}
 	}

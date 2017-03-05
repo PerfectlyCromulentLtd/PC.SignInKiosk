@@ -17,5 +17,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 
 		[OperationContract]
 		void Unsubscribe();
+
+		[OperationContract]
+		void KeepAlive();
 	}
 }

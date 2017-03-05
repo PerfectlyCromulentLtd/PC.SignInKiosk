@@ -3,6 +3,7 @@ using OxHack.SignInKiosk.Domain.Messages;
 using OxHack.SignInKiosk.Messaging;
 using System;
 using System.ServiceModel;
+using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 {
@@ -12,6 +13,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 		private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 		private IMessageBrokerProxyServiceCallback callBack;
 		private readonly MessagingClient messagingClient;
+		private object keepAliveWorker;
 
 		public MessageBrokerProxyService(MessagingClient messagingClient)
 		{
@@ -112,6 +114,8 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 				OperationContext ctx = OperationContext.Current;
 				this.callBack = ctx.GetCallbackChannel<IMessageBrokerProxyServiceCallback>();
 
+				this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
+
 				this.logger.Info("Client subscribed.");
 			}
 			catch (Exception exception)
@@ -131,6 +135,27 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			{
 				this.logger.Error(exception);
 			}
+		}
+
+		private async Task KeepAliveWorkerLoop()
+		{
+			while (true)
+			{
+				try
+				{
+					await Task.Delay(TimeSpan.FromMinutes(5));
+					this.callBack?.KeepCallbackAlive();
+				}
+				catch
+				{
+					// Do nothing.
+				}
+			}
+		}
+
+		public void KeepAlive()
+		{
+			this.logger.Debug("KeepAlive called.");
 		}
 	}
 }

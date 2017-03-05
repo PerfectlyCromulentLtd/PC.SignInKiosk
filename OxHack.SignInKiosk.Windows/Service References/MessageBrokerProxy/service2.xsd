@@ -45,6 +45,16 @@
       <xs:sequence />
     </xs:complexType>
   </xs:element>
+  <xs:element name="KeepAlive">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KeepAliveResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
   <xs:element name="OnTokenReadPublished">
     <xs:complexType>
       <xs:sequence>
@@ -101,6 +111,16 @@
     </xs:complexType>
   </xs:element>
   <xs:element name="OnSignOutRequestSubmittedPublishedResponse">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KeepCallbackAlive">
+    <xs:complexType>
+      <xs:sequence />
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="KeepCallbackAliveResponse">
     <xs:complexType>
       <xs:sequence />
     </xs:complexType>
