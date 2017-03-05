@@ -7,7 +7,9 @@ A fob-based sign-in system for Oxford Hackspace.
 This component isn't actually part of the source code, however it is critical to the operation of the system.  All components communicated with one another through a central RabbitMQ Message Broker.
 
 ### OxHack.SignInKiosk.FobReaderService
-A stand-alone service responsible for reading fob UIDs and relaying them as `FobRead` messages to the Message Broker
+A stand-alone service responsible for reading fob UIDs and relaying them as `FobRead` messages to the Message Broker.
+
+This currently expects to be hosted on a Raspberry Pi and to be interacting with a IB Technologies RWD-HiTag2 chip.
 
 ### OxHack.SignInKiosk.Windows
 The UI for the sign-in system.  This component subscribes to `FobRead` messages and starts one of three workflows with the interactive user:
