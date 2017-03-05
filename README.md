@@ -23,7 +23,7 @@ Additionally, two manual workflows are provided for users to sign-in and -out wi
 ### OxHack.SignInKiosk.CoreService
 A stand-alone service responsible for processing `SignInRequestSubmitted` and `SignOutRequestSubmitted` messages.
 
-This service is responsible for managing the overall system's persisted state (ie, who is currently signed in).  It also records an audit trail of sign-in and sign-out actions for future analysis.
+This service is responsible for managing the overall system's persisted state (ie, who is currently signed in).  It also records an audit trail of sign-in and sign-out events to be used what calculating footfall statistics.
 
 ### OxHack.SignInKiosk.PrinterService
 A stand-alone service responsible for printing out all `PersonSignedIn` and `PersonSignedOut` messages to paper.
@@ -40,13 +40,15 @@ Unfortunately, the only bit of hardware I have access to for hosting the UI is f
 
 Instead of recoding a RabbitMQ/MassTransit library for WinRT I decided to write this service instead.
 
-This is a WCF service (supported by WinRT) that acts like a proxy for the Message Broker.  That's it  Hopefully I'll be able to get rid of it later.
+This is a WCF service (supported by WinRT) that acts like a proxy for the Message Broker.  That's it.
+
+Hopefully I'll be able to get rid of it eventually.
 
 ### OxHack.SignInKiosk.Database
-This one is pretty self explanatory.  This component is responsible for interactions with the system's database.  It uses EF Core internally but exposes the data to the rest of the application as Services.
+This one is pretty self explanatory.  This component is responsible for interactions with the system's database.  It uses EF Core internally but exposes the data to the rest of the application as service classes.
 
 ### OxHack.SignInKiosk.Messaging
-This component encapsulates all the messaging logic.  Subcription and Publishing logic for interacting with the Message Broker is implemented here.  Consumers
+This component encapsulates all the messaging logic.  Subcription and Publishing logic for interacting with the Message Broker is implemented here.
 
 These functionalities are exposed to the rest of the application by the `MessagingClient` class.
 
