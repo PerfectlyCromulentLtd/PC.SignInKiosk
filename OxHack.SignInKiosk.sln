@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26206.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "User Interfaces", "User Interfaces", "{657C0E27-735A-4034-9C52-D511E4B17F1B}"
 EndProject
@@ -19,11 +19,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.MessageB
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.CoreService", "OxHack.SignInKiosk.CoreService\OxHack.SignInKiosk.CoreService.csproj", "{175BD6F7-5194-4A79-84D2-82E012B34730}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Web", "OxHack.SignInKiosk.Web\OxHack.SignInKiosk.Web.csproj", "{BB912513-CA1E-475B-9B29-F6D8512D8DD9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxHack.SignInKiosk.Web", "OxHack.SignInKiosk.Web\OxHack.SignInKiosk.Web.csproj", "{BB912513-CA1E-475B-9B29-F6D8512D8DD9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Windows", "OxHack.SignInKiosk.Windows\OxHack.SignInKiosk.Windows.csproj", "{6016CBFC-8E73-4C38-A293-DEB2FD125169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Database", "OxHack.SignInKiosk.Database\OxHack.SignInKiosk.Database.csproj", "{FFDF6303-40BC-44E7-9B15-EC512929E9EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OxHack.SignInKiosk.Database", "OxHack.SignInKiosk.Database\OxHack.SignInKiosk.Database.csproj", "{FFDF6303-40BC-44E7-9B15-EC512929E9EE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OxHack.SignInKiosk.Domain", "OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj", "{FB095B7E-DA4E-43DC-B072-CBA277FBC99F}"
 EndProject

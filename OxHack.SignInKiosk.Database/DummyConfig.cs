@@ -6,7 +6,7 @@ namespace OxHack.SignInKiosk.Database
 	{
 		public string ConnectionString
 		{
-			get => String.Empty;
+			get => "";
 		}
 	}
 }

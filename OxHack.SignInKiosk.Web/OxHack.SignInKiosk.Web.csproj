@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp1.1</TargetFramework>
+    <UserSecretsId>8919f5da-283d-4afa-ac9a-464e3e2bf23d</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +22,11 @@
   <ItemGroup>
     <ProjectReference Include="..\OxHack.SignInKiosk.Database\OxHack.SignInKiosk.Database.csproj" />
     <ProjectReference Include="..\OxHack.SignInKiosk.Domain\OxHack.SignInKiosk.Domain.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="Dockerfile">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

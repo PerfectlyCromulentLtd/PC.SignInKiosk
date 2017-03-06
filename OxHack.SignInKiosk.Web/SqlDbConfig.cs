@@ -14,6 +14,13 @@ namespace OxHack.SignInKiosk.Web
 		}
 
 		public string ConnectionString
-			=> this.config["DbConnectionString"];
+		{
+			get
+			{
+				return
+					Environment.GetEnvironmentVariable("ConnectionString")
+					?? this.config["DbConnectionString"];
+			}
+		}
 	}
 }

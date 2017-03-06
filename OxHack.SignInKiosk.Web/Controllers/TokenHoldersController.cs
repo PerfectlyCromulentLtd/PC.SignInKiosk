@@ -24,7 +24,7 @@ namespace OxHack.SignInKiosk.Web.Controllers
 			{
 				return this.tokenHolderService.GetTokenHolderByTokenId(tokenId);
 			}
-			catch (Exception ex)
+			catch
 			{
 				// TODO: Log error
 				throw;
