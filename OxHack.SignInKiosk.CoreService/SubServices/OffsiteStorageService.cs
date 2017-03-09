@@ -12,6 +12,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using OxHack.SignInKiosk.Database.Services;
 using OxHack.SignInKiosk.Messaging;
+using OxHack.SignInKiosk.Domain.Models;
 
 namespace OxHack.SignInKiosk.CoreService
 {
@@ -69,17 +70,37 @@ namespace OxHack.SignInKiosk.CoreService
 			var past24Hours = this.signInService.GetPast24Hours().OrderBy(item => item.Time).ToList();
 			var lastUpdateTime = DateTime.Now;
 
-			var content = $@"Last Updated: {lastUpdateTime.ToString("s").Replace('T', ' ')}
+			string content = FormatReport(currentState, past24Hours, lastUpdateTime);
+
+			var file = new File();
+
+			using (var stream = new IO.MemoryStream(Encoding.UTF8.GetBytes(content)))
+			{
+				var request = this.driveService.Files.Update(file, this.fileId, stream, "text/plain");
+				request.Upload();
+			}
+
+			this.driveService.Files.Update(file, this.fileId);
+		}
+
+		private static string FormatReport(IReadOnlyList<SignedInRecord> currentState, List<AuditRecord> past24Hours, DateTime lastUpdateTime)
+		{
+			return $@"Last Updated: {lastUpdateTime.ToString("s").Replace('T', ' ')}
 
 Currently Signed-In:
 ====================
+
 Sign-In Time          Is Visitor?  Name
 --------------------  -----------  --------------------
-{String.Join("\r\n", currentState.Select(item =>
-	item.SignInTime.ToString("s").Replace('T', ' ').PadRight(22) +
-	(item.IsVisitor ? "Yes" : String.Empty).PadRight(13) +
-	item.DisplayName
-	))}
+{String.Join("\r\n",
+				currentState
+					.Select(item =>
+						item.SignInTime.ToString("s").Replace('T', ' ').PadRight(22) +
+						(item.IsVisitor ? "Yes" : String.Empty).PadRight(13) +
+						item.DisplayName
+						)
+					.DefaultIfEmpty("    * ** ***  Nobody is in the hackspace.  *** ** *    ")
+			)}
 
 
 
@@ -100,25 +121,16 @@ Sign-In Time          Is Visitor?  Name
 
 Past 24 Hours:
 ==============
+
 Event Time            Event       Is Visitor?  Name
 --------------------  ----------  -----------  --------------------
 {String.Join("\r\n", past24Hours.Select(item =>
-	item.Time.ToString("s").Replace('T', ' ').PadRight(22) +
-	item.RecordType.PadRight(12) +
-	(item.PersonIsVisitor ? "Yes" : String.Empty).PadRight(13) +
-	item.PersonDisplayName
-	))}
+				item.Time.ToString("s").Replace('T', ' ').PadRight(22) +
+				item.RecordType.PadRight(12) +
+				(item.PersonIsVisitor ? "Yes" : String.Empty).PadRight(13) +
+				item.PersonDisplayName
+				))}
 ";
-
-			var file = new File();
-
-			using (var stream = new IO.MemoryStream(Encoding.UTF8.GetBytes(content)))
-			{
-				var request = this.driveService.Files.Update(file, this.fileId, stream, "text/plain");
-				request.Upload();
-			}
-
-			this.driveService.Files.Update(file, this.fileId);
 		}
 	}
 }
