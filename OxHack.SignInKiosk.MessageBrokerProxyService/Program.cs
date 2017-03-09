@@ -24,6 +24,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService
 
 				hostConf.DependsOn("LanmanServer");
 				hostConf.RunAsLocalSystem();
+				hostConf.StartAutomaticallyDelayed();
 
 				hostConf.SetDescription("A WCF service the Tablet can use in order to receiver and publish messages to the RabbitMQ message broker.");
 				hostConf.SetDisplayName("SignInKiosk.MessageBrokerProxy");

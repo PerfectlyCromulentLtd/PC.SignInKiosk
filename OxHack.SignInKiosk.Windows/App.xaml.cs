@@ -44,7 +44,7 @@ namespace OxHack.SignInKiosk
 			this.container.Singleton<SoundEffectsService>();
 
 			// TODO: Move this hardcoded URI to somesort of configuration file
-			var serviceBase = new Uri("http://SignInKioskWebApi:5001");
+			var serviceBase = new Uri("http://SignInKioskWebApi");
 			this.container.RegisterHandler(typeof(SignInApiWrapper), null, c => new SignInApiWrapper(serviceBase));
 			this.container.RegisterHandler(typeof(TokenHolderApiWrapper), null, c => new TokenHolderApiWrapper(serviceBase));
 			this.container.RegisterHandler(typeof(ToastNotifier), null, c => ToastNotificationManager.CreateToastNotifier());

@@ -13,7 +13,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 		private readonly ILogger logger = LogManager.GetCurrentClassLogger();
 		private IMessageBrokerProxyServiceCallback callBack;
 		private readonly MessagingClient messagingClient;
-		private object keepAliveWorker;
+		//private Task keepAliveWorker;
 
 		public MessageBrokerProxyService(MessagingClient messagingClient)
 		{
@@ -114,7 +114,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 				OperationContext ctx = OperationContext.Current;
 				this.callBack = ctx.GetCallbackChannel<IMessageBrokerProxyServiceCallback>();
 
-				this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
+				//this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
 
 				this.logger.Info("Client subscribed.");
 			}

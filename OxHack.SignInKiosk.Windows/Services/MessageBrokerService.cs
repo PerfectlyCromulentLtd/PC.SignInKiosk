@@ -13,7 +13,7 @@ namespace OxHack.SignInKiosk.Services
 		private ServiceCallback serviceCallback;
 		private MessageBrokerProxyServiceClient serviceClient;
 		private readonly IEventAggregator eventAggregator;
-		private Task keepAliveWorker;
+		//private Task keepAliveWorker;
 
 		public MessageBrokerService(IEventAggregator eventAggregator)
 		{
@@ -33,7 +33,7 @@ namespace OxHack.SignInKiosk.Services
 		public async Task Connect()
 		{
 			await this.CreateNewConnection();
-			this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
+			//this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
 		}
 
 		private async Task KeepAliveWorkerLoop()

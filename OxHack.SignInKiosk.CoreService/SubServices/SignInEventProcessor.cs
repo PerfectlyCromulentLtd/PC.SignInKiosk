@@ -6,6 +6,7 @@ using OxHack.SignInKiosk.Domain.Models;
 using OxHack.SignInKiosk.Messaging;
 using System;
 using System.Collections.Concurrent;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.CoreService.SubServices
@@ -30,8 +31,8 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 			this.signInService = signInService;
 			this.tokenHolderService = tokenHolderService;
 
-			this.messagingClient.SignInRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(async () => await this.StoreSignIn(e));
-			this.messagingClient.SignOutRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(async () => await this.StoreSignOut(e));
+			this.messagingClient.SignInRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(async () => await this.ProcessSignIn(e));
+			this.messagingClient.SignOutRequestSubmitted += (s, e) => this.eventProcessingQueue.Add(async () => await this.ProcessSignOut(e));
 		}
 
 		internal async Task Start()
@@ -67,19 +68,20 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 			}
 		}
 
-		private async Task StoreSignIn(SignInRequestSubmitted e)
+		private async Task ProcessSignIn(SignInRequestSubmitted e)
 		{
 			var signInTime = this.signInService.SignIn(e.Person.DisplayName, e.Person.IsVisitor, e.Person.TokenId);
+
 			await this.messagingClient.Publish(new PersonSignedIn(signInTime, e.Person));
 
 			if (!String.IsNullOrWhiteSpace(e.Person.TokenId))
 			{
 				var tokenHolder = new TokenHolder()
-				{ 
+				{
 					DisplayName = e.Person.DisplayName,
 					IsVisitor = e.Person.IsVisitor,
 					TokenId = e.Person.TokenId
-			};
+				};
 
 				var existingTokenHolder = this.tokenHolderService.GetTokenHolderByTokenId(tokenHolder.TokenId);
 
@@ -90,14 +92,16 @@ namespace OxHack.SignInKiosk.CoreService.SubServices
 			}
 		}
 
-		private async Task StoreSignOut(SignOutRequestSubmitted e)
+		private async Task ProcessSignOut(SignOutRequestSubmitted e)
 		{
 			var signOutTime = this.signInService.SignOut(e.SignedInRecord);
+
 			await this.messagingClient.Publish(
 				new PersonSignedOut(
 					e.SignedInRecord.SignInTime,
 					signOutTime,
 					new Person(e.SignedInRecord.TokenId, e.SignedInRecord.DisplayName, e.SignedInRecord.IsVisitor)));
 		}
+		
 	}
 }

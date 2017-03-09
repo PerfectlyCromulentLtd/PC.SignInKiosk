@@ -104,6 +104,14 @@ namespace OxHack.SignInKiosk.Database.Services
 			}
 		}
 
+		public IReadOnlyList<AuditRecord> GetPast24Hours()
+		{
+			using (var context = this.GetDbContext())
+			{
+				return context.AuditRecords.Where(item => item.Time >= DateTime.Now.Subtract(TimeSpan.FromDays(1))).ToList();
+			}
+		}
+
 		private SignInContext GetDbContext()
 		{
 			return new SignInContext(this.dbConfig);

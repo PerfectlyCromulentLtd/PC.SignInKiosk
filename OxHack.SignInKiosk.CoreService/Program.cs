@@ -21,17 +21,29 @@ namespace OxHack.SignInKiosk.CoreService
 
 				hostConf.Service<Bootstrapper>(serviceConf =>
 				{
+					var messagingClient =
+						new MessagingClient(subscriptions:
+							new[] {
+								typeof(SignInRequestSubmitted),
+								typeof(SignOutRequestSubmitted),
+								typeof(PersonSignedIn),
+								typeof(PersonSignedOut)
+							});
+
 					serviceConf.ConstructUsing(
 						name => new Bootstrapper(
 							new SignInEventProcessor(
-								new MessagingClient(subscriptions: new[] { typeof(SignInRequestSubmitted), typeof(SignOutRequestSubmitted) }),
+								messagingClient,
 								new SignInService(new SqlDbConfig()),
-								new TokenHolderService(new SqlDbConfig())
-						)));
+								new TokenHolderService(new SqlDbConfig())),
+								new OffsiteStorageService(new SignInService(new SqlDbConfig()), messagingClient)
+						));
 					serviceConf.WhenStarted(async target => await target.Start());
 					serviceConf.WhenStopped(async target => await target.Stop());
 				});
-				//hostConf.RunAsLocalSystem();
+				hostConf.DependsOn("LanmanServer");
+				hostConf.RunAsLocalSystem();
+				hostConf.StartAutomaticallyDelayed();
 
 				hostConf.SetDescription("Implements the core business logic for the Sign-In Kiosk project.");
 				hostConf.SetDisplayName("SignInKiosk.CoreService");
