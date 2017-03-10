@@ -3,16 +3,15 @@ using Google.Apis.Drive.v3;
 using Google.Apis.Drive.v3.Data;
 using Google.Apis.Services;
 using NLog;
+using OxHack.SignInKiosk.Database.Services;
+using OxHack.SignInKiosk.Domain.Models;
+using OxHack.SignInKiosk.Messaging;
 using System;
 using System.Collections.Generic;
-using IO = System.IO;
 using System.Linq;
 using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using OxHack.SignInKiosk.Database.Services;
-using OxHack.SignInKiosk.Messaging;
-using OxHack.SignInKiosk.Domain.Models;
+using IO = System.IO;
 
 namespace OxHack.SignInKiosk.CoreService
 {
@@ -38,23 +37,19 @@ namespace OxHack.SignInKiosk.CoreService
 
 		public async Task Connect()
 		{
-			// TODO: Inject clientID and clientSecret
-			var clientSecrets = new ClientSecrets()
-			{
-				ClientId = Environment.GetEnvironmentVariable("GoogleDriveApiClientId"),
-				ClientSecret = Environment.GetEnvironmentVariable("GoogleDriveApiClientSecret")
-			};
+			var serviceAccountEmail = Environment.GetEnvironmentVariable("GoogleDriveServiceAccountEmail");
+			var serviceAccountPrivateKey = Environment.GetEnvironmentVariable("GoogleDriveServiceAccountPrivateKey").Replace("\\n", "\n");
 
-			var credential =
-				await GoogleWebAuthorizationBroker.AuthorizeAsync(
-					clientSecrets,
-					new[] { DriveService.Scope.Drive },
-					"user",
-					CancellationToken.None);
+			ServiceAccountCredential serviceCredential =
+				new ServiceAccountCredential(
+					new ServiceAccountCredential.Initializer(serviceAccountEmail)
+					{
+						Scopes = new[] { DriveService.Scope.Drive },
+					}.FromPrivateKey(serviceAccountPrivateKey));
 
 			this.driveService = new DriveService(new BaseClientService.Initializer()
 			{
-				HttpClientInitializer = credential,
+				HttpClientInitializer = serviceCredential,
 				ApplicationName = "OxHack Sign-In Kiosk",
 			});
 		}
@@ -77,10 +72,8 @@ namespace OxHack.SignInKiosk.CoreService
 			using (var stream = new IO.MemoryStream(Encoding.UTF8.GetBytes(content)))
 			{
 				var request = this.driveService.Files.Update(file, this.fileId, stream, "text/plain");
-				request.Upload();
+				var upload = request.Upload();
 			}
-
-			this.driveService.Files.Update(file, this.fileId);
 		}
 
 		private static string FormatReport(IReadOnlyList<SignedInRecord> currentState, List<AuditRecord> past24Hours, DateTime lastUpdateTime)
