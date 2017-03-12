@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   width="97.989624mm"
+   height="32.173332mm"
+   viewBox="0 0 347.20733 114"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   inkscape:export-filename="C:\Users\yargh\Desktop\OxfordHackspace-1024.png"
+   inkscape:export-xdpi="265.42999"
+   inkscape:export-ydpi="265.42999"
+   sodipodi:docname="OxHack Logo.svg">
+  <defs
+     id="defs4" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="3.959798"
+     inkscape:cx="170.5617"
+     inkscape:cy="52.901937"
+     inkscape:document-units="px"
+     inkscape:current-layer="layer1"
+     showgrid="false"
+     fit-margin-top="0"
+     fit-margin-left="0"
+     fit-margin-right="0"
+     fit-margin-bottom="0"
+     inkscape:window-width="1920"
+     inkscape:window-height="1017"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
+     inkscape:window-maximized="1" />
+  <metadata
+     id="metadata7">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <g
+     inkscape:label="Layer 1"
+     inkscape:groupmode="layer"
+     id="layer1"
+     transform="translate(-166.39633,-869.64792)">
+    <g
+       transform="translate(-217.14438,618.16412)"
+       id="g4282">
+      <circle
+         id="circle3581"
+         r="57"
+         cy="308.4838"
+         cx="440.54071"
+         style="opacity:1;fill:#0088aa" />
+      <g
+         style="opacity:1"
+         transform="translate(383.54069,251.48379)"
+         id="g3583">
+        <path
+           id="path3585"
+           d="M 57,98.501 43.999,85.5 46.217,83.282 30.717,67.781 28.499,70 15.498,57 34.987,37.51 l 13.002,13 -4.234,4.235 2.66,2.661 10.992,-10.993 -2.66,-2.66 -4.089,4.089 L 37.656,34.841 57,15.497 70.001,28.498 67.784,30.716 83.282,46.216 85.501,43.998 98.503,57 79.159,76.343 66.157,63.342 70.246,59.253 68.083,57.09 57.091,68.083 59.253,70.245 63.487,66.011 76.49,79.014 57,98.501 Z"
+           inkscape:connector-curvature="0"
+           style="fill:#ffffff" />
+      </g>
+      <text
+         sodipodi:linespacing="92.000002%"
+         id="text3606"
+         y="299.92798"
+         x="508.69299"
+         style="font-style:normal;font-weight:normal;font-size:48.75px;line-height:92.00000167%;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;opacity:1;fill:#7a7a7a;fill-opacity:1;stroke:none;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
+         xml:space="preserve"><tspan
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:48.75px;line-height:92.00000167%;font-family:Catamaran;-inkscape-font-specification:'Catamaran Bold';fill:#7a7a7a;fill-opacity:1"
+           y="299.92798"
+           x="508.69299"
+           id="tspan3608"
+           sodipodi:role="line"
+           dy="0 7.984049e-009"
+           dx="0 -0.50507623 0.50507629 -0.50507629">Oxford</tspan><tspan
+           dx="0.1349237 -1.87 0 -1.0101526 -0.51746184 0 -0.32999998"
+           style="font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;font-size:48.75px;line-height:92.00000167%;font-family:Catamaran;-inkscape-font-specification:'Catamaran Bold';fill:#7a7a7a;fill-opacity:1"
+           id="tspan3610"
+           y="344.77798"
+           x="508.69299"
+           sodipodi:role="line">Hackspace</tspan></text>
+    </g>
+  </g>
+</svg>
