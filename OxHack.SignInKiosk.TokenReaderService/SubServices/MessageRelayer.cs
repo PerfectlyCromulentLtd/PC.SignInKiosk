@@ -13,6 +13,8 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 	class MessageRelayer
 	{
 		private readonly ILogger logger = LogManager.GetCurrentClassLogger();
+		private readonly object syncLock = new object();
+
 		private readonly MessagingClient messagingClient;
 		private readonly MD5 hasher;
 		private readonly TimeSpan deadPeriod;
@@ -38,27 +40,30 @@ namespace OxHack.SignInKiosk.TokenReaderService.SubServices
 				.Subscribe(this.OnTokenRead);
 		}
 
-		private async void OnTokenRead(uint tokenId)
+		private void OnTokenRead(uint tokenId)
 		{
-			var invocationTime = DateTime.Now;
-			try
+			lock (this.syncLock)
 			{
-				if ((invocationTime - lastPublishTime) >= deadPeriod)
+				var invocationTime = DateTime.Now;
+				try
 				{
-					var tokenIdHash = hasher.ComputeHash(BitConverter.GetBytes(tokenId));
-					var formattedTokenIdHash = BitConverter.ToString(tokenIdHash).Replace("-", String.Empty);
+					if ((invocationTime - lastPublishTime) >= this.deadPeriod)
+					{
+						var tokenIdHash = hasher.ComputeHash(BitConverter.GetBytes(tokenId));
+						var formattedTokenIdHash = BitConverter.ToString(tokenIdHash).Replace("-", String.Empty);
 
-					this.logger.Debug($"Relaying token {tokenId} as {formattedTokenIdHash}.");
+						this.logger.Debug($"Relaying token {tokenId} as {formattedTokenIdHash}.");
 
-					var message = new TokenRead(formattedTokenIdHash);
-					await this.messagingClient.Publish(message);
+						var message = new TokenRead(formattedTokenIdHash);
+						var forget = this.messagingClient.Publish(message);
 
-					lastPublishTime = invocationTime;
+						lastPublishTime = invocationTime;
+					}
 				}
-			}
-			catch (Exception ex)
-			{
-				this.logger.Error(ex);
+				catch (Exception ex)
+				{
+					this.logger.Error(ex);
+				}
 			}
 		}
 

@@ -10,12 +10,14 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml;
 using Windows.UI.Notifications;
 using System.Threading.Tasks;
+using OxHack.SignInKiosk.Events;
 
 namespace OxHack.SignInKiosk
 {
 	public sealed partial class App
 	{
 		private WinRTContainer container;
+		private IEventAggregator eventAggregator;
 
 		public App()
 		{
@@ -48,6 +50,8 @@ namespace OxHack.SignInKiosk
 			this.container.RegisterHandler(typeof(SignInApiWrapper), null, c => new SignInApiWrapper(serviceBase));
 			this.container.RegisterHandler(typeof(TokenHolderApiWrapper), null, c => new TokenHolderApiWrapper(serviceBase));
 			this.container.RegisterHandler(typeof(ToastNotifier), null, c => ToastNotificationManager.CreateToastNotifier());
+
+			this.eventAggregator = this.container.GetInstance<IEventAggregator>();
 		}
 
 		protected override object GetInstance(Type service, string key)
@@ -88,10 +92,10 @@ namespace OxHack.SignInKiosk
 
 			if (e.PreviousExecutionState != ApplicationExecutionState.Running)
 			{
+				Window.Current.VisibilityChanged += (s, ea) => this.eventAggregator.PublishOnCurrentThread(new VisibilityChanged(ea.Visible));
+
 				this.DisplayRootView<StartView>();
 				await this.EnsureSingletonsAreRunning();
-
-				
 			}
 		}
 
@@ -101,7 +105,7 @@ namespace OxHack.SignInKiosk
 
 			try
 			{
-				await messageBrokerService.Connect();
+				await messageBrokerService.ConnectIfNeeded();
 			}
 			catch (Exception e)
 			{

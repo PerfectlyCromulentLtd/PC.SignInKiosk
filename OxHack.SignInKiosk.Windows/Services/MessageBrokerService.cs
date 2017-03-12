@@ -8,16 +8,31 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Services
 {
-	public class MessageBrokerService
+	public class MessageBrokerService :
+		IHandle<VisibilityChanged>
 	{
+		private readonly object connectionLock = new object();
+
 		private ServiceCallback serviceCallback;
 		private MessageBrokerProxyServiceClient serviceClient;
 		private readonly IEventAggregator eventAggregator;
-		//private Task keepAliveWorker;
 
 		public MessageBrokerService(IEventAggregator eventAggregator)
 		{
 			this.eventAggregator = eventAggregator;
+			this.eventAggregator.Subscribe(this);
+		}
+
+		public async void Handle(VisibilityChanged message)
+		{
+			if (message.IsVisible)
+			{
+				await this.ConnectIfNeeded();
+			}
+			else
+			{
+				await this.Disconnect();
+			}
 		}
 
 		public async Task Publish(SignInRequestSubmitted message)
@@ -28,12 +43,6 @@ namespace OxHack.SignInKiosk.Services
 		public async Task Publish(SignOutRequestSubmitted message)
 		{
 			await this.serviceClient.PublishSignOutRequestAsync(message);
-		}
-
-		public async Task Connect()
-		{
-			await this.CreateNewConnection();
-			//this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
 		}
 
 		private async Task KeepAliveWorkerLoop()
@@ -52,52 +61,78 @@ namespace OxHack.SignInKiosk.Services
 			}
 		}
 
+		internal async Task ConnectIfNeeded()
+		{
+			// if null, then connect.
+			// if not null but still faulted, the regular faulted handler will handle reconnecting.
+			// yes, this is kludgy.
+			if (this.serviceClient == null)
+			{
+				await this.CreateNewConnection();
+			}
+		}
+
 		private async Task CreateNewConnection()
 		{
-			if (this.serviceClient != null)
-			{
-				this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
-			}
+			await this.Disconnect();
 
-			var timeout = TimeSpan.FromSeconds(7);
-
-			//TODO: Enable transport security.
-			var binding = new NetTcpBinding()
+			lock (this.connectionLock)
 			{
-				MaxBufferSize = int.MaxValue,
-				ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max,
-				MaxReceivedMessageSize = int.MaxValue,
-				Security = new NetTcpSecurity()
+				var timeout = TimeSpan.FromSeconds(7);
+
+				//TODO: Enable transport security.
+				var binding = new NetTcpBinding()
 				{
-					Message = new MessageSecurityOverTcp()
+					MaxBufferSize = int.MaxValue,
+					ReaderQuotas = System.Xml.XmlDictionaryReaderQuotas.Max,
+					MaxReceivedMessageSize = int.MaxValue,
+					Security = new NetTcpSecurity()
 					{
-						ClientCredentialType = MessageCredentialType.None
+						Message = new MessageSecurityOverTcp()
+						{
+							ClientCredentialType = MessageCredentialType.None
+						},
+						Transport = new TcpTransportSecurity()
+						{
+							ClientCredentialType = TcpClientCredentialType.None
+						},
+						Mode = SecurityMode.None,
 					},
-					Transport = new TcpTransportSecurity()
-					{
-						ClientCredentialType = TcpClientCredentialType.None
-					},
-					Mode = SecurityMode.None,
-				},
-				CloseTimeout = timeout,
-				OpenTimeout = timeout,
-				ReceiveTimeout = timeout,
-				SendTimeout = timeout,
-			};
+					CloseTimeout = timeout,
+					OpenTimeout = timeout,
+					ReceiveTimeout = timeout,
+					SendTimeout = timeout,
+				};
 
-			var remoteAddress = new EndpointAddress(new Uri("net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService"));
+				var remoteAddress = new EndpointAddress(new Uri("net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService"));
 
-			this.serviceCallback = new ServiceCallback(this.eventAggregator);
-			this.serviceClient = new MessageBrokerProxyServiceClient(new InstanceContext(this.serviceCallback), binding, remoteAddress);
-			this.serviceClient.InnerChannel.Faulted += this.HandleServiceClientFaults;
+				this.serviceCallback = new ServiceCallback(this.eventAggregator);
+				this.serviceClient = new MessageBrokerProxyServiceClient(new InstanceContext(this.serviceCallback), binding, remoteAddress);
+				this.serviceClient.InnerChannel.Faulted += this.HandleServiceClientFaults;
+			}
 
 			await this.serviceClient.SubscribeAsync();
 			await this.eventAggregator.PublishOnUIThreadAsync(new Connected());
 		}
 
+		private async Task Disconnect()
+		{
+			lock (this.connectionLock)
+			{
+				if (this.serviceClient != null)
+				{
+					this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
+					var forget = this.serviceClient?.UnsubscribeAsync();
+
+					this.serviceClient = null;
+					this.serviceCallback = null;
+				}
+			}
+		}
+
 		private async void HandleServiceClientFaults(object sender, EventArgs e)
 		{
-			this.eventAggregator.PublishOnUIThread(new Disconnected());
+			this.eventAggregator.PublishOnUIThread(new ConnectionFaulted());
 
 			await Task.Delay(TimeSpan.FromSeconds(5));
 

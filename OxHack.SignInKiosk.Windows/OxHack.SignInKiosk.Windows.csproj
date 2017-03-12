@@ -17,7 +17,7 @@
     <ProjectTypeGuids>{BC8A1FFA-BEE3-4634-8014-F334798102B3};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <PackageCertificateKeyFile>OxHack.SignInKiosk.Windows_TemporaryKey.pfx</PackageCertificateKeyFile>
     <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
-    <AppxPackageDir>C:\Users\yargh\Desktop\packages</AppxPackageDir>
+    <AppxPackageDir>\\kiosk\c%24\Users\Yves\Desktop\Deployments\</AppxPackageDir>
     <AppxBundlePlatforms>neutral</AppxBundlePlatforms>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -111,6 +111,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\VisibilityChanged.cs" />
     <Compile Include="Events\Connected.cs" />
     <Compile Include="Events\Disconnected.cs" />
     <Compile Include="Services\SoundEffectsService.cs" />

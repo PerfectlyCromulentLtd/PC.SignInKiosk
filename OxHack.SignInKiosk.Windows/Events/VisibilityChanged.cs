@@ -6,7 +6,16 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Events
 {
-	class ConnectionFaulted
+	public class VisibilityChanged
 	{
+		public VisibilityChanged(bool isVisible)
+		{
+			this.IsVisible = isVisible;
+		}
+
+		public bool IsVisible
+		{
+			get;
+		}
 	}
 }

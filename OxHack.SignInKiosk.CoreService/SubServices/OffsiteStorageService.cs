@@ -62,7 +62,7 @@ namespace OxHack.SignInKiosk.CoreService
 		private void Update()
 		{
 			var currentState = this.signInService.GetCurrentlySignedIn();
-			var past24Hours = this.signInService.GetPast24Hours().OrderBy(item => item.Time).ToList();
+			var past24Hours = this.signInService.GetPast24Hours().OrderByDescending(item => item.Time).ToList();
 			var lastUpdateTime = DateTime.Now;
 
 			string content = FormatReport(currentState, past24Hours, lastUpdateTime);

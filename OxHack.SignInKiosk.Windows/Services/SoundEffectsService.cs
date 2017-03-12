@@ -9,7 +9,7 @@ namespace OxHack.SignInKiosk.Services
 	class SoundEffectsService :
 		IHandle<PersonSignedIn>,
 		IHandle<PersonSignedOut>,
-		IHandle<Disconnected>,
+		IHandle<ConnectionFaulted>,
 		IHandle<Connected>,
 		IHandle<TokenRead>
 	{
@@ -45,7 +45,7 @@ namespace OxHack.SignInKiosk.Services
 			this.NavigationSoundPlayer.Source = this.connectedSound;
 		}
 
-		public void Handle(Disconnected message)
+		public void Handle(ConnectionFaulted message)
 		{
 			this.NavigationSoundPlayer.Source = this.disconnectedSound;
 		}
