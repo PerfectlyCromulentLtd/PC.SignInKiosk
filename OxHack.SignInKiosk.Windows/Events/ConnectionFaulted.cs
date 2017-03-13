@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Events
 {
-	class ConnectionFaulted
+	public class ConnectionFaulted
 	{
 	}
 }

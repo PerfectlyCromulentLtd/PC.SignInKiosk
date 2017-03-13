@@ -1,16 +1,16 @@
 ﻿using Caliburn.Micro;
+using OxHack.SignInKiosk.Events;
 using OxHack.SignInKiosk.Services;
 using OxHack.SignInKiosk.ViewModels;
 using OxHack.SignInKiosk.Views;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
-using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml;
 using Windows.UI.Notifications;
-using System.Threading.Tasks;
-using OxHack.SignInKiosk.Events;
+using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 
 namespace OxHack.SignInKiosk
 {
@@ -33,6 +33,7 @@ namespace OxHack.SignInKiosk
 			this.container.RegisterWinRTServices();
 
 			this.container.PerRequest<StartViewModel>();
+			this.container.PerRequest<DisconnectedViewModel>();
 			this.container.PerRequest<NameEntryViewModel>();
 			this.container.PerRequest<SignedInGreetingViewModel>();
 			this.container.PerRequest<SignedOutFarewellViewModel>();
@@ -101,17 +102,6 @@ namespace OxHack.SignInKiosk
 
 		private async Task EnsureSingletonsAreRunning()
 		{
-			var messageBrokerService = this.container.GetInstance<MessageBrokerService>();
-
-			try
-			{
-				await messageBrokerService.ConnectIfNeeded();
-			}
-			catch (Exception e)
-			{
-				// TODO: log error
-			}
-
 			this.container.GetInstance<MessageOrchestratorService>();
 			this.container.GetInstance<TokenHolderService>();
 			var soundEffectsService = this.container.GetInstance<SoundEffectsService>();

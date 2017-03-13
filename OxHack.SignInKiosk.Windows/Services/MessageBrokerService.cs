@@ -16,6 +16,7 @@ namespace OxHack.SignInKiosk.Services
 		private ServiceCallback serviceCallback;
 		private MessageBrokerProxyServiceClient serviceClient;
 		private readonly IEventAggregator eventAggregator;
+		private Task keepAliveWorker;
 
 		public MessageBrokerService(IEventAggregator eventAggregator)
 		{
@@ -25,13 +26,20 @@ namespace OxHack.SignInKiosk.Services
 
 		public async void Handle(VisibilityChanged message)
 		{
-			if (message.IsVisible)
+			try
 			{
-				await this.ConnectIfNeeded();
+				if (message.IsVisible)
+				{
+					await this.ConnectIfNeeded();
+				}
+				else
+				{
+					this.Disconnect();
+				}
 			}
-			else
+			catch
 			{
-				await this.Disconnect();
+				// ignore
 			}
 		}
 
@@ -47,12 +55,12 @@ namespace OxHack.SignInKiosk.Services
 
 		private async Task KeepAliveWorkerLoop()
 		{
-			while (true)
+			while (this.serviceClient != null)
 			{
 				try
 				{
-					await Task.Delay(TimeSpan.FromMinutes(5));
-					await this.serviceClient?.KeepAliveAsync();
+					await Task.Delay(TimeSpan.FromSeconds(25));
+					await this.serviceClient.KeepAliveAsync();
 				}
 				catch
 				{
@@ -74,7 +82,7 @@ namespace OxHack.SignInKiosk.Services
 
 		private async Task CreateNewConnection()
 		{
-			await this.Disconnect();
+			this.Disconnect();
 
 			lock (this.connectionLock)
 			{
@@ -104,6 +112,7 @@ namespace OxHack.SignInKiosk.Services
 					SendTimeout = timeout,
 				};
 
+				// TODO: put this in a configuration file somewhere
 				var remoteAddress = new EndpointAddress(new Uri("net.tcp://MessageBrokerProxyService:8137/MessageBrokerProxyService"));
 
 				this.serviceCallback = new ServiceCallback(this.eventAggregator);
@@ -112,38 +121,38 @@ namespace OxHack.SignInKiosk.Services
 			}
 
 			await this.serviceClient.SubscribeAsync();
+			this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
 			await this.eventAggregator.PublishOnUIThreadAsync(new Connected());
 		}
 
-		private async Task Disconnect()
+		private void Disconnect()
 		{
 			lock (this.connectionLock)
 			{
 				if (this.serviceClient != null)
 				{
-					this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
-					var forget = this.serviceClient?.UnsubscribeAsync();
-
-					this.serviceClient = null;
-					this.serviceCallback = null;
+					try
+					{
+						this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
+						var forget = this.serviceClient?.UnsubscribeAsync();
+					}
+					catch
+					{
+						// ignore
+					}
+					finally
+					{
+						this.serviceClient = null;
+						this.serviceCallback = null;
+					}
 				}
 			}
 		}
 
-		private async void HandleServiceClientFaults(object sender, EventArgs e)
+		private void HandleServiceClientFaults(object sender, EventArgs e)
 		{
+			this.Disconnect();
 			this.eventAggregator.PublishOnUIThread(new ConnectionFaulted());
-
-			await Task.Delay(TimeSpan.FromSeconds(5));
-
-			try
-			{
-				await this.CreateNewConnection();
-			}
-			catch
-			{
-				//TODO: log error
-			}
 		}
 
 		class ServiceCallback : IMessageBrokerProxyServiceCallback
