@@ -44,6 +44,11 @@ namespace OxHack.SignInKiosk.CoreService
 				hostConf.DependsOn("LanmanServer");
 				hostConf.RunAsLocalSystem();
 				hostConf.StartAutomaticallyDelayed();
+				hostConf.EnableServiceRecovery(recovery =>
+					recovery
+						.RestartService(delayInMinutes: 1)
+						.SetResetPeriod(days: 1)
+						.OnCrashOnly());
 
 				hostConf.SetDescription("Implements the core business logic for the Sign-In Kiosk project.");
 				hostConf.SetDisplayName("SignInKiosk.CoreService");
