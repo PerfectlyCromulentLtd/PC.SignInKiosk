@@ -45,31 +45,28 @@ namespace OxHack.SignInKiosk.PrinterService.SubServices
 
 		private void OnPersonSignedIn(object sender, PersonSignedIn message)
 		{
-			this.Print($"IN : {message.Person.DisplayName}");
+			this.Print(message.SignInTime, $"IN : {message.Person.DisplayName}");
 		}
 
 		private void OnPersonSignedOut(object sender, PersonSignedOut message)
 		{
-			this.Print($"OUT: {message.Person.DisplayName}");
+			this.Print(message.SignOutTime, $"OUT: {message.Person.DisplayName}");
 		}
 
-		private void Print(string text)
+		private void Print(DateTime timestamp, string text)
 		{
 			try
 			{
-				var now = DateTime.Now;
 				string message =
-					$"@{now.ToString("u").Replace("Z", String.Empty)}{System.Environment.NewLine}{text}";
+					$"@{timestamp.ToString("u").Replace("Z", String.Empty)}{System.Environment.NewLine}{text}";
 
-				var target = new FileInfo("./printFiles/" + now.ToString("s").Replace(':', '_') + ".txt");
-				target.Directory.Create();
-				using (var writer = target.OpenWrite())
-				{
-					var bytes = Encoding.UTF8.GetBytes(message);
-					writer.Write(bytes, 0, bytes.Length);
-				}
+				var startInfo =
+					new ProcessStartInfo(this.printTextScript, Convert.ToBase64String(Encoding.UTF8.GetBytes(message)))
+					{
+						UseShellExecute = false
+					};
 
-				var printProcess = Process.Start(this.printTextScript, $"\"{target.FullName}\"");
+				var printProcess = Process.Start(startInfo);
 
 				var hasExited = printProcess.WaitForExit(10000);
 
