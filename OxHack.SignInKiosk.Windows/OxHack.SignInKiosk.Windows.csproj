@@ -111,9 +111,10 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Events\AppResumed.cs" />
     <Compile Include="Events\VisibilityChanged.cs" />
     <Compile Include="Events\Connected.cs" />
-    <Compile Include="Events\ConnectionFaulted.cs" />
+    <Compile Include="Events\Disconnected.cs" />
     <Compile Include="Services\SoundEffectsService.cs" />
     <Compile Include="Services\MessageOrchestratorService.cs" />
     <Compile Include="Services\TokenHolderApiWrapper.cs" />

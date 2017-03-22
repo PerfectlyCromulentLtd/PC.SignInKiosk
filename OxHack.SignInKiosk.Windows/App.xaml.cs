@@ -94,6 +94,7 @@ namespace OxHack.SignInKiosk
 			if (e.PreviousExecutionState != ApplicationExecutionState.Running)
 			{
 				Window.Current.VisibilityChanged += (s, ea) => this.eventAggregator.PublishOnCurrentThread(new VisibilityChanged(ea.Visible));
+				this.Resuming += (s, ea) => this.eventAggregator.BeginPublishOnUIThread(new AppResumed());
 
 				this.DisplayRootView<StartView>();
 				await this.EnsureSingletonsAreRunning();

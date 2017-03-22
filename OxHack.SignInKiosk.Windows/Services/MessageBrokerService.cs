@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace OxHack.SignInKiosk.Services
 {
 	public class MessageBrokerService :
-		IHandle<VisibilityChanged>
+		IHandle<VisibilityChanged>,
+		IHandle<AppResumed>
 	{
 		private readonly object connectionLock = new object();
 
@@ -34,8 +35,20 @@ namespace OxHack.SignInKiosk.Services
 				}
 				else
 				{
-					this.Disconnect();
+					await this.Disconnect();
 				}
+			}
+			catch
+			{
+				// ignore
+			}
+		}
+
+		public async void Handle(AppResumed message)
+		{
+			try
+			{
+				await this.ConnectIfNeeded();
 			}
 			catch
 			{
@@ -74,7 +87,7 @@ namespace OxHack.SignInKiosk.Services
 			// if null, then connect.
 			// if not null but still faulted, the regular faulted handler will handle reconnecting.
 			// yes, this is kludgy.
-			if (this.serviceClient == null)
+			if (this.serviceClient == null || this.serviceClient.InnerChannel.State == CommunicationState.Faulted)
 			{
 				await this.CreateNewConnection();
 			}
@@ -82,7 +95,7 @@ namespace OxHack.SignInKiosk.Services
 
 		private async Task CreateNewConnection()
 		{
-			this.Disconnect();
+			await this.Disconnect();
 
 			lock (this.connectionLock)
 			{
@@ -125,37 +138,45 @@ namespace OxHack.SignInKiosk.Services
 			await this.eventAggregator.PublishOnUIThreadAsync(new Connected());
 		}
 
-		private void Disconnect()
+		private async Task Disconnect()
 		{
 			lock (this.connectionLock)
 			{
-				if (this.serviceClient != null)
+				try
 				{
-					try
+					if (this.serviceClient != null)
 					{
 						this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
-						var forget = this.serviceClient?.UnsubscribeAsync();
-					}
-					catch
-					{
-						// ignore
-					}
-					finally
-					{
-						this.serviceClient = null;
-						this.serviceCallback = null;
+						if (this.serviceClient.InnerChannel.State == CommunicationState.Faulted)
+						{
+							this.serviceClient.Abort();
+						}
+						else
+						{
+							this.serviceClient.UnsubscribeAsync();
+							this.serviceClient.CloseAsync();
+						}
 					}
 				}
+				catch
+				{
+					// ignore
+				}
+				finally
+				{
+					this.serviceClient = null;
+					this.serviceCallback = null;
+				}
 			}
+			await this.eventAggregator.PublishOnUIThreadAsync(new Disconnected());
 		}
 
-		private void HandleServiceClientFaults(object sender, EventArgs e)
+		private async void HandleServiceClientFaults(object sender, EventArgs e)
 		{
-			this.Disconnect();
-			this.eventAggregator.PublishOnUIThread(new ConnectionFaulted());
+			await this.Disconnect();
 		}
 
-		class ServiceCallback : IMessageBrokerProxyServiceCallback
+		private class ServiceCallback : IMessageBrokerProxyServiceCallback
 		{
 			private readonly IEventAggregator eventAggregator;
 

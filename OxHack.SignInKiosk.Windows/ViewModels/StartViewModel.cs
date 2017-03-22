@@ -30,7 +30,7 @@ namespace OxHack.SignInKiosk.ViewModels
 			catch (Exception e)
 			{
 				// TODO: log error
-				this.eventAggregator.PublishOnUIThread(new ConnectionFaulted());
+				this.eventAggregator.PublishOnUIThread(new Disconnected());
 			}
 		}
 

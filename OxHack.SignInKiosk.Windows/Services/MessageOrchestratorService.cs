@@ -11,7 +11,7 @@ namespace OxHack.SignInKiosk.Services
 	class MessageOrchestratorService :
 		IHandle<PersonSignedIn>,
 		IHandle<PersonSignedOut>,
-		IHandle<ConnectionFaulted>,
+		IHandle<Disconnected>,
 		IHandle<Connected>,
 		IHandle<TokenRead>
 	{
@@ -82,7 +82,7 @@ namespace OxHack.SignInKiosk.Services
 			}
 		}
 
-		public void Handle(ConnectionFaulted message)
+		public void Handle(Disconnected message)
 		{
 			if (this.navigationService.CurrentSourcePageType != typeof(DisconnectedView))
 			{
