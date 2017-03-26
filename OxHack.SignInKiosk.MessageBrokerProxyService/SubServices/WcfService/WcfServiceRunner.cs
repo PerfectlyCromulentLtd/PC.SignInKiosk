@@ -34,10 +34,6 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			try
 			{
 				this.serviceHost = new ServiceHost(new MessageBrokerProxyService(this.messagingClient));
-				this.serviceHost.Opened += (s, e) => this.logger.Info("Service Opened.");
-				this.serviceHost.Closed += (s, e) => this.logger.Info("Service Closed.");
-				this.serviceHost.Faulted += (s, e) => this.logger.Error("Shit!  Service Faulted.");
-				this.serviceHost.UnknownMessageReceived += (s, e) => this.logger.Warn("Huh?  Service received unknown message.");
 
 				await Task.Factory.FromAsync(
 					(callback, state) => this.serviceHost.BeginOpen(callback, state),

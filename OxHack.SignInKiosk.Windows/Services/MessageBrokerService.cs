@@ -13,16 +13,21 @@ namespace OxHack.SignInKiosk.Services
 		IHandle<AppResumed>
 	{
 		private readonly object connectionLock = new object();
+		private readonly IEventAggregator eventAggregator;
+		private readonly TimeSpan timeout;
+		private readonly TimeSpan keepAlivePeriod;
 
 		private ServiceCallback serviceCallback;
 		private MessageBrokerProxyServiceClient serviceClient;
-		private readonly IEventAggregator eventAggregator;
 		private Task keepAliveWorker;
 
 		public MessageBrokerService(IEventAggregator eventAggregator)
 		{
 			this.eventAggregator = eventAggregator;
 			this.eventAggregator.Subscribe(this);
+
+			this.timeout = TimeSpan.FromSeconds(3);
+			this.keepAlivePeriod = TimeSpan.FromSeconds(2);
 		}
 
 		public async void Handle(VisibilityChanged message)
@@ -72,8 +77,8 @@ namespace OxHack.SignInKiosk.Services
 			{
 				try
 				{
-					await Task.Delay(TimeSpan.FromSeconds(25));
-					await this.serviceClient.KeepAliveAsync();
+					await Task.Delay(this.keepAlivePeriod);
+					await this.serviceClient?.KeepAliveAsync();
 				}
 				catch
 				{
@@ -84,8 +89,6 @@ namespace OxHack.SignInKiosk.Services
 
 		internal async Task ConnectIfNeeded()
 		{
-			// if null, then connect.
-			// if not null but still faulted, the regular faulted handler will handle reconnecting.
 			// yes, this is kludgy.
 			if (this.serviceClient == null || this.serviceClient.InnerChannel.State == CommunicationState.Faulted)
 			{
@@ -99,8 +102,6 @@ namespace OxHack.SignInKiosk.Services
 
 			lock (this.connectionLock)
 			{
-				var timeout = TimeSpan.FromSeconds(7);
-
 				//TODO: Enable transport security.
 				var binding = new NetTcpBinding()
 				{
@@ -119,10 +120,10 @@ namespace OxHack.SignInKiosk.Services
 						},
 						Mode = SecurityMode.None,
 					},
-					CloseTimeout = timeout,
-					OpenTimeout = timeout,
-					ReceiveTimeout = timeout,
-					SendTimeout = timeout,
+					CloseTimeout = this.timeout,
+					OpenTimeout = this.timeout,
+					ReceiveTimeout = this.timeout,
+					SendTimeout = this.timeout,
 				};
 
 				// TODO: put this in a configuration file somewhere
@@ -130,7 +131,7 @@ namespace OxHack.SignInKiosk.Services
 
 				this.serviceCallback = new ServiceCallback(this.eventAggregator);
 				this.serviceClient = new MessageBrokerProxyServiceClient(new InstanceContext(this.serviceCallback), binding, remoteAddress);
-				this.serviceClient.InnerChannel.Faulted += this.HandleServiceClientFaults;
+				this.serviceClient.InnerChannel.Faulted += this.OnServiceClientFaulted;
 			}
 
 			await this.serviceClient.SubscribeAsync();
@@ -138,7 +139,7 @@ namespace OxHack.SignInKiosk.Services
 			await this.eventAggregator.PublishOnUIThreadAsync(new Connected());
 		}
 
-		private async Task Disconnect()
+		private async Task Disconnect(bool isFault = false)
 		{
 			lock (this.connectionLock)
 			{
@@ -146,7 +147,7 @@ namespace OxHack.SignInKiosk.Services
 				{
 					if (this.serviceClient != null)
 					{
-						this.serviceClient.InnerChannel.Faulted -= this.HandleServiceClientFaults;
+						this.serviceClient.InnerChannel.Faulted -= this.OnServiceClientFaulted;
 						if (this.serviceClient.InnerChannel.State == CommunicationState.Faulted)
 						{
 							this.serviceClient.Abort();
@@ -168,12 +169,12 @@ namespace OxHack.SignInKiosk.Services
 					this.serviceCallback = null;
 				}
 			}
-			await this.eventAggregator.PublishOnUIThreadAsync(new Disconnected());
+			await this.eventAggregator.PublishOnUIThreadAsync(new Disconnected(isFault: isFault));
 		}
 
-		private async void HandleServiceClientFaults(object sender, EventArgs e)
+		private async void OnServiceClientFaulted(object sender, EventArgs e)
 		{
-			await this.Disconnect();
+			await this.Disconnect(isFault: true);
 		}
 
 		private class ServiceCallback : IMessageBrokerProxyServiceCallback

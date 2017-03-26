@@ -143,7 +143,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			{
 				try
 				{
-					await Task.Delay(TimeSpan.FromSeconds(25));
+					await Task.Delay(TimeSpan.FromSeconds(2));
 					this.callBack?.KeepCallbackAlive();
 				}
 				catch
