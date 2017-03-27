@@ -134,6 +134,7 @@ namespace OxHack.SignInKiosk.Services
 
 				this.serviceCallback = new ServiceCallback(this.eventAggregator);
 				this.serviceClient = new MessageBrokerProxyServiceClient(new InstanceContext(this.serviceCallback), binding, remoteAddress);
+				this.serviceClient.InnerChannel.OperationTimeout = this.timeout;
 				this.serviceClient.InnerChannel.Faulted += this.OnServiceClientFaulted;
 			}
 
