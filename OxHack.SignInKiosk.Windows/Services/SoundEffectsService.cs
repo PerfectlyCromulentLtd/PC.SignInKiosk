@@ -47,10 +47,7 @@ namespace OxHack.SignInKiosk.Services
 
 		public void Handle(Disconnected message)
 		{
-			if (message.IsFault)
-			{
-				this.NavigationSoundPlayer.Source = this.disconnectedSound;
-			}
+			this.NavigationSoundPlayer.Source = this.disconnectedSound;
 		}
 
 		public void Handle(PersonSignedIn message)

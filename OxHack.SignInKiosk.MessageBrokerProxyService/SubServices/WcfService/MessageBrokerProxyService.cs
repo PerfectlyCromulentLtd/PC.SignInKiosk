@@ -3,6 +3,7 @@ using OxHack.SignInKiosk.Domain.Messages;
 using OxHack.SignInKiosk.Messaging;
 using System;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
@@ -114,7 +115,7 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 				OperationContext ctx = OperationContext.Current;
 				this.callBack = ctx.GetCallbackChannel<IMessageBrokerProxyServiceCallback>();
 
-				this.keepAliveWorker = Task.Run(this.KeepAliveWorkerLoop);
+				this.keepAliveWorker = Task.Run(() => this.KeepAliveWorkerLoop());
 
 				this.logger.Info("Client subscribed.");
 			}
@@ -137,13 +138,14 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			}
 		}
 
-		private async Task KeepAliveWorkerLoop()
+		private void KeepAliveWorkerLoop()
 		{
 			while (this.callBack != null)
 			{
 				try
 				{
-					await Task.Delay(TimeSpan.FromSeconds(2));
+					Thread.Sleep(TimeSpan.FromSeconds(1));
+
 					this.callBack?.KeepCallbackAlive();
 				}
 				catch

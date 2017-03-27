@@ -4,6 +4,7 @@ using OxHack.SignInKiosk.Events;
 using OxHack.SignInKiosk.MessageBrokerProxy;
 using System;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.Services
@@ -27,7 +28,7 @@ namespace OxHack.SignInKiosk.Services
 			this.eventAggregator.Subscribe(this);
 
 			this.timeout = TimeSpan.FromSeconds(3);
-			this.keepAlivePeriod = TimeSpan.FromSeconds(2);
+			this.keepAlivePeriod = TimeSpan.FromSeconds(1);
 		}
 
 		public async void Handle(VisibilityChanged message)
@@ -77,7 +78,11 @@ namespace OxHack.SignInKiosk.Services
 			{
 				try
 				{
-					await Task.Delay(this.keepAlivePeriod);
+					using (EventWaitHandle tmpEvent = new ManualResetEvent(false))
+					{
+						tmpEvent.WaitOne(this.keepAlivePeriod);
+					}
+
 					await this.serviceClient?.KeepAliveAsync();
 				}
 				catch
@@ -98,8 +103,6 @@ namespace OxHack.SignInKiosk.Services
 
 		private async Task CreateNewConnection()
 		{
-			await this.Disconnect();
-
 			lock (this.connectionLock)
 			{
 				//TODO: Enable transport security.
@@ -169,7 +172,11 @@ namespace OxHack.SignInKiosk.Services
 					this.serviceCallback = null;
 				}
 			}
-			await this.eventAggregator.PublishOnUIThreadAsync(new Disconnected(isFault: isFault));
+
+			if (isFault)
+			{
+				await this.eventAggregator.PublishOnUIThreadAsync(new Disconnected());
+			}
 		}
 
 		private async void OnServiceClientFaulted(object sender, EventArgs e)

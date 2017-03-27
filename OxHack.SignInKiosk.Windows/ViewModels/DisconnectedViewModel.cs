@@ -1,11 +1,9 @@
 ﻿using Caliburn.Micro;
-using OxHack.SignInKiosk.Domain.Models;
 using OxHack.SignInKiosk.Events;
 using OxHack.SignInKiosk.Services;
-using Prism.Commands;
 using System;
+using System.Threading;
 using System.Threading.Tasks;
-using Windows.UI.Popups;
 
 namespace OxHack.SignInKiosk.ViewModels
 {
@@ -29,7 +27,11 @@ namespace OxHack.SignInKiosk.ViewModels
 			{
 				while (!this.isConnected)
 				{
-					await Task.Delay(TimeSpan.FromSeconds(5));
+					using (EventWaitHandle tmpEvent = new ManualResetEvent(false))
+					{
+						tmpEvent.WaitOne(TimeSpan.FromSeconds(3));
+					}
+
 					try
 					{
 						await this.messageBrokerService.ConnectIfNeeded();
