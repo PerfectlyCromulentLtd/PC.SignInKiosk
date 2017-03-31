@@ -3,7 +3,6 @@ using OxHack.SignInKiosk.Domain.Messages;
 using OxHack.SignInKiosk.Messaging;
 using System;
 using System.ServiceModel;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
@@ -138,13 +137,13 @@ namespace OxHack.SignInKiosk.MessageBrokerProxyService.SubServices.WcfService
 			}
 		}
 
-		private void KeepAliveWorkerLoop()
+		private async Task KeepAliveWorkerLoop()
 		{
 			while (this.callBack != null)
 			{
 				try
 				{
-					Thread.Sleep(TimeSpan.FromSeconds(1));
+					await Task.Delay(TimeSpan.FromSeconds(3));
 
 					this.callBack?.KeepCallbackAlive();
 				}

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/2010/manifest" xmlns:m2="http://schemas.microsoft.com/appx/2013/manifest">
-  <Identity Name="c3944d1d-e5a7-4a30-9017-fc576bae4fc9" Publisher="CN=yargh" Version="1.0.0.90" />
+  <Identity Name="c3944d1d-e5a7-4a30-9017-fc576bae4fc9" Publisher="CN=yargh" Version="1.0.0.92" />
   <Properties>
     <DisplayName>OxHack Sign-in Kiosk</DisplayName>
     <PublisherDisplayName>Yves Conan @ Perfectly Cromulent Ltd</PublisherDisplayName>

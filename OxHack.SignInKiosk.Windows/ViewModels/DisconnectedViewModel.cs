@@ -27,10 +27,7 @@ namespace OxHack.SignInKiosk.ViewModels
 			{
 				while (!this.isConnected)
 				{
-					using (EventWaitHandle tmpEvent = new ManualResetEvent(false))
-					{
-						tmpEvent.WaitOne(TimeSpan.FromSeconds(3));
-					}
+					await Task.Delay(TimeSpan.FromSeconds(3));
 
 					try
 					{

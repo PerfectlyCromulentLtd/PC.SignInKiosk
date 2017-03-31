@@ -27,8 +27,8 @@ namespace OxHack.SignInKiosk.Services
 			this.eventAggregator = eventAggregator;
 			this.eventAggregator.Subscribe(this);
 
-			this.timeout = TimeSpan.FromSeconds(3);
-			this.keepAlivePeriod = TimeSpan.FromSeconds(1);
+			this.timeout = TimeSpan.FromSeconds(6);
+			this.keepAlivePeriod = TimeSpan.FromSeconds(2);
 		}
 
 		public async void Handle(VisibilityChanged message)
@@ -78,11 +78,7 @@ namespace OxHack.SignInKiosk.Services
 			{
 				try
 				{
-					using (EventWaitHandle tmpEvent = new ManualResetEvent(false))
-					{
-						tmpEvent.WaitOne(this.keepAlivePeriod);
-					}
-
+					await Task.Delay(this.keepAlivePeriod);
 					await this.serviceClient?.KeepAliveAsync();
 				}
 				catch
